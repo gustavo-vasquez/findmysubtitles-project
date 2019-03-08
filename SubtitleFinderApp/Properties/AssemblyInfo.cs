@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SubtitleFinderApp")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Buscador de subtítulos")]
+[assembly: AssemblyDescription("Un programa para buscar subtítulos de series y películas desde SubDivX, TuSubtitulo y Subtitulamos")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("SubtitleFinderApp")]
-[assembly: AssemblyCopyright("Copyright ©  2019")]
+[assembly: AssemblyProduct("Buscador de subtítulos")]
+[assembly: AssemblyCopyright("Copyright © 2019 por Gustavo Vasquez")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
