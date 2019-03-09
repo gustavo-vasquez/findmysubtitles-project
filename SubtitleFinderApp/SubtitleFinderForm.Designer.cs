@@ -42,7 +42,7 @@
             this.lblDescription = new System.Windows.Forms.Label();
             this.lblDetails = new System.Windows.Forms.Label();
             this.lblComments = new System.Windows.Forms.LinkLabel();
-            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.dialogSaveSubtitle = new System.Windows.Forms.SaveFileDialog();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -80,8 +80,8 @@
             this.txtSearch.Location = new System.Drawing.Point(12, 40);
             this.txtSearch.Name = "txtSearch";
             this.txtSearch.Size = new System.Drawing.Size(377, 20);
-            this.txtSearch.TabIndex = 4;
-            this.txtSearch.Text = "the walking dead";
+            this.txtSearch.TabIndex = 0;
+            this.txtSearch.Text = "the walking dead s09e05";
             // 
             // btnSearch
             // 
@@ -89,7 +89,7 @@
             this.btnSearch.Location = new System.Drawing.Point(395, 38);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(75, 23);
-            this.btnSearch.TabIndex = 5;
+            this.btnSearch.TabIndex = 1;
             this.btnSearch.Text = "Buscar";
             this.btnSearch.UseVisualStyleBackColor = true;
             this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
@@ -103,7 +103,7 @@
             this.comboBox1.Location = new System.Drawing.Point(555, 39);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(121, 21);
-            this.comboBox1.TabIndex = 6;
+            this.comboBox1.TabIndex = 2;
             // 
             // label1
             // 
@@ -125,10 +125,10 @@
             // 
             // btnDownload
             // 
-            this.btnDownload.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnDownload.Location = new System.Drawing.Point(571, 93);
+            this.btnDownload.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnDownload.Location = new System.Drawing.Point(571, 114);
             this.btnDownload.Name = "btnDownload";
-            this.btnDownload.Size = new System.Drawing.Size(105, 55);
+            this.btnDownload.Size = new System.Drawing.Size(105, 26);
             this.btnDownload.TabIndex = 9;
             this.btnDownload.Text = "Descargar";
             this.btnDownload.UseVisualStyleBackColor = true;
@@ -192,16 +192,17 @@
             this.lblComments.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.lblComments.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lblComments_LinkClicked);
             // 
-            // saveFileDialog1
+            // dialogSaveSubtitle
             // 
-            this.saveFileDialog1.DefaultExt = "rar";
-            this.saveFileDialog1.Filter = "Archivos RAR (*.rar)|*.rar|Todos los archivos (*.*)|*.*";
-            this.saveFileDialog1.InitialDirectory = "F:\\Carpeta personal";
-            this.saveFileDialog1.RestoreDirectory = true;
-            this.saveFileDialog1.Title = "Guardar archivo como...";
+            this.dialogSaveSubtitle.DefaultExt = "rar";
+            this.dialogSaveSubtitle.Filter = "Archivos RAR (*.rar)|*.rar|Todos los archivos (*.*)|*.*";
+            this.dialogSaveSubtitle.InitialDirectory = "F:\\Carpeta personal";
+            this.dialogSaveSubtitle.RestoreDirectory = true;
+            this.dialogSaveSubtitle.Title = "Guardar subtítulo como...";
             // 
             // SubtitleFinderForm
             // 
+            this.AcceptButton = this.btnSearch;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(693, 451);
@@ -216,6 +217,8 @@
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.textBox1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
             this.Name = "SubtitleFinderForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Buscador de subtítulos";
@@ -242,7 +245,7 @@
         private System.Windows.Forms.Label lblDescription;
         private System.Windows.Forms.Label lblDetails;
         private System.Windows.Forms.LinkLabel lblComments;
-        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        private System.Windows.Forms.SaveFileDialog dialogSaveSubtitle;
     }
 }
 

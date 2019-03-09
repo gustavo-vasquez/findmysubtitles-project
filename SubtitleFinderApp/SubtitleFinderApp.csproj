@@ -38,10 +38,6 @@
       <HintPath>..\packages\HtmlAgilityPack.1.9.1\lib\Net45\HtmlAgilityPack.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="IronWebScraper, Version=4.0.4.29861, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\IronWebScraper.4.0.4.3\lib\net452\IronWebScraper.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net" />
@@ -58,6 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Scrapers\SubDivXScraper.cs" />
     <Compile Include="SubtitleFinderForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -66,7 +63,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WebScrapers\SubDivxScraper.cs" />
     <EmbeddedResource Include="SubtitleFinderForm.resx">
       <DependentUpon>SubtitleFinderForm.cs</DependentUpon>
     </EmbeddedResource>

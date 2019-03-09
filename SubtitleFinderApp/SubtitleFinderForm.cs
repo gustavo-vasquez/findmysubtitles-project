@@ -1,5 +1,5 @@
 ﻿using HtmlAgilityPack;
-using SubtitleFinderApp.WebScrapers;
+using SubtitleFinderApp.Scrapers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,10 +17,11 @@ namespace SubtitleFinderApp
     public partial class SubtitleFinderForm : Form
     {
         private HtmlWeb _web = new HtmlWeb() { OverrideEncoding = Encoding.Default };
+        private SubDivXScraper subdivx = new SubDivXScraper();
 
         public SubtitleFinderForm()
         {
-            InitializeComponent();            
+            InitializeComponent();
         }
 
         private void SubtitleFinderForm_Load(object sender, EventArgs e)
@@ -48,15 +49,16 @@ namespace SubtitleFinderApp
         private void DoSearch(string text)
         {
             var htmldoc = _web.Load("https://www.subdivx.com/index.php?buscar=" + HttpUtility.UrlEncode(text) + "&accion=5&masdesc=&subtitulos=1&realiza_b=1");
-            var title = htmldoc.DocumentNode.Descendants("a").Where(a => a.Attributes.Contains("class") && a.Attributes["class"].Value.Contains("titulo_menu_izq")).FirstOrDefault();
-            var description = htmldoc.DocumentNode.Descendants("div").Where(a => a.Attributes.Contains("id") && a.Attributes["id"].Value.Equals("buscador_detalle_sub")).FirstOrDefault();
-            var detail = htmldoc.DocumentNode.Descendants("div").Where(a => a.Attributes.Contains("id") && a.Attributes["id"].Value.Equals("buscador_detalle_sub_datos")).FirstOrDefault();
-            
-            lblTitle.Text = title.InnerText;
-            lblDescription.Text = description.InnerText;
-            lblDetails.Text = detail.InnerText;
-            lblComments.Text = "Comentarios (" + detail.Descendants("a").Where(a => a.Attributes.Contains("rel") && a.Attributes["rel"].Value.Equals("nofollow")).FirstOrDefault().InnerText + ")";
-            lblComments.Links.Add(new LinkLabel.Link() { LinkData = detail.Descendants("a").Where(a => a.Attributes.Contains("href")).FirstOrDefault().Attributes["href"].Value });
+            subdivx.Title = htmldoc.DocumentNode.Descendants("a").Where(a => a.Attributes.Contains("class") && a.Attributes["class"].Value.Contains("titulo_menu_izq")).FirstOrDefault();
+            subdivx.Description = htmldoc.DocumentNode.Descendants("div").Where(a => a.Attributes.Contains("id") && a.Attributes["id"].Value.Equals("buscador_detalle_sub")).FirstOrDefault();
+            subdivx.Details = htmldoc.DocumentNode.Descendants("div").Where(a => a.Attributes.Contains("id") && a.Attributes["id"].Value.Equals("buscador_detalle_sub_datos")).FirstOrDefault();
+            subdivx.Comments = subdivx.Details.Descendants("a").Where(a => a.Attributes.Contains("rel") && a.Attributes["rel"].Value.Equals("nofollow")).FirstOrDefault();
+            subdivx.DownloadLink = subdivx.Details.Descendants("a").Where(a => a.Attributes.Contains("rel") && a.Attributes["rel"].Value.Equals("nofollow")).LastOrDefault();
+
+            lblTitle.Text = subdivx.Title.InnerText;
+            lblDescription.Text = subdivx.Description.InnerText;
+            lblDetails.Text = subdivx.Details.InnerText;
+            lblComments.Text = "Comentarios (" + subdivx.Comments.InnerText + ")";
         }
 
         private void DoSearchAll(string text)
@@ -94,13 +96,13 @@ namespace SubtitleFinderApp
 
         private void btnDownload_Click(object sender, EventArgs e)
         {
-            saveFileDialog1.FileName = lblTitle.Text;            
-            var result = saveFileDialog1.ShowDialog();
+            dialogSaveSubtitle.FileName = lblTitle.Text;
+            var result = dialogSaveSubtitle.ShowDialog();
             if (result == DialogResult.OK)
             {                
                 var wClient = new WebClient();
-                wClient.DownloadFile("http://www.subdivx.com/bajar.php?id=523910&u=8", saveFileDialog1.FileName);
+                wClient.DownloadFile(subdivx.DownloadLink.Attributes["href"].Value, dialogSaveSubtitle.FileName);
             }
-        }
+        }        
     }
 }
