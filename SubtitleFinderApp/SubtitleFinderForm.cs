@@ -17,7 +17,8 @@ namespace SubtitleFinderApp
     public partial class SubtitleFinderForm : Form
     {
         private HtmlWeb _web = new HtmlWeb() { OverrideEncoding = Encoding.Default };
-        private SubDivXScraper subdivx = new SubDivXScraper();
+        private SubDivXScraperSingle subdivx = new SubDivXScraperSingle();
+        private SubDivXScraper subdivxs = new SubDivXScraper();
 
         public SubtitleFinderForm()
         {
@@ -65,30 +66,49 @@ namespace SubtitleFinderApp
 
         private void DoSearchAll(string text)
         {
+            //var htmldoc = _web.Load("https://www.subdivx.com/index.php?buscar=" + HttpUtility.UrlEncode(text) + "&accion=5&masdesc=&subtitulos=1&realiza_b=1");
+            //var anchors = htmldoc.DocumentNode.Descendants("a").Where(a => a.Attributes.Contains("class") && a.Attributes["class"].Value.Contains("titulo_menu_izq"));
+            //var descriptions = htmldoc.DocumentNode.Descendants("div").Where(a => a.Attributes.Contains("id") && a.Attributes["id"].Value.Equals("buscador_detalle_sub"));
+            //var details = htmldoc.DocumentNode.Descendants("div").Where(a => a.Attributes.Contains("id") && a.Attributes["id"].Value.Equals("buscador_detalle_sub_datos"));
+
             var htmldoc = _web.Load("https://www.subdivx.com/index.php?buscar=" + HttpUtility.UrlEncode(text) + "&accion=5&masdesc=&subtitulos=1&realiza_b=1");
-            var anchors = htmldoc.DocumentNode.Descendants("a").Where(a => a.Attributes.Contains("class") && a.Attributes["class"].Value.Contains("titulo_menu_izq"));
-            var descriptions = htmldoc.DocumentNode.Descendants("div").Where(a => a.Attributes.Contains("id") && a.Attributes["id"].Value.Equals("buscador_detalle_sub"));
-            var details = htmldoc.DocumentNode.Descendants("div").Where(a => a.Attributes.Contains("id") && a.Attributes["id"].Value.Equals("buscador_detalle_sub_datos"));
+            subdivxs.Title = htmldoc.DocumentNode.Descendants("a").Where(a => a.Attributes.Contains("class") && a.Attributes["class"].Value.Contains("titulo_menu_izq")).ToList();
+            subdivxs.Description = htmldoc.DocumentNode.Descendants("div").Where(a => a.Attributes.Contains("id") && a.Attributes["id"].Value.Equals("buscador_detalle_sub")).ToList();
+            subdivxs.Details = htmldoc.DocumentNode.Descendants("div").Where(a => a.Attributes.Contains("id") && a.Attributes["id"].Value.Equals("buscador_detalle_sub_datos")).ToList();
 
-            foreach (var a in anchors)
+            subdivxs.Comments = new List<HtmlNode>();
+            subdivxs.DownloadLink = new List<HtmlNode>();
+
+            foreach (HtmlNode detail in subdivxs.Details)
             {
-                lblTitle.Text += a.InnerText;
+                subdivxs.Comments.Add(detail.Descendants("a").Where(a => a.Attributes.Contains("rel") && a.Attributes["rel"].Value.Equals("nofollow")).FirstOrDefault());
+                subdivxs.DownloadLink.Add(detail.Descendants("a").Where(a => a.Attributes.Contains("rel") && a.Attributes["rel"].Value.Equals("nofollow")).LastOrDefault());                
             }
 
-            foreach (var d in descriptions)
+            foreach (var title in subdivxs.Title)
             {
-                lblDescription.Text += d.InnerText;
+                dataGridView1.Rows.Add(title.InnerText.Substring(13));
             }
 
-            foreach (var det in details)
+            for (var i = 0; i < subdivxs.Description.Count; i++)
             {
-                lblDetails.Text += det.InnerText;
+                dataGridView1.Rows[i].Cells["Description"].Value = subdivxs.Description[i].InnerText;
+            }
+
+            for (var i = 0; i < subdivxs.Comments.Count; i++)
+            {
+                dataGridView1.Rows[i].Cells["Comments"].Value = subdivxs.Comments[i].InnerText;
+            }
+
+            for (var i = 0; i < subdivxs.DownloadLink.Count; i++)
+            {
+                dataGridView1.Rows[i].Cells["DownloadLink"].Value = subdivxs.DownloadLink[i].Attributes["href"].Value;
             }
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            this.DoSearch(txtSearch.Text);
+            this.DoSearchAll(txtSearch.Text);
         }
 
         private void lblComments_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

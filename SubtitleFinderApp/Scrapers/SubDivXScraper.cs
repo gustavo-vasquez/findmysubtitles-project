@@ -9,10 +9,10 @@ namespace SubtitleFinderApp.Scrapers
 {
     public class SubDivXScraper
     {
-        public HtmlNode Title { get; set; }
-        public HtmlNode Description { get; set; }
-        public HtmlNode Details { get; set; }
-        public HtmlNode Comments { get; set; }        
-        public HtmlNode DownloadLink { get; set; }
+        public List<HtmlNode> Title { get; set; }
+        public List<HtmlNode> Description { get; set; }
+        public List<HtmlNode> Details { get; set; }
+        public List<HtmlNode> Comments { get; set; }        
+        public List<HtmlNode> DownloadLink { get; set; }        
     }
 }

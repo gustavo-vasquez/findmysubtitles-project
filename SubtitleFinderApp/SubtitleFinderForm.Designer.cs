@@ -46,9 +46,16 @@
             this.dialogSaveSubtitle = new System.Windows.Forms.SaveFileDialog();
             this.flowResultsPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.tableResultRight = new System.Windows.Forms.TableLayoutPanel();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.Title = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Description = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Comments = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DownloadLink = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tableResultLeft.SuspendLayout();
             this.flowResultsPanel.SuspendLayout();
             this.tableResultRight.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // textBox1
@@ -57,7 +64,7 @@
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBox1.Size = new System.Drawing.Size(589, 67);
+            this.textBox1.Size = new System.Drawing.Size(589, 44);
             this.textBox1.TabIndex = 0;
             // 
             // button1
@@ -210,6 +217,9 @@
             // 
             // flowResultsPanel
             // 
+            this.flowResultsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.flowResultsPanel.AutoScroll = true;
             this.flowResultsPanel.Controls.Add(this.tableResultLeft);
             this.flowResultsPanel.Controls.Add(this.tableResultRight);
@@ -218,7 +228,7 @@
             this.flowResultsPanel.Controls.Add(this.button1);
             this.flowResultsPanel.Location = new System.Drawing.Point(12, 83);
             this.flowResultsPanel.Name = "flowResultsPanel";
-            this.flowResultsPanel.Size = new System.Drawing.Size(697, 273);
+            this.flowResultsPanel.Size = new System.Drawing.Size(838, 224);
             this.flowResultsPanel.TabIndex = 12;
             // 
             // tableResultRight
@@ -235,21 +245,75 @@
             this.tableResultRight.Size = new System.Drawing.Size(110, 100);
             this.tableResultRight.TabIndex = 13;
             // 
+            // dataGridView1
+            // 
+            this.dataGridView1.AllowUserToAddRows = false;
+            this.dataGridView1.AllowUserToDeleteRows = false;
+            this.dataGridView1.AllowUserToResizeRows = false;
+            this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Title,
+            this.Description,
+            this.Comments,
+            this.DownloadLink});
+            this.dataGridView1.Location = new System.Drawing.Point(12, 313);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.ReadOnly = true;
+            this.dataGridView1.RowHeadersVisible = false;
+            this.dataGridView1.Size = new System.Drawing.Size(860, 216);
+            this.dataGridView1.TabIndex = 13;
+            // 
+            // Title
+            // 
+            this.Title.HeaderText = "Titulo";
+            this.Title.Name = "Title";
+            this.Title.ReadOnly = true;
+            // 
+            // Description
+            // 
+            this.Description.HeaderText = "Descripcion";
+            this.Description.Name = "Description";
+            this.Description.ReadOnly = true;
+            // 
+            // Comments
+            // 
+            this.Comments.HeaderText = "Comentarios";
+            this.Comments.Name = "Comments";
+            this.Comments.ReadOnly = true;
+            // 
+            // DownloadLink
+            // 
+            this.DownloadLink.HeaderText = "Descargar";
+            this.DownloadLink.Name = "DownloadLink";
+            this.DownloadLink.ReadOnly = true;
+            // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Location = new System.Drawing.Point(0, 540);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(884, 22);
+            this.statusStrip1.TabIndex = 14;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
             // SubtitleFinderForm
             // 
             this.AcceptButton = this.btnSearch;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(738, 451);
+            this.ClientSize = new System.Drawing.Size(884, 562);
+            this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.flowResultsPanel);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.comboSources);
             this.Controls.Add(this.btnSearch);
             this.Controls.Add(this.txtSearch);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximizeBox = false;
             this.Name = "SubtitleFinderForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Buscador de subtítulos";
@@ -258,6 +322,7 @@
             this.flowResultsPanel.ResumeLayout(false);
             this.flowResultsPanel.PerformLayout();
             this.tableResultRight.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -282,6 +347,12 @@
         private System.Windows.Forms.SaveFileDialog dialogSaveSubtitle;
         private System.Windows.Forms.FlowLayoutPanel flowResultsPanel;
         private System.Windows.Forms.TableLayoutPanel tableResultRight;
+        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Title;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Description;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Comments;
+        private System.Windows.Forms.DataGridViewTextBoxColumn DownloadLink;
+        private System.Windows.Forms.StatusStrip statusStrip1;
     }
 }
 
