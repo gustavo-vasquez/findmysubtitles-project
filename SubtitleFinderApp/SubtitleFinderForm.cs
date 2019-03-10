@@ -22,12 +22,14 @@ namespace SubtitleFinderApp
         public SubtitleFinderForm()
         {
             InitializeComponent();
+            this.MouseWheel += flowResultsPanel_MouseWheel;
+            this.comboSources.SelectedItem = this.comboSources.Items[0];
         }
 
         private void SubtitleFinderForm_Load(object sender, EventArgs e)
         {
             
-        }
+        }        
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -104,5 +106,12 @@ namespace SubtitleFinderApp
                 wClient.DownloadFile(subdivx.DownloadLink.Attributes["href"].Value, dialogSaveSubtitle.FileName);
             }
         }        
+
+        private void flowResultsPanel_MouseWheel(object sender, MouseEventArgs e)
+        {
+            if(flowResultsPanel.VerticalScroll.Visible || flowResultsPanel.HorizontalScroll.Visible)
+                if(e.X > 12 && e.X < 709 && e.Y > 83 && e.Y < 289)
+                    flowResultsPanel.Select();            
+        }
     }
 }

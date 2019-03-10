@@ -34,32 +34,36 @@
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.txtSearch = new System.Windows.Forms.TextBox();
             this.btnSearch = new System.Windows.Forms.Button();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.comboSources = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.btnDownload = new System.Windows.Forms.Button();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableResultLeft = new System.Windows.Forms.TableLayoutPanel();
             this.lblTitle = new System.Windows.Forms.Label();
             this.lblDescription = new System.Windows.Forms.Label();
             this.lblDetails = new System.Windows.Forms.Label();
             this.lblComments = new System.Windows.Forms.LinkLabel();
             this.dialogSaveSubtitle = new System.Windows.Forms.SaveFileDialog();
-            this.tableLayoutPanel1.SuspendLayout();
+            this.flowResultsPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.tableResultRight = new System.Windows.Forms.TableLayoutPanel();
+            this.tableResultLeft.SuspendLayout();
+            this.flowResultsPanel.SuspendLayout();
+            this.tableResultRight.SuspendLayout();
             this.SuspendLayout();
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(12, 306);
+            this.textBox1.Location = new System.Drawing.Point(3, 163);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBox1.Size = new System.Drawing.Size(589, 133);
+            this.textBox1.Size = new System.Drawing.Size(589, 67);
             this.textBox1.TabIndex = 0;
             // 
             // button1
             // 
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.button1.Location = new System.Drawing.Point(607, 285);
+            this.button1.Location = new System.Drawing.Point(598, 163);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 2;
@@ -69,11 +73,11 @@
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(12, 211);
+            this.textBox2.Location = new System.Drawing.Point(3, 109);
             this.textBox2.Multiline = true;
             this.textBox2.Name = "textBox2";
             this.textBox2.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBox2.Size = new System.Drawing.Size(589, 76);
+            this.textBox2.Size = new System.Drawing.Size(589, 48);
             this.textBox2.TabIndex = 3;
             // 
             // txtSearch
@@ -95,16 +99,19 @@
             this.btnSearch.UseVisualStyleBackColor = true;
             this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
             // 
-            // comboBox1
+            // comboSources
             // 
-            this.comboBox1.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(555, 39);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 21);
-            this.comboBox1.TabIndex = 2;
+            this.comboSources.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboSources.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboSources.FormattingEnabled = true;
+            this.comboSources.Items.AddRange(new object[] {
+            "SubDivX.com",
+            "TuSubtitulo.com",
+            "Subtitulamos.tv"});
+            this.comboSources.Location = new System.Drawing.Point(555, 39);
+            this.comboSources.Name = "comboSources";
+            this.comboSources.Size = new System.Drawing.Size(121, 21);
+            this.comboSources.TabIndex = 2;
             // 
             // label1
             // 
@@ -127,29 +134,29 @@
             // btnDownload
             // 
             this.btnDownload.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnDownload.Location = new System.Drawing.Point(571, 114);
+            this.btnDownload.Location = new System.Drawing.Point(3, 3);
             this.btnDownload.Name = "btnDownload";
-            this.btnDownload.Size = new System.Drawing.Size(105, 26);
+            this.btnDownload.Size = new System.Drawing.Size(104, 26);
             this.btnDownload.TabIndex = 9;
             this.btnDownload.Text = "Descargar";
             this.btnDownload.UseVisualStyleBackColor = true;
             this.btnDownload.Click += new System.EventHandler(this.btnDownload_Click);
             // 
-            // tableLayoutPanel1
+            // tableResultLeft
             // 
-            this.tableLayoutPanel1.ColumnCount = 1;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.Controls.Add(this.lblTitle, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.lblDescription, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.lblDetails, 0, 2);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(13, 93);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 3;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 41.79105F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 58.20895F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(552, 95);
-            this.tableLayoutPanel1.TabIndex = 10;
+            this.tableResultLeft.ColumnCount = 1;
+            this.tableResultLeft.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableResultLeft.Controls.Add(this.lblTitle, 0, 0);
+            this.tableResultLeft.Controls.Add(this.lblDescription, 0, 1);
+            this.tableResultLeft.Controls.Add(this.lblDetails, 0, 2);
+            this.tableResultLeft.Location = new System.Drawing.Point(3, 3);
+            this.tableResultLeft.Name = "tableResultLeft";
+            this.tableResultLeft.RowCount = 3;
+            this.tableResultLeft.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 41.79105F));
+            this.tableResultLeft.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 58.20895F));
+            this.tableResultLeft.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.tableResultLeft.Size = new System.Drawing.Size(545, 95);
+            this.tableResultLeft.TabIndex = 10;
             // 
             // lblTitle
             // 
@@ -157,7 +164,7 @@
             this.lblTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTitle.Location = new System.Drawing.Point(3, 0);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(553, 29);
+            this.lblTitle.Size = new System.Drawing.Size(545, 29);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "TITULO";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -167,7 +174,7 @@
             this.lblDescription.AutoEllipsis = true;
             this.lblDescription.Location = new System.Drawing.Point(3, 29);
             this.lblDescription.Name = "lblDescription";
-            this.lblDescription.Size = new System.Drawing.Size(549, 40);
+            this.lblDescription.Size = new System.Drawing.Size(545, 40);
             this.lblDescription.TabIndex = 1;
             this.lblDescription.Text = "DESCRIPCION";
             this.lblDescription.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -177,16 +184,16 @@
             this.lblDetails.AutoEllipsis = true;
             this.lblDetails.Location = new System.Drawing.Point(3, 69);
             this.lblDetails.Name = "lblDetails";
-            this.lblDetails.Size = new System.Drawing.Size(553, 26);
+            this.lblDetails.Size = new System.Drawing.Size(545, 26);
             this.lblDetails.TabIndex = 2;
             this.lblDetails.Text = "DETALLES";
             this.lblDetails.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblComments
             // 
-            this.lblComments.Location = new System.Drawing.Point(571, 162);
+            this.lblComments.Location = new System.Drawing.Point(3, 50);
             this.lblComments.Name = "lblComments";
-            this.lblComments.Size = new System.Drawing.Size(105, 26);
+            this.lblComments.Size = new System.Drawing.Size(104, 26);
             this.lblComments.TabIndex = 11;
             this.lblComments.TabStop = true;
             this.lblComments.Text = "Comentarios (30)";
@@ -201,23 +208,45 @@
             this.dialogSaveSubtitle.RestoreDirectory = true;
             this.dialogSaveSubtitle.Title = "Guardar subtítulo como...";
             // 
+            // flowResultsPanel
+            // 
+            this.flowResultsPanel.AutoScroll = true;
+            this.flowResultsPanel.Controls.Add(this.tableResultLeft);
+            this.flowResultsPanel.Controls.Add(this.tableResultRight);
+            this.flowResultsPanel.Controls.Add(this.textBox2);
+            this.flowResultsPanel.Controls.Add(this.textBox1);
+            this.flowResultsPanel.Controls.Add(this.button1);
+            this.flowResultsPanel.Location = new System.Drawing.Point(12, 83);
+            this.flowResultsPanel.Name = "flowResultsPanel";
+            this.flowResultsPanel.Size = new System.Drawing.Size(697, 273);
+            this.flowResultsPanel.TabIndex = 12;
+            // 
+            // tableResultRight
+            // 
+            this.tableResultRight.ColumnCount = 1;
+            this.tableResultRight.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableResultRight.Controls.Add(this.btnDownload, 0, 0);
+            this.tableResultRight.Controls.Add(this.lblComments, 0, 1);
+            this.tableResultRight.Location = new System.Drawing.Point(554, 3);
+            this.tableResultRight.Name = "tableResultRight";
+            this.tableResultRight.RowCount = 2;
+            this.tableResultRight.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableResultRight.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableResultRight.Size = new System.Drawing.Size(110, 100);
+            this.tableResultRight.TabIndex = 13;
+            // 
             // SubtitleFinderForm
             // 
             this.AcceptButton = this.btnSearch;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(693, 451);
-            this.Controls.Add(this.lblComments);
-            this.Controls.Add(this.tableLayoutPanel1);
-            this.Controls.Add(this.btnDownload);
+            this.ClientSize = new System.Drawing.Size(738, 451);
+            this.Controls.Add(this.flowResultsPanel);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.comboSources);
             this.Controls.Add(this.btnSearch);
             this.Controls.Add(this.txtSearch);
-            this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.textBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
@@ -225,7 +254,10 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Buscador de subtítulos";
             this.Load += new System.EventHandler(this.SubtitleFinderForm_Load);
-            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableResultLeft.ResumeLayout(false);
+            this.flowResultsPanel.ResumeLayout(false);
+            this.flowResultsPanel.PerformLayout();
+            this.tableResultRight.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -238,16 +270,18 @@
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.TextBox txtSearch;
         private System.Windows.Forms.Button btnSearch;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox comboSources;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btnDownload;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.TableLayoutPanel tableResultLeft;
         private System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.Label lblDescription;
         private System.Windows.Forms.Label lblDetails;
         private System.Windows.Forms.LinkLabel lblComments;
         private System.Windows.Forms.SaveFileDialog dialogSaveSubtitle;
+        private System.Windows.Forms.FlowLayoutPanel flowResultsPanel;
+        private System.Windows.Forms.TableLayoutPanel tableResultRight;
     }
 }
 
