@@ -25,6 +25,17 @@ namespace SubtitleFinderApp
             InitializeComponent();
             this.MouseWheel += flowResultsPanel_MouseWheel;
             this.comboSources.SelectedItem = this.comboSources.Items[0];
+            gridResults.Columns["Title"].Width = 220;
+            gridResults.Columns["Description"].Width = 430;
+            gridResults.Columns["Comments"].Width = 80;            
+            DataGridViewLinkColumn linkColumn = new DataGridViewLinkColumn();
+            linkColumn.HeaderText = "";
+            linkColumn.LinkBehavior = LinkBehavior.SystemDefault;
+            linkColumn.Name = "DownloadLink";
+            linkColumn.Text = "Descargar";
+            linkColumn.UseColumnTextForLinkValue = true;
+            gridResults.Columns.Add(linkColumn);
+            gridResults.Columns["DownloadLink"].Width = 90;
         }
 
         private void SubtitleFinderForm_Load(object sender, EventArgs e)
@@ -66,10 +77,11 @@ namespace SubtitleFinderApp
 
         private void DoSearchAll(string text)
         {
+            gridResults.Rows.Clear();            
             //var htmldoc = _web.Load("https://www.subdivx.com/index.php?buscar=" + HttpUtility.UrlEncode(text) + "&accion=5&masdesc=&subtitulos=1&realiza_b=1");
             //var anchors = htmldoc.DocumentNode.Descendants("a").Where(a => a.Attributes.Contains("class") && a.Attributes["class"].Value.Contains("titulo_menu_izq"));
             //var descriptions = htmldoc.DocumentNode.Descendants("div").Where(a => a.Attributes.Contains("id") && a.Attributes["id"].Value.Equals("buscador_detalle_sub"));
-            //var details = htmldoc.DocumentNode.Descendants("div").Where(a => a.Attributes.Contains("id") && a.Attributes["id"].Value.Equals("buscador_detalle_sub_datos"));
+            //var details = htmldoc.DocumentNode.Descendants("div").Where(a => a.Attributes.Contains("id") && a.Attributes["id"].Value.Equals("buscador_detalle_sub_datos"));            
 
             var htmldoc = _web.Load("https://www.subdivx.com/index.php?buscar=" + HttpUtility.UrlEncode(text) + "&accion=5&masdesc=&subtitulos=1&realiza_b=1");
             subdivxs.Title = htmldoc.DocumentNode.Descendants("a").Where(a => a.Attributes.Contains("class") && a.Attributes["class"].Value.Contains("titulo_menu_izq")).ToList();
@@ -85,25 +97,40 @@ namespace SubtitleFinderApp
                 subdivxs.DownloadLink.Add(detail.Descendants("a").Where(a => a.Attributes.Contains("rel") && a.Attributes["rel"].Value.Equals("nofollow")).LastOrDefault());                
             }
 
+            //for (var i = 0; i < titles.Count; i++)
+            //{
+            //    subdivxs.Add(new SubDivXScraper()
+            //    {
+            //        Title = titles[i],
+            //        Description = descriptions[i],
+            //        Details = details[i],
+            //        Comments = comments[i],
+            //        DownloadLink = downloadLink[i]
+            //    });
+            //}
+
             foreach (var title in subdivxs.Title)
             {
-                dataGridView1.Rows.Add(title.InnerText.Substring(13));
+                gridResults.Rows.Add(title.InnerText.Substring(13));
             }
 
             for (var i = 0; i < subdivxs.Description.Count; i++)
             {
-                dataGridView1.Rows[i].Cells["Description"].Value = subdivxs.Description[i].InnerText;
+                gridResults.Rows[i].Cells["Description"].Value = subdivxs.Description[i].InnerText;
             }
 
             for (var i = 0; i < subdivxs.Comments.Count; i++)
             {
-                dataGridView1.Rows[i].Cells["Comments"].Value = subdivxs.Comments[i].InnerText;
+                gridResults.Rows[i].Cells["Comments"].Value = subdivxs.Comments[i].InnerText;
             }
 
-            for (var i = 0; i < subdivxs.DownloadLink.Count; i++)
-            {
-                dataGridView1.Rows[i].Cells["DownloadLink"].Value = subdivxs.DownloadLink[i].Attributes["href"].Value;
-            }
+            //for (var i = 0; i < subdivxs.DownloadLink.Count; i++)
+            //{
+            //    DataGridViewLinkCell successCell = new DataGridViewLinkCell();
+            //    successCell.Value = subdivxs.DownloadLink[i].Attributes["href"].Value;
+            //    successCell.LinkColor = Color.Green;
+            //    gridResults.Rows[i].Cells["DownloadLink"].Value = successCell.Value;
+            //}            
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
@@ -132,6 +159,46 @@ namespace SubtitleFinderApp
             if(flowResultsPanel.VerticalScroll.Visible || flowResultsPanel.HorizontalScroll.Visible)
                 if(e.X > 12 && e.X < 709 && e.Y > 83 && e.Y < 289)
                     flowResultsPanel.Select();            
+        }
+
+        private void btnProductInfo_Click(object sender, EventArgs e)
+        {
+            string appInfoText = String.Join(
+                    null,
+                    ProductInfo.Product,
+                    Environment.NewLine,
+                    ProductInfo.Description,
+                    Environment.NewLine,
+                    Environment.NewLine,
+                    ProductInfo.Copyright,
+                    Environment.NewLine,
+                    Environment.NewLine,
+                    "Versión: ",
+                    System.Reflection.Assembly.GetEntryAssembly().GetName().Version.ToString()
+                );
+            DialogResult AppInfoWindow = MessageBox.Show(appInfoText, "Acerca de", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void gridResults_RowStateChanged(object sender, DataGridViewRowStateChangedEventArgs e)
+        {
+            if (e.StateChanged != DataGridViewElementStates.Selected)
+                return;
+
+            statusbarLabel.Text = subdivxs.Details[e.Row.Index].InnerText;
+        }        
+
+        private void gridResults_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == 3)
+            {
+                dialogSaveSubtitle.FileName = subdivxs.Description[e.RowIndex].InnerText;
+                var result = dialogSaveSubtitle.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    var wClient = new WebClient();
+                    wClient.DownloadFile(subdivxs.DownloadLink[e.RowIndex].Attributes["href"].Value, dialogSaveSubtitle.FileName);
+                }
+            }
         }
     }
 }

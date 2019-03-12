@@ -46,16 +46,18 @@
             this.dialogSaveSubtitle = new System.Windows.Forms.SaveFileDialog();
             this.flowResultsPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.tableResultRight = new System.Windows.Forms.TableLayoutPanel();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.gridResults = new System.Windows.Forms.DataGridView();
+            this.statusDetails = new System.Windows.Forms.StatusStrip();
+            this.statusbarLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.btnProductInfo = new System.Windows.Forms.Button();
             this.Title = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Description = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Comments = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.DownloadLink = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tableResultLeft.SuspendLayout();
             this.flowResultsPanel.SuspendLayout();
             this.tableResultRight.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridResults)).BeginInit();
+            this.statusDetails.SuspendLayout();
             this.SuspendLayout();
             // 
             // textBox1
@@ -211,7 +213,7 @@
             // 
             this.dialogSaveSubtitle.DefaultExt = "rar";
             this.dialogSaveSubtitle.Filter = "Archivos RAR (*.rar)|*.rar|Todos los archivos (*.*)|*.*";
-            this.dialogSaveSubtitle.InitialDirectory = "F:\\Carpeta personal";
+            this.dialogSaveSubtitle.InitialDirectory = "%USERPROFILE%\\Downloads";
             this.dialogSaveSubtitle.RestoreDirectory = true;
             this.dialogSaveSubtitle.Title = "Guardar subtítulo como...";
             // 
@@ -245,59 +247,77 @@
             this.tableResultRight.Size = new System.Drawing.Size(110, 100);
             this.tableResultRight.TabIndex = 13;
             // 
-            // dataGridView1
+            // gridResults
             // 
-            this.dataGridView1.AllowUserToAddRows = false;
-            this.dataGridView1.AllowUserToDeleteRows = false;
-            this.dataGridView1.AllowUserToResizeRows = false;
-            this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.gridResults.AllowUserToAddRows = false;
+            this.gridResults.AllowUserToDeleteRows = false;
+            this.gridResults.AllowUserToResizeRows = false;
+            this.gridResults.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.gridResults.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.gridResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.gridResults.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Title,
             this.Description,
-            this.Comments,
-            this.DownloadLink});
-            this.dataGridView1.Location = new System.Drawing.Point(12, 313);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.RowHeadersVisible = false;
-            this.dataGridView1.Size = new System.Drawing.Size(860, 216);
-            this.dataGridView1.TabIndex = 13;
+            this.Comments});
+            this.gridResults.Location = new System.Drawing.Point(12, 313);
+            this.gridResults.MultiSelect = false;
+            this.gridResults.Name = "gridResults";
+            this.gridResults.ReadOnly = true;
+            this.gridResults.RowHeadersVisible = false;
+            this.gridResults.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.gridResults.Size = new System.Drawing.Size(860, 216);
+            this.gridResults.TabIndex = 13;
+            this.gridResults.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridResults_CellContentClick);
+            this.gridResults.RowStateChanged += new System.Windows.Forms.DataGridViewRowStateChangedEventHandler(this.gridResults_RowStateChanged);
+            // 
+            // statusDetails
+            // 
+            this.statusDetails.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.statusbarLabel});
+            this.statusDetails.Location = new System.Drawing.Point(0, 540);
+            this.statusDetails.Name = "statusDetails";
+            this.statusDetails.Size = new System.Drawing.Size(884, 22);
+            this.statusDetails.TabIndex = 14;
+            // 
+            // statusbarLabel
+            // 
+            this.statusbarLabel.Name = "statusbarLabel";
+            this.statusbarLabel.Size = new System.Drawing.Size(32, 17);
+            this.statusbarLabel.Text = "Listo";
+            // 
+            // btnProductInfo
+            // 
+            this.btnProductInfo.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.btnProductInfo.Location = new System.Drawing.Point(797, 38);
+            this.btnProductInfo.Name = "btnProductInfo";
+            this.btnProductInfo.Size = new System.Drawing.Size(75, 23);
+            this.btnProductInfo.TabIndex = 15;
+            this.btnProductInfo.Text = "Info";
+            this.btnProductInfo.UseVisualStyleBackColor = true;
+            this.btnProductInfo.Click += new System.EventHandler(this.btnProductInfo_Click);
             // 
             // Title
             // 
             this.Title.HeaderText = "Titulo";
             this.Title.Name = "Title";
             this.Title.ReadOnly = true;
+            this.Title.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // Description
             // 
             this.Description.HeaderText = "Descripcion";
             this.Description.Name = "Description";
             this.Description.ReadOnly = true;
+            this.Description.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // Comments
             // 
             this.Comments.HeaderText = "Comentarios";
             this.Comments.Name = "Comments";
             this.Comments.ReadOnly = true;
-            // 
-            // DownloadLink
-            // 
-            this.DownloadLink.HeaderText = "Descargar";
-            this.DownloadLink.Name = "DownloadLink";
-            this.DownloadLink.ReadOnly = true;
-            // 
-            // statusStrip1
-            // 
-            this.statusStrip1.Location = new System.Drawing.Point(0, 540);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(884, 22);
-            this.statusStrip1.TabIndex = 14;
-            this.statusStrip1.Text = "statusStrip1";
+            this.Comments.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // SubtitleFinderForm
             // 
@@ -305,8 +325,9 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(884, 562);
-            this.Controls.Add(this.statusStrip1);
-            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.btnProductInfo);
+            this.Controls.Add(this.statusDetails);
+            this.Controls.Add(this.gridResults);
             this.Controls.Add(this.flowResultsPanel);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -322,7 +343,9 @@
             this.flowResultsPanel.ResumeLayout(false);
             this.flowResultsPanel.PerformLayout();
             this.tableResultRight.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridResults)).EndInit();
+            this.statusDetails.ResumeLayout(false);
+            this.statusDetails.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -347,12 +370,13 @@
         private System.Windows.Forms.SaveFileDialog dialogSaveSubtitle;
         private System.Windows.Forms.FlowLayoutPanel flowResultsPanel;
         private System.Windows.Forms.TableLayoutPanel tableResultRight;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView gridResults;
+        private System.Windows.Forms.StatusStrip statusDetails;
+        private System.Windows.Forms.Button btnProductInfo;
+        private System.Windows.Forms.ToolStripStatusLabel statusbarLabel;
         private System.Windows.Forms.DataGridViewTextBoxColumn Title;
         private System.Windows.Forms.DataGridViewTextBoxColumn Description;
         private System.Windows.Forms.DataGridViewTextBoxColumn Comments;
-        private System.Windows.Forms.DataGridViewTextBoxColumn DownloadLink;
-        private System.Windows.Forms.StatusStrip statusStrip1;
     }
 }
 

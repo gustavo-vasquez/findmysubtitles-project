@@ -57,6 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ProductInfo.cs" />
     <Compile Include="Scrapers\SubDivXScraper.cs" />
     <Compile Include="Scrapers\SubDivXScraperSingle.cs" />
     <Compile Include="SubtitleFinderForm.cs">
