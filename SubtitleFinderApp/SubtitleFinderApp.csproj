@@ -96,6 +96,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\icons\comment_search.ico" />
+    <Content Include="Resources\icons\comment_edit.ico" />
     <Content Include="Resources\images\search.png" />
     <Content Include="Resources\images\info.png" />
     <Content Include="Resources\subtitle_finder_icon.ico" />
