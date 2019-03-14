@@ -37,7 +37,8 @@ namespace SubtitleFinderApp
             downloadsColumn.HeaderText = "";
             downloadsColumn.LinkBehavior = LinkBehavior.SystemDefault;
             downloadsColumn.Name = "DownloadLink";
-            downloadsColumn.Text = "Descargar";            
+            downloadsColumn.Text = "Descargar";
+            downloadsColumn.UseColumnTextForLinkValue = true;
             gridResults.Columns.Add(downloadsColumn);
             gridResults.Columns["DownloadLink"].Width = 80;
         }
@@ -91,10 +92,10 @@ namespace SubtitleFinderApp
                 gridResults.Rows[i].Cells["Comments"].Value = subdivx.Comments[i].InnerText;
             }
 
-            for (var i = 0; i < subdivx.DownloadLink.Count; i++)
-            {
-                gridResults.Rows[i].Cells["DownloadLink"].Value = subdivx.DownloadLink[i].Attributes["href"].Value;
-            }
+            //for (var i = 0; i < subdivx.DownloadLink.Count; i++)
+            //{
+            //    gridResults.Rows[i].Cells["DownloadLink"].Value = subdivx.DownloadLink[i].Attributes["href"].Value;
+            //}
 
             //gridResults.Height = this.gridResults.Rows. * gridResults.Rows.Count;
             gridResults.Refresh();
@@ -180,7 +181,7 @@ namespace SubtitleFinderApp
 
             if (e.ColumnIndex == 3)
             {
-                dialogSaveSubtitle.FileName = subdivx.Description[e.RowIndex].InnerText;
+                dialogSaveSubtitle.FileName = subdivx.Title[e.RowIndex].InnerText;
                 var result = dialogSaveSubtitle.ShowDialog();
                 if (result == DialogResult.OK)
                 {
