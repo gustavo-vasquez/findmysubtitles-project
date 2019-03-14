@@ -103,6 +103,8 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gridResults.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.gridResults.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.gridResults.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.gridResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gridResults.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Title,
