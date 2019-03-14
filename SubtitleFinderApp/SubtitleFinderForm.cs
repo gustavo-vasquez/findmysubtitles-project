@@ -40,7 +40,7 @@ namespace SubtitleFinderApp
             downloadsColumn.Text = "Descargar";
             downloadsColumn.UseColumnTextForLinkValue = true;
             gridResults.Columns.Add(downloadsColumn);
-            gridResults.Columns["DownloadLink"].Width = 80;
+            gridResults.Columns["DownloadLink"].Width = 80;            
         }
 
         private void SubtitleFinderForm_Load(object sender, EventArgs e)
@@ -141,47 +141,20 @@ namespace SubtitleFinderApp
 
         private void gridResults_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if(e.ColumnIndex == 2)
-            {
-                string commentUrl = subdivx.Comments[e.RowIndex].Attributes["href"].Value;                
-                string queryString = commentUrl.Substring(commentUrl.IndexOf('?'));
-                string subtitleId = HttpUtility.ParseQueryString(queryString).Get("idsub");
+            string commentUrl = subdivx.Comments[e.RowIndex].Attributes["href"].Value;
+            string queryString = commentUrl.Substring(commentUrl.IndexOf('?'));
+            string subtitleId = HttpUtility.ParseQueryString(queryString).Get("idsub");
+
+            if (e.ColumnIndex == 2)
+            {                
                 var htmlComments = new HtmlWeb() { OverrideEncoding = Encoding.Default }.Load("https://www.subdivx.com/popcoment.php?idsub=" + HttpUtility.UrlEncode(subtitleId));
-                var userComments = htmlComments.DocumentNode.Descendants("div").Where(d => d.Attributes.Contains("id") && d.Attributes["id"].Value.Equals("pop_upcoment"));
-                //string commentsWindowText = "";
-
-                //foreach (var uc in userComments)
-                //{
-                //    commentsWindowText += String.Join(
-                //        null,
-                //        Environment.NewLine,
-                //        Environment.NewLine,
-                //        uc.InnerText,
-                //        Environment.NewLine,
-                //        "Comentario de usuario"
-                //    );
-                //}
-
-                //string commentsWindowText = String.Join(
-                //    null,
-                //    ProductInfo.Product,
-                //    Environment.NewLine,
-                //    ProductInfo.Description,
-                //    Environment.NewLine,
-                //    Environment.NewLine,
-                //    ProductInfo.Copyright,
-                //    Environment.NewLine,
-                //    Environment.NewLine,
-                //    "Versión: ",
-                //    System.Reflection.Assembly.GetEntryAssembly().GetName().Version.ToString()
-                //);
-                //MessageBox.Show(commentsWindowText, "Ver comentarios", MessageBoxButtons.OK);
+                var userComments = htmlComments.DocumentNode.Descendants("div").Where(d => d.Attributes.Contains("id") && d.Attributes["id"].Value.Equals("pop_upcoment"));                
                 new SubDivXCommentsDialog().ShowDialog("traducidos por argenteam para gotham s05e05 pena dura 720p web x264-tbs, también sirve para 1080p web x264-tbs y web x264-tbs los créditos a ellos! enjoy!", "Ver comentarios", userComments);
             }
 
             if (e.ColumnIndex == 3)
             {
-                dialogSaveSubtitle.FileName = subdivx.Title[e.RowIndex].InnerText;
+                dialogSaveSubtitle.FileName = string.Join(" ", subtitleId, "-", subdivx.Title[e.RowIndex].InnerText);
                 var result = dialogSaveSubtitle.ShowDialog();
                 if (result == DialogResult.OK)
                 {
