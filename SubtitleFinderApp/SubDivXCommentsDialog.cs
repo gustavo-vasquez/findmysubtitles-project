@@ -11,6 +11,7 @@ namespace SubtitleFinderApp
     public class SubDivXCommentsDialog
     {
         private Label lblComment, lblUser;
+        private TableLayoutPanel tablePanel;
 
         public void ShowDialog(string text, string caption, IEnumerable<HtmlNode> userCommentsDivs)
         {
@@ -21,47 +22,29 @@ namespace SubtitleFinderApp
             commentsForm.Text = caption;
             commentsForm.StartPosition = FormStartPosition.CenterParent;
             commentsForm.Icon = Properties.Resources.comment_edit;
-            //int offset = 30;
-            int rowIndex = 0;
-
-            FlowLayoutPanel flowPanel = new FlowLayoutPanel()
+            commentsForm.MinimumSize = new System.Drawing.Size(500, 500);
+            int rowIndex = 0;            
+            
+            tablePanel = new TableLayoutPanel()
             {
-                //Left = 50,
-                Width = 420,
-                Height = 390,
-                Location = new System.Drawing.Point(30, 20),
+                Location = new System.Drawing.Point(32, 20),                
+                ColumnCount = 1,                
                 AutoScroll = true,
-                BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle,
+                Size = new System.Drawing.Size(420, 390),             
+                TabIndex = 1,   
                 Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)))
             };
 
-            TableLayoutPanel tablePanel = new TableLayoutPanel()
-            {
-                Location = new System.Drawing.Point(32, 20),
-                //Left = 32,
-                //Top = 20,
-                //Width = 420,
-                //Height = 390,
-                ColumnCount = 1,
-                //CellBorderStyle = TableLayoutPanelCellBorderStyle.Single,
-                AutoScroll = true,                
-                //AutoSize = true,
-                Size = new System.Drawing.Size(420, 390),                
-                Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
-            | System.Windows.Forms.AnchorStyles.Right)))
-            };
+            tablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));            
 
             foreach (var div in userCommentsDivs)
             {
                 lblUser = new Label()
                 {
                     Text = div.Descendants("div").SingleOrDefault().Descendants("a").SingleOrDefault().InnerText,
-                    Margin = new System.Windows.Forms.Padding(3, 0, 3, 0),
-                    //Width = 400,
-                    //MaximumSize = new System.Drawing.Size(400, 0),
+                    Margin = new System.Windows.Forms.Padding(3, 0, 3, 0),                    
                     AutoSize = true,
                     Font = new System.Drawing.Font(Label.DefaultFont, System.Drawing.FontStyle.Bold)
                 };
@@ -83,28 +66,34 @@ namespace SubtitleFinderApp
                 lblComment.Width = tablePanel.Width - 20;                
                 tablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10F));
 
-                //offset = lblUser.Top + lblComment.Height + 20;
+                lblUser.MouseHover += TablePanel_MouseHover;
+                lblComment.MouseHover += TablePanel_MouseHover;
                 rowIndex += 3;
             }            
-
-            //NumericUpDown inputBox = new NumericUpDown() { Left = 50, Top = 100, Width = 400 };
+            
             Button btnClose = new Button()
             {
                 Text = "Cerrar",                
                 Width = 100,
                 Location = new System.Drawing.Point(190, 420),
+                TabIndex = 0,
                 Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)))
             };
 
             btnClose.Click += (sender, e) => { commentsForm.Close(); };
-            commentsForm.Controls.Add(btnClose);            
-            //lblUser.SizeChanged += new EventHandler(lblUser_SizeChanged);
-            //commentsForm.Controls.Add(lblUser);                        
-            //commentsForm.Controls.Add(inputBox);
-            tablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));            
-            commentsForm.Controls.Add(tablePanel);
+            commentsForm.Controls.Add(btnClose);
+            commentsForm.CancelButton = btnClose;
+            //lblUser.SizeChanged += new EventHandler(lblUser_SizeChanged);            
+            tablePanel.MouseHover += TablePanel_MouseHover;
+            commentsForm.Controls.Add(tablePanel);            
             commentsForm.ShowDialog();            
         }
+
+        private void TablePanel_MouseHover(object sender, EventArgs e)
+        {
+            if (!tablePanel.Focused && tablePanel.VerticalScroll.Visible)
+                tablePanel.Focus();
+        }        
 
         //private void lblUser_SizeChanged(object sender, EventArgs e)
         //{
