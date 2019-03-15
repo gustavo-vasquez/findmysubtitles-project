@@ -10,34 +10,55 @@ namespace SubtitleFinderApp
 {
     public class SubDivXCommentsDialog
     {
-        private Label lblComment, lblUser;
+        private Form commentsForm;
         private TableLayoutPanel tablePanel;
+        private Label lblComment, lblUser;
+        private Button btnClose;
 
-        public void ShowDialog(string text, string caption, IEnumerable<HtmlNode> userCommentsDivs)
+        public SubDivXCommentsDialog()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SubtitleFinderForm));
-            Form commentsForm = new Form();
-            commentsForm.Width = 500;
-            commentsForm.Height = 500;
-            commentsForm.Text = caption;
-            commentsForm.StartPosition = FormStartPosition.CenterParent;
-            commentsForm.Icon = Properties.Resources.comment_edit;
-            commentsForm.MinimumSize = new System.Drawing.Size(500, 500);
-            int rowIndex = 0;            
-            
+            commentsForm = new Form()
+            {
+                Width = 500,
+                Height = 500,
+                Text = "Ver comentarios",
+                StartPosition = FormStartPosition.CenterParent,
+                Icon = Properties.Resources.comment_edit,
+                MinimumSize = new System.Drawing.Size(500, 500)
+            };
+
             tablePanel = new TableLayoutPanel()
             {
-                Location = new System.Drawing.Point(32, 20),                
-                ColumnCount = 1,                
+                Location = new System.Drawing.Point(32, 20),
+                ColumnCount = 1,
                 AutoScroll = true,
-                Size = new System.Drawing.Size(420, 390),             
-                TabIndex = 1,   
+                Size = new System.Drawing.Size(420, 390),
+                TabIndex = 1,
                 Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)))
             };
 
-            tablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));            
+            tablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            tablePanel.MouseHover += TablePanel_MouseHover;
+
+            btnClose = new Button()
+            {
+                Text = "Cerrar",
+                Width = 100,
+                Location = new System.Drawing.Point(190, 420),
+                TabIndex = 0,
+                Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)))
+            };
+
+            btnClose.Click += (sender, e) => { commentsForm.Close(); };
+            commentsForm.Controls.Add(btnClose);
+            commentsForm.CancelButton = btnClose;            
+        }
+
+        public void ShowDialog(IEnumerable<HtmlNode> userCommentsDivs)
+        {
+            int rowIndex = 0;
 
             foreach (var div in userCommentsDivs)
             {
@@ -58,8 +79,6 @@ namespace SubtitleFinderApp
                     Margin = new System.Windows.Forms.Padding(3, 0, 3, 0),                    
                     AutoSize = true
                 };
-
-                //lblUser.SizeChanged += new EventHandler(lblUser_SizeChanged);
                 
                 tablePanel.Controls.Add(lblComment, 0, rowIndex + 1);
                 tablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.AutoSize));
@@ -69,36 +88,16 @@ namespace SubtitleFinderApp
                 lblUser.MouseHover += TablePanel_MouseHover;
                 lblComment.MouseHover += TablePanel_MouseHover;
                 rowIndex += 3;
-            }            
-            
-            Button btnClose = new Button()
-            {
-                Text = "Cerrar",                
-                Width = 100,
-                Location = new System.Drawing.Point(190, 420),
-                TabIndex = 0,
-                Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)))
-            };
+            }
 
-            btnClose.Click += (sender, e) => { commentsForm.Close(); };
-            commentsForm.Controls.Add(btnClose);
-            commentsForm.CancelButton = btnClose;
-            //lblUser.SizeChanged += new EventHandler(lblUser_SizeChanged);            
-            tablePanel.MouseHover += TablePanel_MouseHover;
-            commentsForm.Controls.Add(tablePanel);            
-            commentsForm.ShowDialog();            
+            commentsForm.Controls.Add(tablePanel);
+            commentsForm.ShowDialog();
         }
 
         private void TablePanel_MouseHover(object sender, EventArgs e)
         {
             if (!tablePanel.Focused && tablePanel.VerticalScroll.Visible)
                 tablePanel.Focus();
-        }        
-
-        //private void lblUser_SizeChanged(object sender, EventArgs e)
-        //{
-        //    //lblComment.Top = lblUser.Top + lblUser.Height + 10;
-        //    //label2.Top = label1.Top;
-        //}
+        }
     }
 }

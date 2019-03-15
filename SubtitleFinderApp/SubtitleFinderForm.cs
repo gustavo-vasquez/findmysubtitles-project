@@ -149,7 +149,7 @@ namespace SubtitleFinderApp
             {                
                 var htmlComments = new HtmlWeb() { OverrideEncoding = Encoding.Default }.Load("https://www.subdivx.com/popcoment.php?idsub=" + HttpUtility.UrlEncode(subtitleId));
                 var userComments = htmlComments.DocumentNode.Descendants("div").Where(d => d.Attributes.Contains("id") && d.Attributes["id"].Value.Equals("pop_upcoment"));                
-                new SubDivXCommentsDialog().ShowDialog("traducidos por argenteam para gotham s05e05 pena dura 720p web x264-tbs, también sirve para 1080p web x264-tbs y web x264-tbs los créditos a ellos! enjoy!", "Ver comentarios", userComments);
+                new SubDivXCommentsDialog().ShowDialog(userComments);
             }
 
             if (e.ColumnIndex == 3)
