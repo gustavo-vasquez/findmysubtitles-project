@@ -162,6 +162,12 @@ namespace SubtitleFinderApp
                     wClient.DownloadFile(subdivx.DownloadLink[e.RowIndex].Attributes["href"].Value, dialogSaveSubtitle.FileName);
                 }
             }
-        }        
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            var myForm = new SubtitulamosSourceForm();
+            myForm.Show();
+        }
     }
 }

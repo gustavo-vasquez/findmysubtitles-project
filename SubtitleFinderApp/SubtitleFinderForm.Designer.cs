@@ -36,12 +36,13 @@
             this.label2 = new System.Windows.Forms.Label();
             this.dialogSaveSubtitle = new System.Windows.Forms.SaveFileDialog();
             this.gridResults = new System.Windows.Forms.DataGridView();
+            this.Title = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Description = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.statusDetails = new System.Windows.Forms.StatusStrip();
             this.statusbarLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.btnSearch = new System.Windows.Forms.Button();
             this.btnProductInfo = new System.Windows.Forms.Button();
-            this.Title = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Description = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.gridResults)).BeginInit();
             this.statusDetails.SuspendLayout();
             this.SuspendLayout();
@@ -122,6 +123,24 @@
             this.gridResults.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridResults_CellContentClick);
             this.gridResults.RowStateChanged += new System.Windows.Forms.DataGridViewRowStateChangedEventHandler(this.gridResults_RowStateChanged);
             // 
+            // Title
+            // 
+            this.Title.FillWeight = 194.9239F;
+            this.Title.HeaderText = "Titulo";
+            this.Title.Name = "Title";
+            this.Title.ReadOnly = true;
+            this.Title.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Title.Width = 200;
+            // 
+            // Description
+            // 
+            this.Description.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Description.FillWeight = 5.076141F;
+            this.Description.HeaderText = "Descripcion";
+            this.Description.Name = "Description";
+            this.Description.ReadOnly = true;
+            this.Description.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
             // statusDetails
             // 
             this.statusDetails.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -162,23 +181,15 @@
             this.btnProductInfo.UseVisualStyleBackColor = true;
             this.btnProductInfo.Click += new System.EventHandler(this.btnProductInfo_Click);
             // 
-            // Title
+            // button1
             // 
-            this.Title.FillWeight = 194.9239F;
-            this.Title.HeaderText = "Titulo";
-            this.Title.Name = "Title";
-            this.Title.ReadOnly = true;
-            this.Title.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Title.Width = 200;
-            // 
-            // Description
-            // 
-            this.Description.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Description.FillWeight = 5.076141F;
-            this.Description.HeaderText = "Descripcion";
-            this.Description.Name = "Description";
-            this.Description.ReadOnly = true;
-            this.Description.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.button1.Location = new System.Drawing.Point(701, 38);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 15;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // SubtitleFinderForm
             // 
@@ -186,6 +197,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(884, 462);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.btnProductInfo);
             this.Controls.Add(this.statusDetails);
             this.Controls.Add(this.gridResults);
@@ -221,6 +233,7 @@
         private System.Windows.Forms.ToolStripStatusLabel statusbarLabel;
         private System.Windows.Forms.DataGridViewTextBoxColumn Title;
         private System.Windows.Forms.DataGridViewTextBoxColumn Description;
+        private System.Windows.Forms.Button button1;
     }
 }
 
