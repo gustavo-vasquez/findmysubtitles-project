@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="ProductInfo.cs" />
     <Compile Include="Scrapers\SubDivXScraper.cs" />
+    <Compile Include="Scrapers\SubtitulamosScraper.cs" />
     <Compile Include="SubDivXCommentsDialog.cs" />
     <Compile Include="SubtitleFinderForm.cs">
       <SubType>Form</SubType>
