@@ -16,6 +16,7 @@ namespace SubtitleFinderApp
     {
         private HtmlWeb _web = new HtmlWeb() { OverrideEncoding = Encoding.Default };
         private const string sourceURL = "https://www.subtitulamos.tv/";
+        private List<SubtitulamosScraper> scraper = new List<SubtitulamosScraper>();
 
         public SubtitulamosSourceForm()
         {
@@ -39,7 +40,7 @@ namespace SubtitleFinderApp
 
             textBox1.Text = string.Join("<>", search, tvShowURL);
 
-            var tvShowHtml = new HtmlWeb() { OverrideEncoding = Encoding.Default }.Load(tvShowURL);            
+            var tvShowHtml = new HtmlWeb().Load(tvShowURL);            
             var tabs = tvShowHtml.DocumentNode.Descendants("div").Where(d => d.Attributes.Contains("class") && d.Attributes["class"].Value.Equals("tabs")).SingleOrDefault();
             var seasonsList = tabs.Descendants("ul").SingleOrDefault().Descendants("li");            
 
@@ -52,8 +53,7 @@ namespace SubtitleFinderApp
                 }
             }
 
-            var episodes = tvShowHtml.DocumentNode.Descendants("div").Where(d => d.Attributes.Contains("id") && d.Attributes["id"].Value.Equals("episodes")).SingleOrDefault().Descendants("div").Where(d => d.Attributes.Contains("class") && d.Attributes["class"].Value.Equals("episode"));
-            var scraper = new List<SubtitulamosScraper>();
+            var episodes = tvShowHtml.DocumentNode.Descendants("div").Where(d => d.Attributes.Contains("id") && d.Attributes["id"].Value.Equals("episodes")).SingleOrDefault().Descendants("div").Where(d => d.Attributes.Contains("class") && d.Attributes["class"].Value.Equals("episode"));            
 
             foreach (var episode in episodes)
             {
@@ -87,6 +87,88 @@ namespace SubtitleFinderApp
         private void SubtitulamosSourceForm_Load(object sender, EventArgs e)
         {
             
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Label lblTitle;
+            DataGridView gridDetails;
+            int labelOffsetY = 19;
+            int gridViewOffsetY = 51;
+            tabPage9.AutoScroll = true;
+
+            foreach (var item in scraper)
+            {
+                lblTitle = new Label()
+                {
+                    AutoSize = true,
+                    Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0))),
+                    Location = new System.Drawing.Point(6, labelOffsetY),
+                    Text = item.EpisodeName
+                };                
+
+                gridDetails = new DataGridView()
+                {
+                    AllowUserToAddRows = false,
+                    AllowUserToDeleteRows = false,
+                    AllowUserToResizeRows = false,
+                    AllowUserToOrderColumns = false,                    
+                    BackgroundColor = System.Drawing.SystemColors.Control,
+                    BorderStyle = System.Windows.Forms.BorderStyle.None,
+                    ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize,
+                    Location = new System.Drawing.Point(6, gridViewOffsetY),
+                    ReadOnly = true,
+                    RowHeadersVisible = false,
+                    Size = new System.Drawing.Size(800, 120),
+                    SelectionMode = DataGridViewSelectionMode.FullRowSelect                    
+                };
+
+                DataGridViewTextBoxColumn Language = new System.Windows.Forms.DataGridViewTextBoxColumn()
+                {
+                    HeaderText = "Idioma",
+                    Name = "Language",
+                    ReadOnly = true,
+                    Width = 190,
+                    SortMode = DataGridViewColumnSortMode.NotSortable
+                };
+                DataGridViewTextBoxColumn Version = new System.Windows.Forms.DataGridViewTextBoxColumn()
+                {
+                    HeaderText = "Versión",
+                    Name = "Version",
+                    ReadOnly = true,
+                    Width = 250,
+                    SortMode = DataGridViewColumnSortMode.NotSortable
+                };
+                DataGridViewTextBoxColumn Progress = new System.Windows.Forms.DataGridViewTextBoxColumn()
+                {
+                    HeaderText = "Progreso",
+                    Name = "Progress",
+                    ReadOnly = true,
+                    Width = 60,
+                    SortMode = DataGridViewColumnSortMode.NotSortable
+                };
+                DataGridViewLinkColumn DownloadLink = new System.Windows.Forms.DataGridViewLinkColumn()
+                {
+                    HeaderText = "Descarga",
+                    Name = "DownloadLink",
+                    ReadOnly = true,
+                    Width = 110,
+                    SortMode = DataGridViewColumnSortMode.NotSortable
+                };
+
+                gridDetails.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] { Language, Version, Progress, DownloadLink });
+
+                foreach (var detail in item.SubtitleDetails)
+                {                                        
+                    gridDetails.Rows.Add(detail.SubtitleLanguage, detail.VersionName, detail.ProgressPercentage, detail.DownloadUrl);
+                }
+
+                tabPage9.Controls.Add(lblTitle);
+                gridDetails.Height = gridDetails.Rows.Count * gridDetails.RowTemplate.Height + 30;
+                tabPage9.Controls.Add(gridDetails);
+                labelOffsetY = gridDetails.Location.Y + gridDetails.Height + 14;
+                gridViewOffsetY = labelOffsetY + lblTitle.Height + 16;
+            }
         }
     }
 }
