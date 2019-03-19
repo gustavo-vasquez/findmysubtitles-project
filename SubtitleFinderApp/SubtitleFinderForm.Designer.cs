@@ -58,7 +58,6 @@
             // comboSources
             // 
             this.comboSources.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboSources.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboSources.FormattingEnabled = true;
             this.comboSources.Items.AddRange(new object[] {
             "SubDivX.com",

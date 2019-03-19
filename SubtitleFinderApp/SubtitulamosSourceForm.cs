@@ -14,7 +14,7 @@ namespace SubtitleFinderApp
 {
     public partial class SubtitulamosSourceForm : Form
     {
-        private HtmlWeb _web = new HtmlWeb() { OverrideEncoding = Encoding.Default };
+        private HtmlWeb _web = new HtmlWeb() { OverrideEncoding = Encoding.GetEncoding("ISO-8859-1"), AutoDetectEncoding = false };
         private const string sourceURL = "https://www.subtitulamos.tv/";        
         private Dictionary<string, string> seasonURL;
         private IEnumerable<HtmlNode> tvShows;
@@ -33,13 +33,13 @@ namespace SubtitleFinderApp
                 Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right))),
-                Appearance = System.Windows.Forms.TabAppearance.FlatButtons,
+                Appearance = System.Windows.Forms.TabAppearance.Normal,
                 Location = new System.Drawing.Point(12, 69),
                 Name = "tabCtrlResults",                
                 Size = new System.Drawing.Size(860, 381)
             };
 
-            tabCtrlResults.SelectedIndexChanged += tabCtrlResults_SelectedIndexChanged;
+            tabCtrlResults.Click += tabCtrlResults_Click;
         }
 
         public void SubtitulamosSearch(string search, IEnumerable<HtmlNode> tvShows)
@@ -83,27 +83,27 @@ namespace SubtitleFinderApp
             RenderizeSeasonTab(tvShowHtml);
         }
 
-        private void RenderizeSeasonTab(object season)
+        private void RenderizeSeasonTab(object htmlOrUrl)
         {
-            var htmldoc = (season is string) ? _web.Load((string)season) : (HtmlAgilityPack.HtmlDocument)season;
+            HtmlAgilityPack.HtmlDocument htmldoc = (htmlOrUrl is HtmlAgilityPack.HtmlDocument) ? (HtmlAgilityPack.HtmlDocument)htmlOrUrl : new HtmlWeb().Load((string)htmlOrUrl);
 
             IEnumerable<HtmlNode> episodes = htmldoc.DocumentNode.Descendants("div").Where(d => d.Attributes.Contains("id") && d.Attributes["id"].Value.Equals("episodes")).SingleOrDefault().Descendants("div").Where(d => d.Attributes.Contains("class") && d.Attributes["class"].Value.Equals("episode"));
             List<SubtitulamosScraper> scraper = new List<SubtitulamosScraper>();
 
             foreach (var episode in episodes)
             {
-                var scraperItem = new SubtitulamosScraper();
-                scraperItem.EpisodeName = episode.Descendants("div").Where(e => e.Attributes.Contains("class") && e.Attributes["class"].Value.Equals("episode-name")).SingleOrDefault().InnerText;
+                SubtitulamosScraper scraperItem = new SubtitulamosScraper();
+                scraperItem.EpisodeName = System.Web.HttpUtility.HtmlDecode(episode.Descendants("div").Where(e => e.Attributes.Contains("class") && e.Attributes["class"].Value.Equals("episode-name")).SingleOrDefault().InnerText);
 
                 foreach (var language in episode.Descendants("div").Where(e => e.Attributes.Contains("class") && e.Attributes["class"].Value.Equals("subtitle-language")))
                 {
-                    var details = language.NextSibling.NextSibling.Descendants("div").Where(d => d.Attributes.Contains("class") && d.Attributes["class"].Value.Equals("sub"));
+                    IEnumerable<HtmlNode> details = language.NextSibling.NextSibling.Descendants("div").Where(d => d.Attributes.Contains("class") && d.Attributes["class"].Value.Equals("sub"));
 
-                    foreach (var detail in details)
+                    foreach (HtmlNode detail in details)
                     {
-                        var versionName = detail.Descendants("div").Where(d => d.Attributes.Contains("class") && d.Attributes["class"].Value.Equals("version-name")).SingleOrDefault();
-                        var progressPercentage = detail.Descendants("div").Where(d => d.Attributes.Contains("class") && d.Attributes["class"].Value.Equals("progress_percentage")).SingleOrDefault();
-                        var downloadUrl = detail.Descendants("a").Where(a => a.Attributes.Contains("href")).SingleOrDefault();
+                        HtmlNode versionName = detail.Descendants("div").Where(d => d.Attributes.Contains("class") && d.Attributes["class"].Value.Equals("version-name")).SingleOrDefault();
+                        HtmlNode progressPercentage = detail.Descendants("div").Where(d => d.Attributes.Contains("class") && d.Attributes["class"].Value.Equals("progress_percentage")).SingleOrDefault();
+                        HtmlNode downloadUrl = detail.Descendants("a").Where(a => a.Attributes.Contains("href")).SingleOrDefault();
 
                         scraperItem.SubtitleDetails.Add(new SubtitleDetails()
                         {
@@ -124,7 +124,7 @@ namespace SubtitleFinderApp
             int gridViewOffsetY = 51;
             int selectedTabIndex = tabCtrlResults.SelectedIndex;
 
-            foreach (var item in scraper)
+            foreach (SubtitulamosScraper item in scraper)
             {
                 lblTitle = new Label()
                 {
@@ -140,14 +140,14 @@ namespace SubtitleFinderApp
                     AllowUserToDeleteRows = false,
                     AllowUserToResizeRows = false,
                     AllowUserToOrderColumns = false,
-                    BackgroundColor = System.Drawing.SystemColors.Control,
+                    BackgroundColor = System.Drawing.SystemColors.ControlLightLight,
                     BorderStyle = System.Windows.Forms.BorderStyle.None,
                     ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize,
                     Location = new System.Drawing.Point(6, gridViewOffsetY),
                     ReadOnly = true,
                     RowHeadersVisible = false,
                     Size = new System.Drawing.Size(800, 120),
-                    SelectionMode = DataGridViewSelectionMode.FullRowSelect,
+                    //SelectionMode = DataGridViewSelectionMode.FullRowSelect,
                     StandardTab = true
                 };
 
@@ -189,7 +189,7 @@ namespace SubtitleFinderApp
 
                 gridDetails.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] { Language, Version, Progress, DownloadLink });
 
-                foreach (var detail in item.SubtitleDetails)
+                foreach (SubtitleDetails detail in item.SubtitleDetails)
                 {
                     gridDetails.Rows.Add(detail.SubtitleLanguage, detail.VersionName, detail.ProgressPercentage, detail.DownloadUrl);
                 }
@@ -204,9 +204,10 @@ namespace SubtitleFinderApp
             Controls.Add(tabCtrlResults);
         }
 
-        private void tabCtrlResults_SelectedIndexChanged(object sender, EventArgs e)
+        private void tabCtrlResults_Click(object sender, EventArgs e)
         {
-            RenderizeSeasonTab(seasonURL[tabCtrlResults.SelectedTab.Text]);
+            if (tabCtrlResults.SelectedTab.Controls.Count <= 0)
+                RenderizeSeasonTab(seasonURL[tabCtrlResults.SelectedTab.Text]);
         }
 
         private void SubtitulamosSourceForm_Load(object sender, EventArgs e)
