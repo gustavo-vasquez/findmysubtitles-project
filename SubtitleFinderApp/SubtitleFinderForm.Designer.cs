@@ -44,14 +44,14 @@
             this.rdoBtnSubDivX = new System.Windows.Forms.RadioButton();
             this.rdoBtnTuSubtitulo = new System.Windows.Forms.RadioButton();
             this.rdoBtnSubtitulamos = new System.Windows.Forms.RadioButton();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.pictureBox3 = new System.Windows.Forms.PictureBox();
+            this.picBoxSubtitulamos = new System.Windows.Forms.PictureBox();
+            this.picBoxTuSubtitulo = new System.Windows.Forms.PictureBox();
+            this.picBoxSubDivX = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.gridResults)).BeginInit();
             this.statusDetails.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picBoxSubtitulamos)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picBoxTuSubtitulo)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picBoxSubDivX)).BeginInit();
             this.SuspendLayout();
             // 
             // txtSearch
@@ -178,6 +178,7 @@
             // rdoBtnSubDivX
             // 
             this.rdoBtnSubDivX.AutoSize = true;
+            this.rdoBtnSubDivX.Checked = true;
             this.rdoBtnSubDivX.Location = new System.Drawing.Point(303, 30);
             this.rdoBtnSubDivX.Name = "rdoBtnSubDivX";
             this.rdoBtnSubDivX.Size = new System.Drawing.Size(90, 17);
@@ -208,35 +209,38 @@
             this.rdoBtnSubtitulamos.Text = "Subtitulamos.tv";
             this.rdoBtnSubtitulamos.UseVisualStyleBackColor = true;
             // 
-            // pictureBox1
+            // picBoxSubtitulamos
             // 
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(548, 10);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(16, 16);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 19;
-            this.pictureBox1.TabStop = false;
+            this.picBoxSubtitulamos.Image = ((System.Drawing.Image)(resources.GetObject("picBoxSubtitulamos.Image")));
+            this.picBoxSubtitulamos.Location = new System.Drawing.Point(548, 10);
+            this.picBoxSubtitulamos.Name = "picBoxSubtitulamos";
+            this.picBoxSubtitulamos.Size = new System.Drawing.Size(16, 16);
+            this.picBoxSubtitulamos.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picBoxSubtitulamos.TabIndex = 19;
+            this.picBoxSubtitulamos.TabStop = false;
+            this.picBoxSubtitulamos.Click += new System.EventHandler(this.picBoxSubtitulamos_Click);
             // 
-            // pictureBox2
+            // picBoxTuSubtitulo
             // 
-            this.pictureBox2.Image = global::SubtitleFinderApp.Properties.Resources.tusubtitulo;
-            this.pictureBox2.Location = new System.Drawing.Point(441, 10);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(16, 16);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox2.TabIndex = 20;
-            this.pictureBox2.TabStop = false;
+            this.picBoxTuSubtitulo.Image = global::SubtitleFinderApp.Properties.Resources.tusubtitulo;
+            this.picBoxTuSubtitulo.Location = new System.Drawing.Point(441, 10);
+            this.picBoxTuSubtitulo.Name = "picBoxTuSubtitulo";
+            this.picBoxTuSubtitulo.Size = new System.Drawing.Size(16, 16);
+            this.picBoxTuSubtitulo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picBoxTuSubtitulo.TabIndex = 20;
+            this.picBoxTuSubtitulo.TabStop = false;
+            this.picBoxTuSubtitulo.Click += new System.EventHandler(this.picBoxTuSubtitulo_Click);
             // 
-            // pictureBox3
+            // picBoxSubDivX
             // 
-            this.pictureBox3.Image = global::SubtitleFinderApp.Properties.Resources.subdivx;
-            this.pictureBox3.Location = new System.Drawing.Point(340, 10);
-            this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(16, 16);
-            this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox3.TabIndex = 21;
-            this.pictureBox3.TabStop = false;
+            this.picBoxSubDivX.Image = global::SubtitleFinderApp.Properties.Resources.subdivx;
+            this.picBoxSubDivX.Location = new System.Drawing.Point(340, 10);
+            this.picBoxSubDivX.Name = "picBoxSubDivX";
+            this.picBoxSubDivX.Size = new System.Drawing.Size(16, 16);
+            this.picBoxSubDivX.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picBoxSubDivX.TabIndex = 21;
+            this.picBoxSubDivX.TabStop = false;
+            this.picBoxSubDivX.Click += new System.EventHandler(this.picBoxSubDivX_Click);
             // 
             // SubtitleFinderForm
             // 
@@ -244,9 +248,9 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(884, 462);
-            this.Controls.Add(this.pictureBox3);
-            this.Controls.Add(this.pictureBox2);
-            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.picBoxSubDivX);
+            this.Controls.Add(this.picBoxTuSubtitulo);
+            this.Controls.Add(this.picBoxSubtitulamos);
             this.Controls.Add(this.rdoBtnSubtitulamos);
             this.Controls.Add(this.rdoBtnTuSubtitulo);
             this.Controls.Add(this.rdoBtnSubDivX);
@@ -266,9 +270,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.gridResults)).EndInit();
             this.statusDetails.ResumeLayout(false);
             this.statusDetails.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picBoxSubtitulamos)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picBoxTuSubtitulo)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picBoxSubDivX)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -289,9 +293,9 @@
         private System.Windows.Forms.RadioButton rdoBtnSubDivX;
         private System.Windows.Forms.RadioButton rdoBtnTuSubtitulo;
         private System.Windows.Forms.RadioButton rdoBtnSubtitulamos;
-        private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.PictureBox pictureBox2;
-        private System.Windows.Forms.PictureBox pictureBox3;
+        private System.Windows.Forms.PictureBox picBoxSubtitulamos;
+        private System.Windows.Forms.PictureBox picBoxTuSubtitulo;
+        private System.Windows.Forms.PictureBox picBoxSubDivX;
     }
 }
 

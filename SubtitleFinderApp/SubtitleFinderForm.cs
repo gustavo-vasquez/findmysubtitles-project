@@ -169,5 +169,20 @@ namespace SubtitleFinderApp
             var myForm = new SubtitulamosSourceForm();
             myForm.Show();
         }
+
+        private void picBoxSubDivX_Click(object sender, EventArgs e)
+        {
+            rdoBtnSubDivX.Checked = true;
+        }
+
+        private void picBoxTuSubtitulo_Click(object sender, EventArgs e)
+        {
+            rdoBtnTuSubtitulo.Checked = true;
+        }
+
+        private void picBoxSubtitulamos_Click(object sender, EventArgs e)
+        {
+            rdoBtnSubtitulamos.Checked = true;
+        }
     }
 }

@@ -181,10 +181,10 @@ namespace SubtitleFinderApp
                 DataGridViewLinkColumn DownloadLink = new System.Windows.Forms.DataGridViewLinkColumn()
                 {
                     HeaderText = "Descarga",
-                    Name = "DownloadLink",
+                    Name = "DownloadLink",                    
                     ReadOnly = true,
                     Width = 110,
-                    SortMode = DataGridViewColumnSortMode.NotSortable
+                    SortMode = DataGridViewColumnSortMode.NotSortable                    
                 };
 
                 gridDetails.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] { Language, Version, Progress, DownloadLink });
