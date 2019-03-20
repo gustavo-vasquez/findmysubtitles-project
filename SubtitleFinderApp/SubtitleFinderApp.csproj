@@ -111,6 +111,8 @@
     <Content Include="Resources\favicons\tusubtitulo.ico" />
     <Content Include="Resources\icons\comments_form.ico" />
     <Content Include="Resources\icons\subtitlefinder_form.ico" />
+    <Content Include="Resources\images\appicon_grayscale.png" />
+    <Content Include="Resources\images\appicon_color.png" />
     <Content Include="Resources\images\search.png" />
     <Content Include="Resources\images\info.png" />
   </ItemGroup>

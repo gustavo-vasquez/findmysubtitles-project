@@ -124,11 +124,11 @@
   <data name="tusubtitulo" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\favicons\tusubtitulo.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="subtitulamos" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\favicons\subtitulamos.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="comments_form" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons\comments_form.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="search" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\images\search.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="subdivx" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\favicons\subdivx.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -136,7 +136,7 @@
   <data name="subtitlefinder_form" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons\subtitlefinder_form.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="subtitulamos" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\favicons\subtitulamos.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="search" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\images\search.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
