@@ -23,7 +23,7 @@ namespace SubtitleFinderApp
                 Height = 500,
                 Text = "Ver comentarios",
                 StartPosition = FormStartPosition.CenterParent,
-                Icon = Properties.Resources.comment_edit,
+                Icon = Properties.Resources.comments_form,
                 MinimumSize = new System.Drawing.Size(500, 500)
             };
 

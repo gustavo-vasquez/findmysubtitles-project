@@ -199,6 +199,7 @@ namespace SubtitleFinderApp
                 tabCtrlResults.TabPages[selectedTabIndex].Controls.Add(gridDetails);
                 labelOffsetY = gridDetails.Location.Y + gridDetails.Height + 14;
                 gridViewOffsetY = labelOffsetY + lblTitle.Height + 16;
+                gridDetails.CellContentClick += gridDetails_CellContentClick;
             }
 
             Controls.Add(tabCtrlResults);
@@ -218,6 +219,22 @@ namespace SubtitleFinderApp
         private void button2_Click(object sender, EventArgs e)
         {
             SubtitulamosSearch(textBox2.Text, tvShows);
+        }
+
+        private void gridDetails_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == 3)
+            {
+                DataGridView currentGridView = (DataGridView)sender;
+                Label previousTitle = (Label)GetNextControl(currentGridView, false);
+                saveFileDialog1.FileName = string.Join("_", previousTitle.Text, currentGridView.CurrentRow.Cells[1].Value.ToString().Replace('/', '_'), currentGridView.CurrentRow.Cells[0].Value.ToString());
+                var result = saveFileDialog1.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    var wClient = new System.Net.WebClient();
+                    wClient.DownloadFile(currentGridView.CurrentRow.Cells[3].Value.ToString(), saveFileDialog1.FileName);
+                }
+            }
         }
     }
 }

@@ -28,11 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SubtitleFinderForm));
             this.txtSearch = new System.Windows.Forms.TextBox();
-            this.comboSources = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.dialogSaveSubtitle = new System.Windows.Forms.SaveFileDialog();
             this.gridResults = new System.Windows.Forms.DataGridView();
@@ -43,44 +41,31 @@
             this.btnSearch = new System.Windows.Forms.Button();
             this.btnProductInfo = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
+            this.rdoBtnSubDivX = new System.Windows.Forms.RadioButton();
+            this.rdoBtnTuSubtitulo = new System.Windows.Forms.RadioButton();
+            this.rdoBtnSubtitulamos = new System.Windows.Forms.RadioButton();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.pictureBox3 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.gridResults)).BeginInit();
             this.statusDetails.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.SuspendLayout();
             // 
             // txtSearch
             // 
-            this.txtSearch.Location = new System.Drawing.Point(12, 40);
+            this.txtSearch.Location = new System.Drawing.Point(12, 66);
             this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(377, 20);
+            this.txtSearch.Size = new System.Drawing.Size(632, 20);
             this.txtSearch.TabIndex = 0;
             this.txtSearch.Text = "jigsaw 2017";
-            // 
-            // comboSources
-            // 
-            this.comboSources.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboSources.FormattingEnabled = true;
-            this.comboSources.Items.AddRange(new object[] {
-            "SubDivX.com",
-            "TuSubtitulo.com",
-            "Subtitulamos.tv"});
-            this.comboSources.Location = new System.Drawing.Point(555, 39);
-            this.comboSources.Name = "comboSources";
-            this.comboSources.Size = new System.Drawing.Size(121, 21);
-            this.comboSources.TabIndex = 2;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(506, 43);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(43, 13);
-            this.label1.TabIndex = 7;
-            this.label1.Text = "Fuente:";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(9, 24);
+            this.label2.Location = new System.Drawing.Point(9, 50);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(188, 13);
             this.label2.TabIndex = 8;
@@ -110,13 +95,13 @@
             this.gridResults.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Title,
             this.Description});
-            this.gridResults.Location = new System.Drawing.Point(12, 100);
+            this.gridResults.Location = new System.Drawing.Point(12, 104);
             this.gridResults.MultiSelect = false;
             this.gridResults.Name = "gridResults";
             this.gridResults.ReadOnly = true;
             this.gridResults.RowHeadersVisible = false;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.gridResults.RowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gridResults.RowsDefaultCellStyle = dataGridViewCellStyle2;
             this.gridResults.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.gridResults.Size = new System.Drawing.Size(860, 320);
             this.gridResults.TabIndex = 4;
@@ -159,7 +144,7 @@
             // btnSearch
             // 
             this.btnSearch.Image = global::SubtitleFinderApp.Properties.Resources.search;
-            this.btnSearch.Location = new System.Drawing.Point(395, 38);
+            this.btnSearch.Location = new System.Drawing.Point(650, 64);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(75, 23);
             this.btnSearch.TabIndex = 1;
@@ -171,11 +156,10 @@
             // btnProductInfo
             // 
             this.btnProductInfo.Image = global::SubtitleFinderApp.Properties.Resources.info;
-            this.btnProductInfo.Location = new System.Drawing.Point(797, 38);
+            this.btnProductInfo.Location = new System.Drawing.Point(822, 64);
             this.btnProductInfo.Name = "btnProductInfo";
-            this.btnProductInfo.Size = new System.Drawing.Size(75, 23);
+            this.btnProductInfo.Size = new System.Drawing.Size(50, 23);
             this.btnProductInfo.TabIndex = 3;
-            this.btnProductInfo.Text = "Info";
             this.btnProductInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnProductInfo.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnProductInfo.UseVisualStyleBackColor = true;
@@ -183,7 +167,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(701, 38);
+            this.button1.Location = new System.Drawing.Point(706, 22);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 15;
@@ -191,19 +175,86 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // rdoBtnSubDivX
+            // 
+            this.rdoBtnSubDivX.AutoSize = true;
+            this.rdoBtnSubDivX.Location = new System.Drawing.Point(303, 30);
+            this.rdoBtnSubDivX.Name = "rdoBtnSubDivX";
+            this.rdoBtnSubDivX.Size = new System.Drawing.Size(90, 17);
+            this.rdoBtnSubDivX.TabIndex = 16;
+            this.rdoBtnSubDivX.TabStop = true;
+            this.rdoBtnSubDivX.Text = "SubDivX.com";
+            this.rdoBtnSubDivX.UseVisualStyleBackColor = true;
+            // 
+            // rdoBtnTuSubtitulo
+            // 
+            this.rdoBtnTuSubtitulo.AutoSize = true;
+            this.rdoBtnTuSubtitulo.Location = new System.Drawing.Point(399, 30);
+            this.rdoBtnTuSubtitulo.Name = "rdoBtnTuSubtitulo";
+            this.rdoBtnTuSubtitulo.Size = new System.Drawing.Size(102, 17);
+            this.rdoBtnTuSubtitulo.TabIndex = 17;
+            this.rdoBtnTuSubtitulo.TabStop = true;
+            this.rdoBtnTuSubtitulo.Text = "TuSubtitulo.com";
+            this.rdoBtnTuSubtitulo.UseVisualStyleBackColor = true;
+            // 
+            // rdoBtnSubtitulamos
+            // 
+            this.rdoBtnSubtitulamos.AutoSize = true;
+            this.rdoBtnSubtitulamos.Location = new System.Drawing.Point(507, 30);
+            this.rdoBtnSubtitulamos.Name = "rdoBtnSubtitulamos";
+            this.rdoBtnSubtitulamos.Size = new System.Drawing.Size(97, 17);
+            this.rdoBtnSubtitulamos.TabIndex = 18;
+            this.rdoBtnSubtitulamos.TabStop = true;
+            this.rdoBtnSubtitulamos.Text = "Subtitulamos.tv";
+            this.rdoBtnSubtitulamos.UseVisualStyleBackColor = true;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(548, 10);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(16, 16);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 19;
+            this.pictureBox1.TabStop = false;
+            // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Image = global::SubtitleFinderApp.Properties.Resources.tusubtitulo;
+            this.pictureBox2.Location = new System.Drawing.Point(441, 10);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(16, 16);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox2.TabIndex = 20;
+            this.pictureBox2.TabStop = false;
+            // 
+            // pictureBox3
+            // 
+            this.pictureBox3.Image = global::SubtitleFinderApp.Properties.Resources.subdivx;
+            this.pictureBox3.Location = new System.Drawing.Point(340, 10);
+            this.pictureBox3.Name = "pictureBox3";
+            this.pictureBox3.Size = new System.Drawing.Size(16, 16);
+            this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox3.TabIndex = 21;
+            this.pictureBox3.TabStop = false;
+            // 
             // SubtitleFinderForm
             // 
             this.AcceptButton = this.btnSearch;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(884, 462);
+            this.Controls.Add(this.pictureBox3);
+            this.Controls.Add(this.pictureBox2);
+            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.rdoBtnSubtitulamos);
+            this.Controls.Add(this.rdoBtnTuSubtitulo);
+            this.Controls.Add(this.rdoBtnSubDivX);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.btnProductInfo);
             this.Controls.Add(this.statusDetails);
             this.Controls.Add(this.gridResults);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.comboSources);
             this.Controls.Add(this.btnSearch);
             this.Controls.Add(this.txtSearch);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -215,6 +266,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.gridResults)).EndInit();
             this.statusDetails.ResumeLayout(false);
             this.statusDetails.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -223,8 +277,6 @@
         #endregion
         private System.Windows.Forms.TextBox txtSearch;
         private System.Windows.Forms.Button btnSearch;
-        private System.Windows.Forms.ComboBox comboSources;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.SaveFileDialog dialogSaveSubtitle;
         private System.Windows.Forms.DataGridView gridResults;
@@ -234,6 +286,12 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Title;
         private System.Windows.Forms.DataGridViewTextBoxColumn Description;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.RadioButton rdoBtnSubDivX;
+        private System.Windows.Forms.RadioButton rdoBtnTuSubtitulo;
+        private System.Windows.Forms.RadioButton rdoBtnSubtitulamos;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox pictureBox2;
+        private System.Windows.Forms.PictureBox pictureBox3;
     }
 }
 

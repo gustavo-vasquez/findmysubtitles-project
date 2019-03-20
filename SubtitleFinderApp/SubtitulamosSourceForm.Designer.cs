@@ -32,6 +32,7 @@
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.button2 = new System.Windows.Forms.Button();
             this.tabCtrlResults2 = new System.Windows.Forms.TabControl();
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.SuspendLayout();
             // 
             // textBox1
@@ -71,6 +72,11 @@
             this.tabCtrlResults2.TabIndex = 2;
             this.tabCtrlResults2.Visible = false;
             // 
+            // saveFileDialog1
+            // 
+            this.saveFileDialog1.DefaultExt = "srt";
+            this.saveFileDialog1.Filter = "Archivos SRT (*.srt)|*.srt|Todos los archivos (*.*)|*.*";
+            // 
             // SubtitulamosSourceForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -94,5 +100,6 @@
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.TabControl tabCtrlResults2;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
     }
 }

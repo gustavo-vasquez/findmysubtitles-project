@@ -23,7 +23,7 @@ namespace SubtitleFinderApp
         {
             InitializeComponent();
             //this.MouseWheel += flowResultsPanel_MouseWheel;
-            this.comboSources.SelectedItem = this.comboSources.Items[0];
+            //this.comboSources.SelectedItem = this.comboSources.Items[0];
             gridResults.Columns["Title"].Width = 200;
             gridResults.Columns["Description"].Width = 450;
             DataGridViewLinkColumn commentsColumn = new DataGridViewLinkColumn();

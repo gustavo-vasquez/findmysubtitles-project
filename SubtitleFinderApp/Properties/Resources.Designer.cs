@@ -63,19 +63,9 @@ namespace SubtitleFinderApp.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon comment_edit {
+        internal static System.Drawing.Icon comments_form {
             get {
-                object obj = ResourceManager.GetObject("comment_edit", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon comment_search {
-            get {
-                object obj = ResourceManager.GetObject("comment_search", resourceCulture);
+                object obj = ResourceManager.GetObject("comments_form", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -96,6 +86,46 @@ namespace SubtitleFinderApp.Properties {
         internal static System.Drawing.Bitmap search {
             get {
                 object obj = ResourceManager.GetObject("search", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap subdivx {
+            get {
+                object obj = ResourceManager.GetObject("subdivx", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon subtitlefinder_form {
+            get {
+                object obj = ResourceManager.GetObject("subtitlefinder_form", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap subtitulamos {
+            get {
+                object obj = ResourceManager.GetObject("subtitulamos", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap tusubtitulo {
+            get {
+                object obj = ResourceManager.GetObject("tusubtitulo", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
