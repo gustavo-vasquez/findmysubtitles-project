@@ -23,74 +23,15 @@ namespace SubtitleFinderApp
         public SubtitleFinderForm()
         {
             InitializeComponent();
-            //this.MouseWheel += flowResultsPanel_MouseWheel;
-            gridResults = new DataGridView();
-            gridResults.AllowUserToAddRows = false;
-            gridResults.AllowUserToDeleteRows = false;
-            gridResults.AllowUserToResizeRows = false;
-            gridResults.Anchor = ((System.Windows.Forms.AnchorStyles)((((AnchorStyles.Top | AnchorStyles.Bottom)
-            | AnchorStyles.Left)
-            | AnchorStyles.Right)));
-            gridResults.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
-            gridResults.BackgroundColor = SystemColors.Control;
-            gridResults.BorderStyle = BorderStyle.None;
-            gridResults.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            gridResults.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            gridResults.Location = new Point(12, 110);
-            gridResults.MultiSelect = false;
-            gridResults.Name = "gridResults";
-            gridResults.ReadOnly = true;
-            gridResults.RowHeadersVisible = false;            
-            gridResults.RowsDefaultCellStyle = new DataGridViewCellStyle() { WrapMode = DataGridViewTriState.True };
-            gridResults.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            gridResults.Size = new Size(860, 320);
-            gridResults.CellContentClick += new DataGridViewCellEventHandler(this.gridResults_CellContentClick);
-            gridResults.RowStateChanged += new DataGridViewRowStateChangedEventHandler(this.gridResults_RowStateChanged);
 
-            DataGridViewTextBoxColumn Title = new DataGridViewTextBoxColumn();            
-            Title.FillWeight = 194.9239F;
-            Title.HeaderText = "Titulo";
-            Title.Name = "Title";
-            Title.ReadOnly = true;
-            Title.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            Title.Width = 200;
-            gridResults.Columns.Add(Title);
-            //gridResults.Columns["Title"].Width = 200;
-
-            DataGridViewTextBoxColumn Description = new DataGridViewTextBoxColumn();
-            Description.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            Description.FillWeight = 5.076141F;
-            Description.HeaderText = "Descripcion";
-            Description.Name = "Description";
-            Description.ReadOnly = true;
-            Description.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            Description.Width = 450;
-            gridResults.Columns.Add(Description);
-            //gridResults.Columns["Description"].Width = 450;
-
-            DataGridViewLinkColumn commentsColumn = new DataGridViewLinkColumn();
-            commentsColumn.HeaderText = "Comentarios";
-            commentsColumn.LinkBehavior = LinkBehavior.SystemDefault;
-            commentsColumn.Name = "Comments";
-            commentsColumn.Text = "Comentarios";
-            commentsColumn.Width = 80;
-            gridResults.Columns.Add(commentsColumn);
-            //gridResults.Columns["Comments"].Width = 80;
-
-            DataGridViewLinkColumn downloadsColumn = new DataGridViewLinkColumn();
-            downloadsColumn.HeaderText = "";
-            downloadsColumn.LinkBehavior = LinkBehavior.SystemDefault;
-            downloadsColumn.Name = "DownloadLink";
-            downloadsColumn.Text = "Descargar";
-            downloadsColumn.UseColumnTextForLinkValue = true;
-            downloadsColumn.Width = 80;
-            gridResults.Columns.Add(downloadsColumn);
-            //gridResults.Columns["DownloadLink"].Width = 80;            
+            rdoBtnSubDivX.Click += radioBtnSources_CheckedChanged;
+            rdoBtnTuSubtitulo.Click += radioBtnSources_CheckedChanged;
+            rdoBtnSubtitulamos.Click += radioBtnSources_CheckedChanged;
         }
 
         private void SubtitleFinderForm_Load(object sender, EventArgs e)
         {
-            
+            this.rdoBtnSubDivX.PerformClick();
         }
 
         private void DoSearch(string text)
@@ -146,14 +87,7 @@ namespace SubtitleFinderApp
         private void btnSearch_Click(object sender, EventArgs e)
         {
             this.DoSearch(txtSearch.Text);
-        }        
-
-        //private void flowResultsPanel_MouseWheel(object sender, MouseEventArgs e)
-        //{
-        //    if(flowResultsPanel.VerticalScroll.Visible || flowResultsPanel.HorizontalScroll.Visible)
-        //        if(e.X > 12 && e.X < 709 && e.Y > 83 && e.Y < 289)
-        //            flowResultsPanel.Select();            
-        //}
+        }
 
         private void btnProductInfo_Click(object sender, EventArgs e)
         {
@@ -225,6 +159,32 @@ namespace SubtitleFinderApp
         private void picBoxSubtitulamos_Click(object sender, EventArgs e)
         {
             rdoBtnSubtitulamos.Checked = true;
+        }
+
+        private void radioBtnSources_CheckedChanged(object sender, EventArgs e)
+        {
+            RadioButton currentRadioButton = sender as RadioButton;
+
+            if(currentRadioButton != null && currentRadioButton.Checked)
+            {
+                switch(currentRadioButton.Name)
+                {
+                    case "rdoBtnSubDivX":
+                        if(gridResults == null)
+                        {
+                            gridResults = subdivx.InitSubDivXGridResults();
+                            gridResults.CellContentClick += new DataGridViewCellEventHandler(this.gridResults_CellContentClick);
+                            gridResults.RowStateChanged += new DataGridViewRowStateChangedEventHandler(this.gridResults_RowStateChanged);
+                        }
+                        break;
+                    case "rdoBtnTuSubtitulo":
+                        MessageBox.Show("Elegiste tusubtitulo.");
+                        break;
+                    case "rdoBtnSubtitulamos":
+                        MessageBox.Show("Elegiste subtitulamos.");
+                        break;
+                }
+            }
         }
     }
 }

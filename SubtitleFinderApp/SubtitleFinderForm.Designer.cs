@@ -82,7 +82,7 @@
             // 
             this.statusDetails.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statusbarLabel});
-            this.statusDetails.Location = new System.Drawing.Point(0, 440);
+            this.statusDetails.Location = new System.Drawing.Point(0, 540);
             this.statusDetails.Name = "statusDetails";
             this.statusDetails.Size = new System.Drawing.Size(884, 22);
             this.statusDetails.TabIndex = 14;
@@ -207,7 +207,7 @@
             // 
             this.picBoxAppImage.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.picBoxAppImage.Image = ((System.Drawing.Image)(resources.GetObject("picBoxAppImage.Image")));
-            this.picBoxAppImage.Location = new System.Drawing.Point(386, 198);
+            this.picBoxAppImage.Location = new System.Drawing.Point(386, 248);
             this.picBoxAppImage.Name = "picBoxAppImage";
             this.picBoxAppImage.Size = new System.Drawing.Size(128, 128);
             this.picBoxAppImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -219,7 +219,7 @@
             this.AcceptButton = this.btnSearch;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(884, 462);
+            this.ClientSize = new System.Drawing.Size(884, 562);
             this.Controls.Add(this.picBoxAppImage);
             this.Controls.Add(this.picBoxSubDivX);
             this.Controls.Add(this.picBoxTuSubtitulo);
@@ -234,7 +234,7 @@
             this.Controls.Add(this.btnSearch);
             this.Controls.Add(this.txtSearch);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(900, 500);
+            this.MinimumSize = new System.Drawing.Size(900, 600);
             this.Name = "SubtitleFinderForm";
             this.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

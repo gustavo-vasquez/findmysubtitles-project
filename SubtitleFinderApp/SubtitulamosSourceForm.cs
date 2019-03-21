@@ -30,13 +30,13 @@ namespace SubtitleFinderApp
 
             tabCtrlResults = new TabControl()
             {
-                Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
-            | System.Windows.Forms.AnchorStyles.Right))),
-                Appearance = System.Windows.Forms.TabAppearance.Normal,
-                Location = new System.Drawing.Point(12, 69),
-                Name = "tabCtrlResults",                
-                Size = new System.Drawing.Size(860, 381)
+                Anchor = ((System.Windows.Forms.AnchorStyles)((((AnchorStyles.Top | AnchorStyles.Bottom)
+            | AnchorStyles.Left)
+            | AnchorStyles.Right))),
+                Appearance = TabAppearance.Normal,
+                Location = new Point(12, 69),
+                Name = "tabCtrlResults",
+                Size = new Size(860, 381)
             };
 
             tabCtrlResults.Click += tabCtrlResults_Click;
@@ -65,8 +65,8 @@ namespace SubtitleFinderApp
             {
                 TabPage tab = new TabPage()
                 {
-                    Location = new System.Drawing.Point(4, 25),
-                    Size = new System.Drawing.Size(852, 352),
+                    Location = new Point(4, 25),
+                    Size = new Size(852, 352),
                     Text = season.Descendants("a").SingleOrDefault().InnerText,
                     UseVisualStyleBackColor = true,
                     AutoScroll = true
@@ -129,8 +129,8 @@ namespace SubtitleFinderApp
                 lblTitle = new Label()
                 {
                     AutoSize = true,
-                    Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0))),
-                    Location = new System.Drawing.Point(6, labelOffsetY),
+                    Font = new Font("Microsoft Sans Serif", 9.75F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(0))),
+                    Location = new Point(6, labelOffsetY),
                     Text = item.EpisodeName
                 };
 
@@ -140,21 +140,20 @@ namespace SubtitleFinderApp
                     AllowUserToDeleteRows = false,
                     AllowUserToResizeRows = false,
                     AllowUserToOrderColumns = false,
-                    BackgroundColor = System.Drawing.SystemColors.ControlLightLight,
-                    BorderStyle = System.Windows.Forms.BorderStyle.None,
-                    ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize,
-                    Location = new System.Drawing.Point(6, gridViewOffsetY),
+                    BackgroundColor = SystemColors.ControlLightLight,
+                    BorderStyle = BorderStyle.None,
+                    ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize,
+                    Location = new Point(6, gridViewOffsetY),
                     ReadOnly = true,
                     RowHeadersVisible = false,
-                    Size = new System.Drawing.Size(800, 120),
-                    //SelectionMode = DataGridViewSelectionMode.FullRowSelect,
+                    Size = new Size(800, 120),                    
                     StandardTab = true
                 };
 
                 gridDetails.DefaultCellStyle.SelectionBackColor = gridDetails.DefaultCellStyle.BackColor;
                 gridDetails.DefaultCellStyle.SelectionForeColor = gridDetails.DefaultCellStyle.ForeColor;
 
-                DataGridViewTextBoxColumn Language = new System.Windows.Forms.DataGridViewTextBoxColumn()
+                DataGridViewTextBoxColumn Language = new DataGridViewTextBoxColumn()
                 {
                     HeaderText = "Idioma",
                     Name = "Language",
@@ -162,7 +161,7 @@ namespace SubtitleFinderApp
                     Width = 190,
                     SortMode = DataGridViewColumnSortMode.NotSortable
                 };
-                DataGridViewTextBoxColumn Version = new System.Windows.Forms.DataGridViewTextBoxColumn()
+                DataGridViewTextBoxColumn Version = new DataGridViewTextBoxColumn()
                 {
                     HeaderText = "Versión",
                     Name = "Version",
@@ -170,7 +169,7 @@ namespace SubtitleFinderApp
                     Width = 250,
                     SortMode = DataGridViewColumnSortMode.NotSortable
                 };
-                DataGridViewTextBoxColumn Progress = new System.Windows.Forms.DataGridViewTextBoxColumn()
+                DataGridViewTextBoxColumn Progress = new DataGridViewTextBoxColumn()
                 {
                     HeaderText = "Progreso",
                     Name = "Progress",
@@ -178,7 +177,7 @@ namespace SubtitleFinderApp
                     Width = 60,
                     SortMode = DataGridViewColumnSortMode.NotSortable
                 };
-                DataGridViewLinkColumn DownloadLink = new System.Windows.Forms.DataGridViewLinkColumn()
+                DataGridViewLinkColumn DownloadLink = new DataGridViewLinkColumn()
                 {
                     HeaderText = "Descarga",
                     Name = "DownloadLink",                    
@@ -187,7 +186,7 @@ namespace SubtitleFinderApp
                     SortMode = DataGridViewColumnSortMode.NotSortable                    
                 };
 
-                gridDetails.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] { Language, Version, Progress, DownloadLink });
+                gridDetails.Columns.AddRange(new DataGridViewColumn[] { Language, Version, Progress, DownloadLink });
 
                 foreach (SubtitleDetails detail in item.SubtitleDetails)
                 {
