@@ -31,7 +31,6 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.button2 = new System.Windows.Forms.Button();
-            this.tabCtrlResults2 = new System.Windows.Forms.TabControl();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.SuspendLayout();
             // 
@@ -59,19 +58,6 @@
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
-            // tabCtrlResults2
-            // 
-            this.tabCtrlResults2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tabCtrlResults2.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
-            this.tabCtrlResults2.Location = new System.Drawing.Point(199, 343);
-            this.tabCtrlResults2.Name = "tabCtrlResults2";
-            this.tabCtrlResults2.SelectedIndex = 0;
-            this.tabCtrlResults2.Size = new System.Drawing.Size(860, 381);
-            this.tabCtrlResults2.TabIndex = 2;
-            this.tabCtrlResults2.Visible = false;
-            // 
             // saveFileDialog1
             // 
             this.saveFileDialog1.DefaultExt = "srt";
@@ -81,11 +67,10 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(884, 462);
+            this.ClientSize = new System.Drawing.Size(884, 562);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.tabCtrlResults2);
             this.Name = "SubtitulamosSourceForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "SubtitulamosSourceForm";
@@ -99,7 +84,6 @@
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.TabControl tabCtrlResults2;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
     }
 }

@@ -24,8 +24,8 @@ namespace SubtitleFinderApp
         {
             InitializeComponent();
             
-            var htmldoc = _web.Load("https://www.subtitulamos.tv/shows");
-            var showsListDiv = htmldoc.DocumentNode.Descendants("div").Where(d => d.Attributes.Contains("class") && d.Attributes["class"].Value.Equals("container")).SingleOrDefault();            
+            HtmlAgilityPack.HtmlDocument htmldoc = _web.Load("https://www.subtitulamos.tv/shows");
+            HtmlNode showsListDiv = htmldoc.DocumentNode.Descendants("div").Where(d => d.Attributes.Contains("class") && d.Attributes["class"].Value.Equals("container")).SingleOrDefault();            
             tvShows = showsListDiv.Descendants("div").Where(d => d.Attributes.Contains("class") && d.Attributes["class"].Value.Equals("row"));            
 
             tabCtrlResults = new TabControl()
@@ -36,7 +36,7 @@ namespace SubtitleFinderApp
                 Appearance = TabAppearance.Normal,
                 Location = new Point(12, 69),
                 Name = "tabCtrlResults",
-                Size = new Size(860, 381)
+                Size = new Size(860, 420)
             };
 
             tabCtrlResults.Click += tabCtrlResults_Click;

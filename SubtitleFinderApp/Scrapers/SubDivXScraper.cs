@@ -38,7 +38,7 @@ namespace SubtitleFinderApp.Scrapers
             gridResults.RowHeadersVisible = false;
             gridResults.RowsDefaultCellStyle = new DataGridViewCellStyle() { WrapMode = DataGridViewTriState.True };
             gridResults.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            gridResults.Size = new Size(860, 420);            
+            gridResults.Size = new Size(860, 420);
 
             DataGridViewTextBoxColumn Title = new DataGridViewTextBoxColumn();
             Title.FillWeight = 194.9239F;

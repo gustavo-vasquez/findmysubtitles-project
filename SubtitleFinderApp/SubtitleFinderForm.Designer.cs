@@ -134,14 +134,13 @@
             // 
             this.rdoBtnSubDivX.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.rdoBtnSubDivX.AutoSize = true;
-            this.rdoBtnSubDivX.Checked = true;
             this.rdoBtnSubDivX.Location = new System.Drawing.Point(303, 40);
             this.rdoBtnSubDivX.Name = "rdoBtnSubDivX";
             this.rdoBtnSubDivX.Size = new System.Drawing.Size(90, 17);
             this.rdoBtnSubDivX.TabIndex = 2;
-            this.rdoBtnSubDivX.TabStop = true;
             this.rdoBtnSubDivX.Text = "SubDivX.com";
             this.rdoBtnSubDivX.UseVisualStyleBackColor = true;
+            this.rdoBtnSubDivX.CheckedChanged += new System.EventHandler(this.radioBtnSources_CheckedChanged);
             // 
             // rdoBtnTuSubtitulo
             // 
@@ -151,9 +150,9 @@
             this.rdoBtnTuSubtitulo.Name = "rdoBtnTuSubtitulo";
             this.rdoBtnTuSubtitulo.Size = new System.Drawing.Size(102, 17);
             this.rdoBtnTuSubtitulo.TabIndex = 3;
-            this.rdoBtnTuSubtitulo.TabStop = true;
             this.rdoBtnTuSubtitulo.Text = "TuSubtitulo.com";
             this.rdoBtnTuSubtitulo.UseVisualStyleBackColor = true;
+            this.rdoBtnTuSubtitulo.CheckedChanged += new System.EventHandler(this.radioBtnSources_CheckedChanged);
             // 
             // rdoBtnSubtitulamos
             // 
@@ -163,9 +162,9 @@
             this.rdoBtnSubtitulamos.Name = "rdoBtnSubtitulamos";
             this.rdoBtnSubtitulamos.Size = new System.Drawing.Size(97, 17);
             this.rdoBtnSubtitulamos.TabIndex = 4;
-            this.rdoBtnSubtitulamos.TabStop = true;
             this.rdoBtnSubtitulamos.Text = "Subtitulamos.tv";
             this.rdoBtnSubtitulamos.UseVisualStyleBackColor = true;
+            this.rdoBtnSubtitulamos.CheckedChanged += new System.EventHandler(this.radioBtnSources_CheckedChanged);
             // 
             // picBoxSubtitulamos
             // 
