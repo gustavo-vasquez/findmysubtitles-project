@@ -29,28 +29,6 @@ namespace SubtitleFinderApp
         public SubtitleFinderForm()
         {
             InitializeComponent();
-
-            //rdoBtnSubDivX.Click += radioBtnSources_CheckedChanged;
-            //rdoBtnTuSubtitulo.Click += radioBtnSources_CheckedChanged;
-            //rdoBtnSubtitulamos.Click += radioBtnSources_CheckedChanged;
-
-            //****************//
-            //HtmlAgilityPack.HtmlDocument htmldoc = _web.Load("https://www.subtitulamos.tv/shows");
-            //HtmlNode showsListDiv = htmldoc.DocumentNode.Descendants("div").Where(d => d.Attributes.Contains("class") && d.Attributes["class"].Value.Equals("container")).SingleOrDefault();
-            //tvShows = showsListDiv.Descendants("div").Where(d => d.Attributes.Contains("class") && d.Attributes["class"].Value.Equals("row"));
-
-            //tabCtrlResults = new TabControl()
-            //{
-            //    Anchor = ((System.Windows.Forms.AnchorStyles)((((AnchorStyles.Top | AnchorStyles.Bottom)
-            //| AnchorStyles.Left)
-            //| AnchorStyles.Right))),
-            //    Appearance = TabAppearance.Normal,
-            //    Location = new Point(12, 110),
-            //    Name = "tabCtrlResults",
-            //    Size = new Size(860, 420)
-            //};
-
-            //tabCtrlResults.Click += tabCtrlResults_Click;
         }
 
         private void SubtitleFinderForm_Load(object sender, EventArgs e)
@@ -297,7 +275,7 @@ namespace SubtitleFinderApp
                     tabCtrlResults.SelectTab(tab);
             }
 
-            RenderizeSeasonTab(tvShowHtml);            
+            RenderizeSeasonTab(tvShowHtml);
         }
 
 
@@ -308,32 +286,33 @@ namespace SubtitleFinderApp
             IEnumerable<HtmlNode> episodes = htmldoc.DocumentNode.Descendants("div").Where(d => d.Attributes.Contains("id") && d.Attributes["id"].Value.Equals("episodes")).SingleOrDefault().Descendants("div").Where(d => d.Attributes.Contains("class") && d.Attributes["class"].Value.Equals("episode"));
             List<SubtitulamosScraper> scraper = new List<SubtitulamosScraper>();
 
-            foreach (var episode in episodes)
+            foreach (HtmlNode episode in episodes)
             {
                 SubtitulamosScraper scraperItem = new SubtitulamosScraper();
-                scraperItem.EpisodeName = System.Web.HttpUtility.HtmlDecode(episode.Descendants("div").Where(e => e.Attributes.Contains("class") && e.Attributes["class"].Value.Equals("episode-name")).SingleOrDefault().InnerText);
+                //scraperItem.EpisodeName = System.Web.HttpUtility.HtmlDecode(episode.Descendants("div").Where(e => e.Attributes.Contains("class") && e.Attributes["class"].Value.Equals("episode-name")).SingleOrDefault().InnerText);
 
-                foreach (var language in episode.Descendants("div").Where(e => e.Attributes.Contains("class") && e.Attributes["class"].Value.Equals("subtitle-language")))
-                {
-                    IEnumerable<HtmlNode> details = language.NextSibling.NextSibling.Descendants("div").Where(d => d.Attributes.Contains("class") && d.Attributes["class"].Value.Equals("sub"));
+                //foreach (var language in episode.Descendants("div").Where(e => e.Attributes.Contains("class") && e.Attributes["class"].Value.Equals("subtitle-language")))
+                //{
+                //    IEnumerable<HtmlNode> details = language.NextSibling.NextSibling.Descendants("div").Where(d => d.Attributes.Contains("class") && d.Attributes["class"].Value.Equals("sub"));
 
-                    foreach (HtmlNode detail in details)
-                    {
-                        HtmlNode versionName = detail.Descendants("div").Where(d => d.Attributes.Contains("class") && d.Attributes["class"].Value.Equals("version-name")).SingleOrDefault();
-                        HtmlNode progressPercentage = detail.Descendants("div").Where(d => d.Attributes.Contains("class") && d.Attributes["class"].Value.Equals("progress_percentage")).SingleOrDefault();
-                        HtmlNode downloadUrl = detail.Descendants("a").Where(a => a.Attributes.Contains("href")).SingleOrDefault();
+                //    foreach (HtmlNode detail in details)
+                //    {
+                //        HtmlNode versionName = detail.Descendants("div").Where(d => d.Attributes.Contains("class") && d.Attributes["class"].Value.Equals("version-name")).SingleOrDefault();
+                //        HtmlNode progressPercentage = detail.Descendants("div").Where(d => d.Attributes.Contains("class") && d.Attributes["class"].Value.Equals("progress_percentage")).SingleOrDefault();
+                //        HtmlNode downloadUrl = detail.Descendants("a").Where(a => a.Attributes.Contains("href")).SingleOrDefault();
 
-                        scraperItem.SubtitleDetails.Add(new SubtitleDetails()
-                        {
-                            SubtitleLanguage = language.InnerText,
-                            VersionName = versionName.InnerText,
-                            ProgressPercentage = progressPercentage.InnerText.Trim(),
-                            DownloadUrl = (downloadUrl != null) ? sourceURL + downloadUrl.Attributes["href"].Value.Substring(1) : ""
-                        });
-                    }
-                }
+                //        scraperItem.SubtitleDetails.Add(new SubtitleDetails()
+                //        {
+                //            SubtitleLanguage = language.InnerText,
+                //            VersionName = versionName.InnerText,
+                //            ProgressPercentage = progressPercentage.InnerText.Trim(),
+                //            DownloadUrl = (downloadUrl != null) ? sourceURL + downloadUrl.Attributes["href"].Value.Substring(1) : ""
+                //        });
+                //    }
+                //}
 
-                scraper.Add(scraperItem);
+                //scraper.Add(scraperItem);                
+                scraper.Add(scraperItem.GetEpisodeInformation(episode, sourceURL));
             }
 
             Label lblTitle;
