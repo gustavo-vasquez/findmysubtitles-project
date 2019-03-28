@@ -22,9 +22,11 @@ namespace SubtitleFinderApp
 
         //private HtmlWeb _web = new HtmlWeb() { OverrideEncoding = Encoding.GetEncoding("ISO-8859-1"), AutoDetectEncoding = false };
         private const string sourceURL = "https://www.subtitulamos.tv/";
+        private const string sourceTuSubtituloURL = "https://www.tusubtitulo.com";
         private Dictionary<string, string> seasonURL;
         private IEnumerable<HtmlNode> tvShows;
         private TabControl tabCtrlResults;
+        private TabControl tabCtrl_tuSubtitulo;
 
         public SubtitleFinderForm()
         {
@@ -46,6 +48,9 @@ namespace SubtitleFinderApp
                 {
                     case "rdoBtnSubDivX":
                         searchThroughSubDivX(text);
+                        break;
+                    case "rdoBtnTuSubtitulo":
+                        searchThroughTuSubtitulo(text);
                         break;
                     case "rdoBtnSubtitulamos":                        
                         searchThroughSubtitulamos(text);
@@ -154,7 +159,19 @@ namespace SubtitleFinderApp
                         }
                         break;
                     case "rdoBtnTuSubtitulo":
-                        MessageBox.Show("Elegiste tusubtitulo.");
+                        if (tabCtrl_tuSubtitulo == null)
+                        {
+                            tabCtrl_tuSubtitulo = new TabControl()
+                            {
+                                Anchor = ((System.Windows.Forms.AnchorStyles)((((AnchorStyles.Top | AnchorStyles.Bottom) | AnchorStyles.Left) | AnchorStyles.Right))),
+                                Appearance = TabAppearance.Normal,
+                                Location = new Point(12, 110),
+                                Name = "tabCtrl_tuSubtitulo",
+                                Size = new Size(860, 420)
+                            };
+
+                            tabCtrl_tuSubtitulo.Click += tabCtrl_tuSubtitulo_Click;
+                        }
                         break;
                     case "rdoBtnSubtitulamos":
                         if(tabCtrlResults == null)
@@ -177,6 +194,12 @@ namespace SubtitleFinderApp
 
         private void searchThroughSubDivX(string text)
         {
+            if (this.Controls.ContainsKey("tabCtrl_tuSubtitulo"))
+            {
+                this.Controls.Remove(tabCtrl_tuSubtitulo);
+                tabCtrl_tuSubtitulo.Controls.Clear();
+            }
+
             if (this.Controls.ContainsKey("tabCtrlResults"))
             {
                 this.Controls.Remove(tabCtrlResults);
@@ -226,7 +249,13 @@ namespace SubtitleFinderApp
             {
                 this.Controls.Remove(gridResults);
                 gridResults.Rows.Clear();
-            }            
+            }
+
+            if (this.Controls.ContainsKey("tabCtrl_tuSubtitulo"))
+            {
+                this.Controls.Remove(tabCtrl_tuSubtitulo);
+                tabCtrl_tuSubtitulo.Controls.Clear();
+            }
 
             if (!this.Controls.ContainsKey("tabCtrlResults"))
                 this.Controls.Add(tabCtrlResults);
@@ -278,6 +307,70 @@ namespace SubtitleFinderApp
             RenderizeSeasonTab(tvShowHtml);
         }
 
+        private void searchThroughTuSubtitulo(string text)
+        {
+            if (this.Controls.ContainsKey("gridResults"))
+            {
+                this.Controls.Remove(gridResults);
+                gridResults.Rows.Clear();
+            }
+
+            if (this.Controls.ContainsKey("tabCtrlResults"))
+            {
+                this.Controls.Remove(tabCtrlResults);
+                tabCtrlResults.Controls.Clear();
+            }
+
+            if (!this.Controls.ContainsKey("tabCtrl_tuSubtitulo"))
+                this.Controls.Add(tabCtrl_tuSubtitulo);
+            else
+                tabCtrl_tuSubtitulo.Controls.Clear();
+
+            HtmlAgilityPack.HtmlDocument htmldoc = new HtmlWeb().Load("https://www.tusubtitulo.com/series.php");
+            var tvShows = htmldoc.DocumentNode.Descendants("td").Where(t => t.Attributes.Contains("class") && t.Attributes["class"].Value == "line0").ToList();
+            string tvShowURL = "";
+            string tvShowId = "";
+
+            foreach (var tvShow in tvShows)
+            {
+                HtmlNode anchorTag = tvShow.Descendants("a").SingleOrDefault();
+
+                if (text.ToLower() == anchorTag.InnerText.ToLower())
+                {
+                    tvShowURL = sourceTuSubtituloURL + anchorTag.Attributes["href"].Value;
+                    tvShowId = anchorTag.Attributes["href"].Value.Substring(anchorTag.Attributes["href"].Value.LastIndexOf('/') + 1);
+                    break;
+                }
+            }
+
+            var tvShowHtml = new HtmlWeb().Load(tvShowURL);
+            var tabs = tvShowHtml.DocumentNode.Descendants("span").Where(t => t.Attributes.Contains("class") && t.Attributes["class"].Value == "titulo").FirstOrDefault();
+            List<HtmlNode> seasonsList = tabs.Descendants("a").ToList();
+            int totalIndexSeasons = seasonsList.Count() - 1;
+            seasonURL = new Dictionary<string, string>();
+
+            for(int i = 0; i <= totalIndexSeasons; i++)
+            {
+                string seasonTitle = "Temporada " + seasonsList[i].InnerText;
+
+                TabPage tab = new TabPage()
+                {
+                    Location = new Point(4, 25),
+                    Size = new Size(852, 352),
+                    Text = seasonTitle,
+                    UseVisualStyleBackColor = true,
+                    AutoScroll = true
+                };
+
+                tabCtrl_tuSubtitulo.Controls.Add(tab);
+
+                if (i != totalIndexSeasons)
+                    seasonURL.Add(seasonTitle, "https://www.tusubtitulo.com/ajax_loadShow.php?show=" + tvShowId + "&season=" + seasonsList[i].InnerText);
+                else
+                    tabCtrl_tuSubtitulo.SelectTab(tab);
+            }
+        }
+
 
         private void RenderizeSeasonTab(object htmlOrUrl)
         {
@@ -289,29 +382,6 @@ namespace SubtitleFinderApp
             foreach (HtmlNode episode in episodes)
             {
                 SubtitulamosScraper scraperItem = new SubtitulamosScraper();
-                //scraperItem.EpisodeName = System.Web.HttpUtility.HtmlDecode(episode.Descendants("div").Where(e => e.Attributes.Contains("class") && e.Attributes["class"].Value.Equals("episode-name")).SingleOrDefault().InnerText);
-
-                //foreach (var language in episode.Descendants("div").Where(e => e.Attributes.Contains("class") && e.Attributes["class"].Value.Equals("subtitle-language")))
-                //{
-                //    IEnumerable<HtmlNode> details = language.NextSibling.NextSibling.Descendants("div").Where(d => d.Attributes.Contains("class") && d.Attributes["class"].Value.Equals("sub"));
-
-                //    foreach (HtmlNode detail in details)
-                //    {
-                //        HtmlNode versionName = detail.Descendants("div").Where(d => d.Attributes.Contains("class") && d.Attributes["class"].Value.Equals("version-name")).SingleOrDefault();
-                //        HtmlNode progressPercentage = detail.Descendants("div").Where(d => d.Attributes.Contains("class") && d.Attributes["class"].Value.Equals("progress_percentage")).SingleOrDefault();
-                //        HtmlNode downloadUrl = detail.Descendants("a").Where(a => a.Attributes.Contains("href")).SingleOrDefault();
-
-                //        scraperItem.SubtitleDetails.Add(new SubtitleDetails()
-                //        {
-                //            SubtitleLanguage = language.InnerText,
-                //            VersionName = versionName.InnerText,
-                //            ProgressPercentage = progressPercentage.InnerText.Trim(),
-                //            DownloadUrl = (downloadUrl != null) ? sourceURL + downloadUrl.Attributes["href"].Value.Substring(1) : ""
-                //        });
-                //    }
-                //}
-
-                //scraper.Add(scraperItem);                
                 scraper.Add(scraperItem.GetEpisodeInformation(episode, sourceURL));
             }
 
@@ -405,6 +475,11 @@ namespace SubtitleFinderApp
         {
             if (tabCtrlResults.SelectedTab.Controls.Count <= 0)
                 RenderizeSeasonTab(seasonURL[tabCtrlResults.SelectedTab.Text]);
+        }
+
+        private void tabCtrl_tuSubtitulo_Click(object sender, EventArgs e)
+        {
+
         }
 
         private void gridDetails_CellContentClick(object sender, DataGridViewCellEventArgs e)
