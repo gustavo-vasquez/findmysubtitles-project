@@ -364,17 +364,28 @@ namespace SubtitleFinderApp
 
                 tabCtrl_tuSubtitulo.Controls.Add(tab);
 
-                if (i != totalIndexSeasons)
-                    seasonURL.Add(seasonTitle, "https://www.tusubtitulo.com/ajax_loadShow.php?show=" + tvShowId + "&season=" + seasonsList[i].InnerText);
-                else
+                seasonURL.Add(seasonTitle, "https://www.tusubtitulo.com/ajax_loadShow.php?show=" + tvShowId + "&season=" + seasonsList[i].InnerText);
+
+                if (i == totalIndexSeasons)
                     tabCtrl_tuSubtitulo.SelectTab(tab);
             }
+
+            RenderizeSeasonTab(seasonURL.Last().Value);
         }
 
 
         private void RenderizeSeasonTab(object htmlOrUrl)
         {
             HtmlAgilityPack.HtmlDocument htmldoc = (htmlOrUrl is HtmlAgilityPack.HtmlDocument) ? (HtmlAgilityPack.HtmlDocument)htmlOrUrl : new HtmlWeb().Load((string)htmlOrUrl);
+
+            IEnumerable<HtmlNode> episodesTuSub = htmldoc.DocumentNode.Descendants("table");
+            List<TuSubtituloScraper> scraperTuSub = new List<TuSubtituloScraper>();
+
+            foreach (HtmlNode episode in episodesTuSub)
+            {
+                TuSubtituloScraper scraperItemTuSub = new TuSubtituloScraper();
+                scraperTuSub.Add(scraperItemTuSub.GetEpisodeInformation(episode, "https:"));
+            }
 
             IEnumerable<HtmlNode> episodes = htmldoc.DocumentNode.Descendants("div").Where(d => d.Attributes.Contains("id") && d.Attributes["id"].Value.Equals("episodes")).SingleOrDefault().Descendants("div").Where(d => d.Attributes.Contains("class") && d.Attributes["class"].Value.Equals("episode"));
             List<SubtitulamosScraper> scraper = new List<SubtitulamosScraper>();
