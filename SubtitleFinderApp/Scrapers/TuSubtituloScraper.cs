@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SubtitleFinderApp.Scrapers
 {
-    public class TuSubtituloScraper
+    public class TuSubtituloScraper : ISourceScraper
     {
         public string EpisodeName { get; set; }
         public List<SubtitleDetails> SubtitleDetails { get; set; }
@@ -18,18 +18,20 @@ namespace SubtitleFinderApp.Scrapers
             this.SubtitleDetails = new List<Scrapers.SubtitleDetails>();
         }
 
-        public TuSubtituloScraper GetEpisodeInformation(HtmlNode episode, string prefix)
+        public void SetEpisodeData(HtmlNode episode, string prefix)
         {
-            EpisodeName = episode.Descendants("tr").FirstOrDefault().Descendants("td").Where(c => c.Attributes.Contains("class") && c.Attributes["class"].Value.Equals("NewsTitle")).LastOrDefault().Descendants("a").FirstOrDefault().InnerText;
+            IEnumerable<HtmlNode> allRows = episode.Descendants("tr");
+            EpisodeName = allRows.FirstOrDefault().Descendants("td").Where(c => c.Attributes.Contains("class") && c.Attributes["class"].Value.Equals("NewsTitle")).LastOrDefault().Descendants("a").FirstOrDefault().InnerText;
             string versionName = "", subtitleLanguage = "", progressPercentage = "", downloadUrl = "";
 
-            foreach(var row in episode.Descendants("tr"))
+            foreach(HtmlNode row in allRows)
             {
-                bool isTitleRow = row.Descendants("td").Any(c => c.Attributes.Contains("class") && c.Attributes["class"].Value.Equals("NewsTitle"));
+                IEnumerable<HtmlNode> currentColumns = row.Descendants("td");
+                bool isTitleRow = currentColumns.Any(c => c.Attributes.Contains("class") && c.Attributes["class"].Value.Equals("NewsTitle"));
 
-                if(!isTitleRow && (row.Descendants("td").Count() > 1))
+                if(!isTitleRow && (currentColumns.Count() > 1))
                 {
-                    HtmlNode versionNameColumn = row.Descendants("td").Where(c => c.Attributes.Contains("colspan") && c.Attributes["class"].Value.Equals("newsClaro")).SingleOrDefault();
+                    HtmlNode versionNameColumn = currentColumns.Where(c => c.Attributes.Contains("colspan") && c.Attributes["class"].Value.Equals("newsClaro")).SingleOrDefault();
 
                     if (versionNameColumn != null)
                     {
@@ -37,7 +39,7 @@ namespace SubtitleFinderApp.Scrapers
                         continue;
                     }
 
-                    HtmlNode languageColumn = row.Descendants("td").Where(c => c.Attributes.Contains("class") && c.Attributes["class"].Value.Equals("language")).SingleOrDefault();
+                    HtmlNode languageColumn = currentColumns.Where(c => c.Attributes.Contains("class") && c.Attributes["class"].Value.Equals("language")).SingleOrDefault();
 
                     if (languageColumn != null)
                     {
@@ -49,16 +51,16 @@ namespace SubtitleFinderApp.Scrapers
 
                         SubtitleDetails.Add(new SubtitleDetails()
                         {
-                            VersionName = versionName,
-                            SubtitleLanguage = subtitleLanguage,
-                            ProgressPercentage = progressPercentage,
+                            VersionName = System.Web.HttpUtility.HtmlDecode(versionName.Trim()),
+                            SubtitleLanguage = subtitleLanguage.Trim(),
+                            ProgressPercentage = progressPercentage.Trim(),
                             DownloadUrl = downloadUrl
                         });
                     }
                 }
             }
 
-            return this;
+            //return this;
         }
     }
 }

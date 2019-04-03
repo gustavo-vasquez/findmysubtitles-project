@@ -57,8 +57,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums\SearchSources.cs" />
     <Compile Include="ProductInfo.cs" />
+    <Compile Include="Scrapers\ISourceScraper.cs" />
     <Compile Include="Scrapers\SubDivXScraper.cs" />
+    <Compile Include="Scrapers\SubtitleDetails.cs" />
     <Compile Include="Scrapers\SubtitulamosScraper.cs" />
     <Compile Include="Scrapers\TuSubtituloScraper.cs" />
     <Compile Include="SubDivXCommentsDialog.cs" />

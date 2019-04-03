@@ -1,5 +1,6 @@
 ﻿using HtmlAgilityPack;
 using SubtitleFinderApp.Scrapers;
+using SubtitleFinderApp.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -159,18 +160,18 @@ namespace SubtitleFinderApp
                         }
                         break;
                     case "rdoBtnTuSubtitulo":
-                        if (tabCtrl_tuSubtitulo == null)
+                        if (tabCtrlResults == null)
                         {
-                            tabCtrl_tuSubtitulo = new TabControl()
+                            tabCtrlResults = new TabControl()
                             {
                                 Anchor = ((System.Windows.Forms.AnchorStyles)((((AnchorStyles.Top | AnchorStyles.Bottom) | AnchorStyles.Left) | AnchorStyles.Right))),
                                 Appearance = TabAppearance.Normal,
                                 Location = new Point(12, 110),
-                                Name = "tabCtrl_tuSubtitulo",
+                                Name = "tabCtrlResults",
                                 Size = new Size(860, 420)
                             };
 
-                            tabCtrl_tuSubtitulo.Click += tabCtrl_tuSubtitulo_Click;
+                            tabCtrlResults.Click += tabCtrlResults_Click;
                         }
                         break;
                     case "rdoBtnSubtitulamos":
@@ -304,7 +305,7 @@ namespace SubtitleFinderApp
                     tabCtrlResults.SelectTab(tab);
             }
 
-            RenderizeSeasonTab(tvShowHtml);
+            RenderizeSeasonTab(tvShowHtml, SearchSources.Subtitulamos);
         }
 
         private void searchThroughTuSubtitulo(string text)
@@ -315,16 +316,16 @@ namespace SubtitleFinderApp
                 gridResults.Rows.Clear();
             }
 
-            if (this.Controls.ContainsKey("tabCtrlResults"))
-            {
-                this.Controls.Remove(tabCtrlResults);
-                tabCtrlResults.Controls.Clear();
-            }
+            //if (this.Controls.ContainsKey("tabCtrlResults"))
+            //{
+            //    this.Controls.Remove(tabCtrlResults);
+            //    tabCtrlResults.Controls.Clear();
+            //}
 
-            if (!this.Controls.ContainsKey("tabCtrl_tuSubtitulo"))
-                this.Controls.Add(tabCtrl_tuSubtitulo);
+            if (!this.Controls.ContainsKey("tabCtrlResults"))
+                this.Controls.Add(tabCtrlResults);
             else
-                tabCtrl_tuSubtitulo.Controls.Clear();
+                tabCtrlResults.Controls.Clear();
 
             HtmlAgilityPack.HtmlDocument htmldoc = new HtmlWeb().Load("https://www.tusubtitulo.com/series.php");
             var tvShows = htmldoc.DocumentNode.Descendants("td").Where(t => t.Attributes.Contains("class") && t.Attributes["class"].Value == "line0").ToList();
@@ -362,47 +363,54 @@ namespace SubtitleFinderApp
                     AutoScroll = true
                 };
 
-                tabCtrl_tuSubtitulo.Controls.Add(tab);
+                tabCtrlResults.Controls.Add(tab);
 
                 seasonURL.Add(seasonTitle, "https://www.tusubtitulo.com/ajax_loadShow.php?show=" + tvShowId + "&season=" + seasonsList[i].InnerText);
 
                 if (i == totalIndexSeasons)
-                    tabCtrl_tuSubtitulo.SelectTab(tab);
+                    tabCtrlResults.SelectTab(tab);
             }
 
-            RenderizeSeasonTab(seasonURL.Last().Value);
+            RenderizeSeasonTab(seasonURL.Last().Value, SearchSources.TuSubtitulo);
         }
 
 
-        private void RenderizeSeasonTab(object htmlOrUrl)
+        private void RenderizeSeasonTab(object htmlOrUrl, SearchSources sourceName)
         {
             HtmlAgilityPack.HtmlDocument htmldoc = (htmlOrUrl is HtmlAgilityPack.HtmlDocument) ? (HtmlAgilityPack.HtmlDocument)htmlOrUrl : new HtmlWeb().Load((string)htmlOrUrl);
+            List<ISourceScraper> scraper = new List<ISourceScraper>();
 
-            IEnumerable<HtmlNode> episodesTuSub = htmldoc.DocumentNode.Descendants("table");
-            List<TuSubtituloScraper> scraperTuSub = new List<TuSubtituloScraper>();
-
-            foreach (HtmlNode episode in episodesTuSub)
+            if (sourceName == SearchSources.TuSubtitulo)
             {
-                TuSubtituloScraper scraperItemTuSub = new TuSubtituloScraper();
-                scraperTuSub.Add(scraperItemTuSub.GetEpisodeInformation(episode, "https:"));
+                IEnumerable<HtmlNode> episodes = htmldoc.DocumentNode.Descendants("table");                
+
+                foreach (HtmlNode episode in episodes)
+                {
+                    TuSubtituloScraper scraperItem = new TuSubtituloScraper();
+                    scraperItem.SetEpisodeData(episode, "https:");
+                    scraper.Add(scraperItem);
+                }
             }
-
-            IEnumerable<HtmlNode> episodes = htmldoc.DocumentNode.Descendants("div").Where(d => d.Attributes.Contains("id") && d.Attributes["id"].Value.Equals("episodes")).SingleOrDefault().Descendants("div").Where(d => d.Attributes.Contains("class") && d.Attributes["class"].Value.Equals("episode"));
-            List<SubtitulamosScraper> scraper = new List<SubtitulamosScraper>();
-
-            foreach (HtmlNode episode in episodes)
+            else
             {
-                SubtitulamosScraper scraperItem = new SubtitulamosScraper();
-                scraper.Add(scraperItem.GetEpisodeInformation(episode, sourceURL));
+                IEnumerable<HtmlNode> episodes = htmldoc.DocumentNode.Descendants("div").Where(d => d.Attributes.Contains("id") && d.Attributes["id"].Value.Equals("episodes")).SingleOrDefault().Descendants("div").Where(d => d.Attributes.Contains("class") && d.Attributes["class"].Value.Equals("episode"));                
+
+                foreach (HtmlNode episode in episodes)
+                {
+                    SubtitulamosScraper scraperItem = new SubtitulamosScraper();
+                    scraperItem.SetEpisodeData(episode, sourceURL);
+                    scraper.Add(scraperItem);
+                }
             }
 
             Label lblTitle;
             DataGridView gridDetails;
             int labelOffsetY = 19;
             int gridViewOffsetY = 51;
-            int selectedTabIndex = tabCtrlResults.SelectedIndex;
+            int selectedTabIndex = tabCtrlResults.SelectedIndex; 
+            //int selectedTabIndex = tabCtrl_tuSubtitulo.SelectedIndex;
 
-            foreach (SubtitulamosScraper item in scraper)
+            foreach (var item in scraper)
             {
                 lblTitle = new Label()
                 {
@@ -472,25 +480,26 @@ namespace SubtitleFinderApp
                 }
 
                 tabCtrlResults.TabPages[selectedTabIndex].Controls.Add(lblTitle);
+                //tabCtrl_tuSubtitulo.TabPages[selectedTabIndex].Controls.Add(lblTitle);
                 gridDetails.Height = gridDetails.Rows.Count * gridDetails.RowTemplate.Height + 30;
                 tabCtrlResults.TabPages[selectedTabIndex].Controls.Add(gridDetails);
+                //tabCtrl_tuSubtitulo.TabPages[selectedTabIndex].Controls.Add(gridDetails);
                 labelOffsetY = gridDetails.Location.Y + gridDetails.Height + 14;
                 gridViewOffsetY = labelOffsetY + lblTitle.Height + 16;
                 gridDetails.CellContentClick += gridDetails_CellContentClick;
             }
 
             Controls.Add(tabCtrlResults);
+            //Controls.Add(tabCtrl_tuSubtitulo);
         }
 
         private void tabCtrlResults_Click(object sender, EventArgs e)
         {
             if (tabCtrlResults.SelectedTab.Controls.Count <= 0)
-                RenderizeSeasonTab(seasonURL[tabCtrlResults.SelectedTab.Text]);
-        }
-
-        private void tabCtrl_tuSubtitulo_Click(object sender, EventArgs e)
-        {
-
+                if(rdoBtnTuSubtitulo.Checked)
+                    RenderizeSeasonTab(seasonURL[tabCtrlResults.SelectedTab.Text], SearchSources.TuSubtitulo);
+                else
+                    RenderizeSeasonTab(seasonURL[tabCtrlResults.SelectedTab.Text], SearchSources.Subtitulamos);
         }
 
         private void gridDetails_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -506,7 +515,7 @@ namespace SubtitleFinderApp
                 var result = dialogSaveSubtitle.ShowDialog();
                 if (result == DialogResult.OK)
                 {
-                    var wClient = new System.Net.WebClient();
+                    var wClient = new WebClient();
                     wClient.DownloadFile(currentGridView.CurrentRow.Cells[3].Value.ToString(), dialogSaveSubtitle.FileName);
                 }
             }

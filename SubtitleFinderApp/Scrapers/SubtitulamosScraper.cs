@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SubtitleFinderApp.Scrapers
 {
-    public class SubtitulamosScraper
+    public class SubtitulamosScraper : ISourceScraper
     {
         public string EpisodeName { get; set; }
         public List<SubtitleDetails> SubtitleDetails { get; set; }
@@ -18,7 +18,7 @@ namespace SubtitleFinderApp.Scrapers
             this.SubtitleDetails = new List<Scrapers.SubtitleDetails>();
         }
 
-        public SubtitulamosScraper GetEpisodeInformation(HtmlNode episode, string sourceURL)
+        public void SetEpisodeData(HtmlNode episode, string sourceURL)
         {
             EpisodeName = System.Web.HttpUtility.HtmlDecode(episode.Descendants("div").Where(e => e.Attributes.Contains("class") && e.Attributes["class"].Value.Equals("episode-name")).SingleOrDefault().InnerText);
 
@@ -42,15 +42,7 @@ namespace SubtitleFinderApp.Scrapers
                 }
             }
 
-            return this;
+            //return this;
         }
-    }
-
-    public class SubtitleDetails
-    {
-        public string SubtitleLanguage { get; set; }
-        public string VersionName { get; set; }
-        public string ProgressPercentage { get; set; }
-        public string DownloadUrl { get; set; }
     }
 }
