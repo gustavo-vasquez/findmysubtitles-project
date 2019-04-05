@@ -36,7 +36,6 @@
             this.statusbarLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.btnSearch = new System.Windows.Forms.Button();
             this.btnProductInfo = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
             this.rdoBtnSubDivX = new System.Windows.Forms.RadioButton();
             this.rdoBtnTuSubtitulo = new System.Windows.Forms.RadioButton();
             this.rdoBtnSubtitulamos = new System.Windows.Forms.RadioButton();
@@ -119,16 +118,6 @@
             this.btnProductInfo.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnProductInfo.UseVisualStyleBackColor = true;
             this.btnProductInfo.Click += new System.EventHandler(this.btnProductInfo_Click);
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(741, 76);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 15;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // rdoBtnSubDivX
             // 
@@ -226,7 +215,6 @@
             this.Controls.Add(this.rdoBtnSubtitulamos);
             this.Controls.Add(this.rdoBtnTuSubtitulo);
             this.Controls.Add(this.rdoBtnSubDivX);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.btnProductInfo);
             this.Controls.Add(this.statusDetails);
             this.Controls.Add(this.label2);
@@ -258,7 +246,6 @@
         private System.Windows.Forms.StatusStrip statusDetails;
         private System.Windows.Forms.Button btnProductInfo;
         private System.Windows.Forms.ToolStripStatusLabel statusbarLabel;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.RadioButton rdoBtnSubDivX;
         private System.Windows.Forms.RadioButton rdoBtnTuSubtitulo;
         private System.Windows.Forms.RadioButton rdoBtnSubtitulamos;

@@ -79,6 +79,7 @@
     <Compile Include="SubtitulamosSourceForm.Designer.cs">
       <DependentUpon>SubtitulamosSourceForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Wrappers\TabControlWrapper.cs" />
     <EmbeddedResource Include="SubtitleFinderForm.resx">
       <DependentUpon>SubtitleFinderForm.cs</DependentUpon>
     </EmbeddedResource>

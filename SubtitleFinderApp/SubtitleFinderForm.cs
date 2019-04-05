@@ -27,7 +27,6 @@ namespace SubtitleFinderApp
         private Dictionary<string, string> seasonURL;
         private IEnumerable<HtmlNode> tvShows;
         private TabControl tabCtrlResults;
-        private TabControl tabCtrl_tuSubtitulo;
 
         public SubtitleFinderForm()
         {
@@ -122,12 +121,6 @@ namespace SubtitleFinderApp
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            var myForm = new SubtitulamosSourceForm();
-            myForm.Show();
-        }
-
         private void picBoxSubDivX_Click(object sender, EventArgs e)
         {
             rdoBtnSubDivX.Checked = true;
@@ -195,17 +188,11 @@ namespace SubtitleFinderApp
 
         private void searchThroughSubDivX(string text)
         {
-            if (this.Controls.ContainsKey("tabCtrl_tuSubtitulo"))
-            {
-                this.Controls.Remove(tabCtrl_tuSubtitulo);
-                tabCtrl_tuSubtitulo.Controls.Clear();
-            }
-
             if (this.Controls.ContainsKey("tabCtrlResults"))
             {
                 this.Controls.Remove(tabCtrlResults);
                 tabCtrlResults.Controls.Clear();
-            }                           
+            }
 
             if (!this.Controls.ContainsKey("gridResults"))
                 this.Controls.Add(gridResults);
@@ -250,12 +237,6 @@ namespace SubtitleFinderApp
             {
                 this.Controls.Remove(gridResults);
                 gridResults.Rows.Clear();
-            }
-
-            if (this.Controls.ContainsKey("tabCtrl_tuSubtitulo"))
-            {
-                this.Controls.Remove(tabCtrl_tuSubtitulo);
-                tabCtrl_tuSubtitulo.Controls.Clear();
             }
 
             if (!this.Controls.ContainsKey("tabCtrlResults"))
@@ -316,12 +297,6 @@ namespace SubtitleFinderApp
                 gridResults.Rows.Clear();
             }
 
-            //if (this.Controls.ContainsKey("tabCtrlResults"))
-            //{
-            //    this.Controls.Remove(tabCtrlResults);
-            //    tabCtrlResults.Controls.Clear();
-            //}
-
             if (!this.Controls.ContainsKey("tabCtrlResults"))
                 this.Controls.Add(tabCtrlResults);
             else
@@ -379,118 +354,38 @@ namespace SubtitleFinderApp
         {
             HtmlAgilityPack.HtmlDocument htmldoc = (htmlOrUrl is HtmlAgilityPack.HtmlDocument) ? (HtmlAgilityPack.HtmlDocument)htmlOrUrl : new HtmlWeb().Load((string)htmlOrUrl);
             List<ISourceScraper> scraper = new List<ISourceScraper>();
+            IEnumerable<HtmlNode> episodes;
 
-            if (sourceName == SearchSources.TuSubtitulo)
+            switch (sourceName)
             {
-                IEnumerable<HtmlNode> episodes = htmldoc.DocumentNode.Descendants("table");                
+                case SearchSources.TuSubtitulo:
+                    episodes = htmldoc.DocumentNode.Descendants("table");
 
-                foreach (HtmlNode episode in episodes)
-                {
-                    TuSubtituloScraper scraperItem = new TuSubtituloScraper();
-                    scraperItem.SetEpisodeData(episode, "https:");
-                    scraper.Add(scraperItem);
-                }
-            }
-            else
-            {
-                IEnumerable<HtmlNode> episodes = htmldoc.DocumentNode.Descendants("div").Where(d => d.Attributes.Contains("id") && d.Attributes["id"].Value.Equals("episodes")).SingleOrDefault().Descendants("div").Where(d => d.Attributes.Contains("class") && d.Attributes["class"].Value.Equals("episode"));                
+                    foreach (HtmlNode episode in episodes)
+                    {
+                        TuSubtituloScraper scraperItem = new TuSubtituloScraper();
+                        scraperItem.SetEpisodeData(episode, "https:");
+                        scraper.Add(scraperItem);
+                    }
+                    break;
+                case SearchSources.Subtitulamos:
+                    episodes = htmldoc.DocumentNode.Descendants("div").Where(d => d.Attributes.Contains("id") && d.Attributes["id"].Value.Equals("episodes")).SingleOrDefault().Descendants("div").Where(d => d.Attributes.Contains("class") && d.Attributes["class"].Value.Equals("episode"));
 
-                foreach (HtmlNode episode in episodes)
-                {
-                    SubtitulamosScraper scraperItem = new SubtitulamosScraper();
-                    scraperItem.SetEpisodeData(episode, sourceURL);
-                    scraper.Add(scraperItem);
-                }
-            }
-
-            Label lblTitle;
-            DataGridView gridDetails;
-            int labelOffsetY = 19;
-            int gridViewOffsetY = 51;
-            int selectedTabIndex = tabCtrlResults.SelectedIndex; 
-            //int selectedTabIndex = tabCtrl_tuSubtitulo.SelectedIndex;
-
-            foreach (var item in scraper)
-            {
-                lblTitle = new Label()
-                {
-                    AutoSize = true,
-                    Font = new Font("Microsoft Sans Serif", 9.75F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(0))),
-                    Location = new Point(6, labelOffsetY),
-                    Text = item.EpisodeName
-                };
-
-                gridDetails = new DataGridView()
-                {
-                    AllowUserToAddRows = false,
-                    AllowUserToDeleteRows = false,
-                    AllowUserToResizeRows = false,
-                    AllowUserToOrderColumns = false,
-                    BackgroundColor = SystemColors.ControlLightLight,
-                    BorderStyle = BorderStyle.None,
-                    ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize,
-                    Location = new Point(6, gridViewOffsetY),
-                    ReadOnly = true,
-                    RowHeadersVisible = false,
-                    Size = new Size(800, 120),
-                    StandardTab = true
-                };
-
-                gridDetails.DefaultCellStyle.SelectionBackColor = gridDetails.DefaultCellStyle.BackColor;
-                gridDetails.DefaultCellStyle.SelectionForeColor = gridDetails.DefaultCellStyle.ForeColor;
-
-                DataGridViewTextBoxColumn Language = new DataGridViewTextBoxColumn()
-                {
-                    HeaderText = "Idioma",
-                    Name = "Language",
-                    ReadOnly = true,
-                    Width = 190,
-                    SortMode = DataGridViewColumnSortMode.NotSortable
-                };
-                DataGridViewTextBoxColumn Version = new DataGridViewTextBoxColumn()
-                {
-                    HeaderText = "Versión",
-                    Name = "Version",
-                    ReadOnly = true,
-                    Width = 250,
-                    SortMode = DataGridViewColumnSortMode.NotSortable
-                };
-                DataGridViewTextBoxColumn Progress = new DataGridViewTextBoxColumn()
-                {
-                    HeaderText = "Progreso",
-                    Name = "Progress",
-                    ReadOnly = true,
-                    Width = 60,
-                    SortMode = DataGridViewColumnSortMode.NotSortable
-                };
-                DataGridViewLinkColumn DownloadLink = new DataGridViewLinkColumn()
-                {
-                    HeaderText = "Descarga",
-                    Name = "DownloadLink",
-                    ReadOnly = true,
-                    Width = 110,
-                    SortMode = DataGridViewColumnSortMode.NotSortable
-                };
-
-                gridDetails.Columns.AddRange(new DataGridViewColumn[] { Language, Version, Progress, DownloadLink });
-
-                foreach (SubtitleDetails detail in item.SubtitleDetails)
-                {
-                    gridDetails.Rows.Add(detail.SubtitleLanguage, detail.VersionName, detail.ProgressPercentage, detail.DownloadUrl);
-                }
-
-                tabCtrlResults.TabPages[selectedTabIndex].Controls.Add(lblTitle);
-                //tabCtrl_tuSubtitulo.TabPages[selectedTabIndex].Controls.Add(lblTitle);
-                gridDetails.Height = gridDetails.Rows.Count * gridDetails.RowTemplate.Height + 30;
-                tabCtrlResults.TabPages[selectedTabIndex].Controls.Add(gridDetails);
-                //tabCtrl_tuSubtitulo.TabPages[selectedTabIndex].Controls.Add(gridDetails);
-                labelOffsetY = gridDetails.Location.Y + gridDetails.Height + 14;
-                gridViewOffsetY = labelOffsetY + lblTitle.Height + 16;
-                gridDetails.CellContentClick += gridDetails_CellContentClick;
+                    foreach (HtmlNode episode in episodes)
+                    {
+                        SubtitulamosScraper scraperItem = new SubtitulamosScraper();
+                        scraperItem.SetEpisodeData(episode, sourceURL);
+                        scraper.Add(scraperItem);
+                    }
+                    break;
+                default:
+                    MessageBox.Show("No se pudo generar los resultados. Pruebe de nuevo.");
+                    break;
             }
 
-            Controls.Add(tabCtrlResults);
-            //Controls.Add(tabCtrl_tuSubtitulo);
+            tabCtrlResults = new Wrappers.TabControlWrapper(tabCtrlResults).SetControls(scraper);
+
+            this.Controls.Add(tabCtrlResults);
         }
 
         private void tabCtrlResults_Click(object sender, EventArgs e)

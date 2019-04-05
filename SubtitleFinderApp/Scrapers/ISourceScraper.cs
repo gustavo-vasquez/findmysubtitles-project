@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SubtitleFinderApp.Scrapers
 {
-    interface ISourceScraper
+    public interface ISourceScraper
     {
         string EpisodeName { get; set; }
         List<SubtitleDetails> SubtitleDetails { get; set; }
