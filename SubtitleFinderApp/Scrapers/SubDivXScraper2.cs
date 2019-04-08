@@ -9,18 +9,17 @@ using System.Windows.Forms;
 
 namespace SubtitleFinderApp.Scrapers
 {
-    public class SubDivXScraper
+    public class SubDivXScraper2
     {
-        public List<SubDivXSResult> SubDivXSResults { get; set; }
+        public List<HtmlNode> Title { get; set; }
+        public List<HtmlNode> Description { get; set; }
+        public List<HtmlNode> Details { get; set; }
+        public List<HtmlNode> Comments { get; set; }        
+        public List<HtmlNode> DownloadLink { get; set; }
 
-        public SubDivXScraper()
+        public DataGridView InitSubDivXGridResults()
         {
-            this.SubDivXSResults = new List<SubDivXSResult>();
-        }
-
-        public static void InitGridViewControl(ref DataGridView gridResults)
-        {
-            gridResults = new DataGridView();
+            DataGridView gridResults = new DataGridView();
             gridResults.AllowUserToAddRows = false;
             gridResults.AllowUserToDeleteRows = false;
             gridResults.AllowUserToResizeRows = false;
@@ -60,7 +59,7 @@ namespace SubtitleFinderApp.Scrapers
             Description.Width = 400;
             gridResults.Columns.Add(Description);
 
-            DataGridViewTextBoxColumn UploadBy = new DataGridViewTextBoxColumn();
+            DataGridViewTextBoxColumn UploadBy = new DataGridViewTextBoxColumn();            
             UploadBy.HeaderText = "Subido por";
             UploadBy.Name = "UploadBy";
             UploadBy.ReadOnly = true;
@@ -85,60 +84,7 @@ namespace SubtitleFinderApp.Scrapers
             downloadsColumn.Width = 80;
             gridResults.Columns.Add(downloadsColumn);
 
-            DataGridViewLinkColumn commentsUrlColumn = new DataGridViewLinkColumn();
-            commentsUrlColumn.HeaderText = "URL de comentarios";
-            commentsUrlColumn.LinkBehavior = LinkBehavior.SystemDefault;
-            commentsUrlColumn.Name = "CommentsUrl";
-            commentsUrlColumn.Visible = false;
-            gridResults.Columns.Add(commentsUrlColumn);
-
-            //return gridResults;
+            return gridResults;
         }
-
-        public void FillResults(ref DataGridView gridResults, IEnumerable<HtmlNode> episodes)
-        {
-            foreach (var episode in episodes)
-            {
-                HtmlNode detailsWrapper = episode.NextSibling;
-                IEnumerable<HtmlNode> anchors = detailsWrapper.LastChild.Descendants("a");
-                SubDivXSResult result = new SubDivXSResult();
-
-                result.EpisodeName = episode.FirstChild.FirstChild.InnerText.Substring(13);
-                result.Description = detailsWrapper.FirstChild.NextSibling.InnerText;
-
-                var commentsNode = anchors.Where(a => a.Attributes.Contains("rel") && a.Attributes["rel"].Value.Equals("nofollow") && a.Attributes.Contains("onclick")).SingleOrDefault();
-                if (commentsNode != null)
-                {
-                    result.Comments = commentsNode.InnerText;
-                    result.CommentsUrl = commentsNode.Attributes["href"].Value;
-                }
-
-                result.UploadBy = anchors.Where(u => u.Attributes.Contains("class") && u.Attributes["class"].Value.Equals("link1")).SingleOrDefault().InnerText;
-                result.DownloadUrl = anchors.Where(a => a.Attributes.Contains("rel") && a.Attributes["rel"].Value.Equals("nofollow") && a.Attributes.Contains("target")).SingleOrDefault().Attributes["href"].Value;
-                SubDivXSResults.Add(result);
-            }
-
-            foreach (SubDivXSResult result in SubDivXSResults)
-            {
-                gridResults.Rows.Add(
-                        result.EpisodeName,
-                        result.Description,
-                        result.UploadBy,
-                        result.Comments,                        
-                        result.DownloadUrl,
-                        result.CommentsUrl
-                    );
-            }
-        }
-    }
-
-    public class SubDivXSResult
-    {
-        public string EpisodeName { get; set; }
-        public string Description { get; set; }
-        public string Comments { get; set; }
-        public string CommentsUrl { get; set; }
-        public string UploadBy { get; set; }
-        public string DownloadUrl { get; set; }
     }
 }

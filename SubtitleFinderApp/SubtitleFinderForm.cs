@@ -18,7 +18,7 @@ namespace SubtitleFinderApp
     public partial class SubtitleFinderForm : Form
     {
         private HtmlWeb _web = new HtmlWeb() { OverrideEncoding = Encoding.Default };        
-        private SubDivXScraper subdivx = new SubDivXScraper();
+        private SubDivXScraper2 subdivx = new SubDivXScraper2();
         private DataGridView gridResults;
 
         //private HtmlWeb _web = new HtmlWeb() { OverrideEncoding = Encoding.GetEncoding("ISO-8859-1"), AutoDetectEncoding = false };
@@ -87,36 +87,43 @@ namespace SubtitleFinderApp
 
         private void gridResults_RowStateChanged(object sender, DataGridViewRowStateChangedEventArgs e)
         {
-            if (e.StateChanged != DataGridViewElementStates.Selected)
-                return;
+            //if (e.StateChanged != DataGridViewElementStates.Selected)
+            //    return;
 
-            statusbarLabel.Text = subdivx.Details[e.Row.Index].InnerText;
+            //statusbarLabel.Text = subdivx.Details[e.Row.Index].InnerText;
         }        
 
         private void gridResults_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            string commentUrl = subdivx.Comments[e.RowIndex].Attributes["href"].Value;
-            string queryString = commentUrl.Substring(commentUrl.IndexOf('?'));
-            string subtitleId = HttpUtility.ParseQueryString(queryString).Get("idsub");
-
-            if (e.ColumnIndex == 2)
-            {                
-                var htmlComments = new HtmlWeb() { OverrideEncoding = Encoding.Default }.Load("https://www.subdivx.com/popcoment.php?idsub=" + HttpUtility.UrlEncode(subtitleId));
-                var userComments = htmlComments.DocumentNode.Descendants("div").Where(d => d.Attributes.Contains("id") && d.Attributes["id"].Value.Equals("pop_upcoment"));                
-                new SubDivXCommentsDialog().ShowDialog(userComments);
-            }
+            DataGridView currentGridView = (DataGridView)sender;
+            DataGridViewRow currentRow = currentGridView.Rows[e.RowIndex];
 
             if (e.ColumnIndex == 3)
             {
-                dialogSaveSubtitle.FileName = string.Join(" ", subtitleId, "-", subdivx.Title[e.RowIndex].InnerText);
+                string commentUrl = currentRow.Cells["CommentsUrl"].Value.ToString();
+                string queryString = commentUrl.Substring(commentUrl.IndexOf('?'));
+                string subtitleId = HttpUtility.ParseQueryString(queryString).Get("idsub");
+
+                var htmlComments = new HtmlWeb() { OverrideEncoding = Encoding.Default }.Load("https://www.subdivx.com/popcoment.php?idsub=" + HttpUtility.UrlEncode(subtitleId));
+                var userComments = htmlComments.DocumentNode.Descendants("div").Where(d => d.Attributes.Contains("id") && d.Attributes["id"].Value.Equals("pop_upcoment"));
+                new SubDivXCommentsDialog().ShowDialog(userComments);
+            }
+
+            if (e.ColumnIndex == 4)
+            {
+                string downloadUrl = currentRow.Cells["DownloadLink"].Value.ToString();
+                string queryString = downloadUrl.Substring(downloadUrl.IndexOf('?'));
+                string subtitleId = HttpUtility.ParseQueryString(queryString).Get("id");
+
+                dialogSaveSubtitle.FileName = string.Join(" ", currentRow.Cells["Title"].Value.ToString(), "-", subtitleId);
                 dialogSaveSubtitle.DefaultExt = "rar";
                 dialogSaveSubtitle.Filter = "Archivos RAR (*.rar)|*.rar|Todos los archivos (*.*)|*.*";
 
                 var result = dialogSaveSubtitle.ShowDialog();
                 if (result == DialogResult.OK)
                 {
-                    var wClient = new WebClient();
-                    wClient.DownloadFile(subdivx.DownloadLink[e.RowIndex].Attributes["href"].Value, dialogSaveSubtitle.FileName);
+                    WebClient wClient = new WebClient();
+                    wClient.DownloadFile(downloadUrl, dialogSaveSubtitle.FileName);
                 }
             }
         }
@@ -147,9 +154,9 @@ namespace SubtitleFinderApp
                     case "rdoBtnSubDivX":
                         if(gridResults == null)
                         {
-                            gridResults = subdivx.InitSubDivXGridResults();
-                            gridResults.CellContentClick += new DataGridViewCellEventHandler(this.gridResults_CellContentClick);
-                            gridResults.RowStateChanged += new DataGridViewRowStateChangedEventHandler(this.gridResults_RowStateChanged);
+                            SubDivXScraper.InitGridViewControl(ref gridResults);
+                            gridResults.CellContentClick += this.gridResults_CellContentClick;
+                            gridResults.RowStateChanged += this.gridResults_RowStateChanged;
                         }
                         break;
                     case "rdoBtnTuSubtitulo":
@@ -200,35 +207,11 @@ namespace SubtitleFinderApp
                 gridResults.Rows.Clear();
 
             HtmlAgilityPack.HtmlDocument htmldoc = _web.Load("https://www.subdivx.com/index.php?buscar=" + HttpUtility.UrlEncode(text) + "&accion=5&masdesc=&subtitulos=1&realiza_b=1");
-            subdivx.Title = htmldoc.DocumentNode.Descendants("a").Where(a => a.Attributes.Contains("class") && a.Attributes["class"].Value.Contains("titulo_menu_izq")).ToList();
-            subdivx.Description = htmldoc.DocumentNode.Descendants("div").Where(a => a.Attributes.Contains("id") && a.Attributes["id"].Value.Equals("buscador_detalle_sub")).ToList();
-            subdivx.Details = htmldoc.DocumentNode.Descendants("div").Where(a => a.Attributes.Contains("id") && a.Attributes["id"].Value.Equals("buscador_detalle_sub_datos")).ToList();
+            HtmlNode wrapper = htmldoc.DocumentNode.Descendants("div").Where(d => d.Attributes.Contains("id") && d.Attributes["id"].Value.Equals("contenedor_izq")).SingleOrDefault();
+            IEnumerable<HtmlNode> episodes = wrapper.Descendants("div").Where(d => d.Attributes.Contains("id") && d.Attributes["id"].Value.Equals("menu_detalle_buscador"));
 
-            subdivx.Comments = new List<HtmlNode>();
-            subdivx.DownloadLink = new List<HtmlNode>();
-
-            foreach (HtmlNode detail in subdivx.Details)
-            {
-                subdivx.Comments.Add(detail.Descendants("a").Where(a => a.Attributes.Contains("rel") && a.Attributes["rel"].Value.Equals("nofollow")).FirstOrDefault());
-                subdivx.DownloadLink.Add(detail.Descendants("a").Where(a => a.Attributes.Contains("rel") && a.Attributes["rel"].Value.Equals("nofollow")).LastOrDefault());
-            }
-
-            foreach (HtmlNode title in subdivx.Title)
-            {
-                gridResults.Rows.Add(title.InnerText.Substring(13));
-            }
-
-            for (int i = 0; i < subdivx.Description.Count; i++)
-            {
-                gridResults.Rows[i].Cells["Description"].Value = subdivx.Description[i].InnerText;
-            }
-
-            for (int i = 0; i < subdivx.Comments.Count; i++)
-            {
-                gridResults.Rows[i].Cells["Comments"].Value = subdivx.Comments[i].InnerText;
-            }
-
-            //gridResults.Refresh();
+            SubDivXScraper scraper = new SubDivXScraper();
+            scraper.FillResults(ref gridResults, episodes);
         }
 
         private void searchThroughSubtitulamos(string text)
