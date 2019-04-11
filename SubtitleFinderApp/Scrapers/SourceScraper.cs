@@ -1,4 +1,5 @@
-﻿using SubtitleFinderApp.Scrapers;
+﻿using HtmlAgilityPack;
+using SubtitleFinderApp.Enums;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -7,26 +8,70 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace SubtitleFinderApp.Wrappers
+namespace SubtitleFinderApp.Scrapers
 {
-    public class TabControlWrapper
+    public abstract class SourceScraper
     {
-        private Label _lblTitle;
-        private DataGridView _gridDetails;
-        private int _labelOffsetY = 19;
-        private int _gridViewOffsetY = 51;
-        public TabControl tabCtrlResults;
+        protected TabControl tabCtrlResults { get; set; }
+        protected Dictionary<string, string> SeasonURL { get; set; }
 
-        public TabControlWrapper(TabControl tabCtrlResults)
+        protected abstract string ShowsCatalogUrl { get; }
+        protected abstract string UrlPrefix { get; }
+
+        protected abstract void SetTvShows();
+
+        public abstract string GetTvShowUrl(string text);
+
+        public abstract TabControl GenerateResults(string tvShowUrl);
+
+        public TabControl RenderizeSeasonTab(string lastSeasonUrl, SearchSources sourceName)
         {
-            this.tabCtrlResults = tabCtrlResults;
+            HtmlAgilityPack.HtmlDocument htmldoc = new HtmlWeb().Load(lastSeasonUrl);
+            List<ISourceScraperData> scraperData = new List<ISourceScraperData>();
+            IEnumerable<HtmlNode> episodes;
+
+            switch (sourceName)
+            {
+                case SearchSources.TuSubtitulo:
+                    episodes = htmldoc.DocumentNode.Descendants("table");
+
+                    foreach (HtmlNode episode in episodes)
+                    {
+                        TuSubtituloScraperData scraperItem = new TuSubtituloScraperData();
+                        scraperItem.SetEpisodeData(episode, "https:");
+                        scraperData.Add(scraperItem);
+                    }
+                    break;
+                case SearchSources.Subtitulamos:
+                    episodes = htmldoc.DocumentNode.Descendants("div").Where(d => d.Attributes.Contains("id") && d.Attributes["id"].Value.Equals("episodes")).SingleOrDefault().Descendants("div").Where(d => d.Attributes.Contains("class") && d.Attributes["class"].Value.Equals("episode"));
+
+                    foreach (HtmlNode episode in episodes)
+                    {
+                        SubtitulamosScraperData scraperItem = new SubtitulamosScraperData();
+                        scraperItem.SetEpisodeData(episode, "https://www.subtitulamos.tv/");
+                        scraperData.Add(scraperItem);
+                    }
+                    break;
+                default:
+                    MessageBox.Show("No se pudo generar los resultados. Pruebe de nuevo.");
+                    break;
+            }
+
+            tabCtrlResults = SetControls(scraperData, tabCtrlResults);
+
+            return tabCtrlResults;
         }
 
-        public TabControl SetControls(List<ISourceScraperData> scraper)
+        protected TabControl SetControls(List<ISourceScraperData> scraperData, TabControl tabCtrlResults)
         {
+            Label _lblTitle;
+            DataGridView _gridDetails;
+            int _labelOffsetY = 19;
+            int _gridViewOffsetY = 51;
+
             int selectedTabIndex = tabCtrlResults.SelectedIndex;
 
-            foreach (var item in scraper)
+            foreach (var item in scraperData)
             {
                 _lblTitle = new Label()
                 {
@@ -106,12 +151,36 @@ namespace SubtitleFinderApp.Wrappers
             return tabCtrlResults;
         }
 
-        private void gridDetails_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        protected TabControl NewTabControl()
+        {
+            return new TabControl()
+            {
+                Anchor = ((System.Windows.Forms.AnchorStyles)((((AnchorStyles.Top | AnchorStyles.Bottom) | AnchorStyles.Left) | AnchorStyles.Right))),
+                Appearance = TabAppearance.Normal,
+                Location = new Point(12, 114),
+                Name = "tabCtrlResults",
+                Size = new Size(860, 442)
+            };
+        }
+
+        protected TabPage NewTabPage(string seasonTitle)
+        {
+            return new TabPage()
+            {
+                Location = new Point(4, 25),
+                Size = new Size(852, 352),
+                Text = seasonTitle,
+                UseVisualStyleBackColor = true,
+                AutoScroll = true
+            };
+        }
+
+        protected void gridDetails_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.ColumnIndex == 3)
             {
                 DataGridView currentGridView = (DataGridView)sender;
-                TabControl tab = Application.OpenForms["SubtitleFinderForm"].Controls["tabCtrResults"] as TabControl;
+                //TabControl tab = Application.OpenForms["SubtitleFinderForm"].Controls["tabCtrResults"] as TabControl;
                 Label previousTitle = (Label)tabCtrlResults.GetNextControl(currentGridView, false);
 
                 SaveFileDialog dialogSaveSubtitle = new SaveFileDialog();
@@ -130,5 +199,7 @@ namespace SubtitleFinderApp.Wrappers
                 }
             }
         }
+
+        protected abstract void tabCtrlResults_Click(object sender, EventArgs e);
     }
 }

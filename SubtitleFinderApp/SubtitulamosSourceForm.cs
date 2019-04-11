@@ -88,11 +88,11 @@ namespace SubtitleFinderApp
             HtmlAgilityPack.HtmlDocument htmldoc = (htmlOrUrl is HtmlAgilityPack.HtmlDocument) ? (HtmlAgilityPack.HtmlDocument)htmlOrUrl : new HtmlWeb().Load((string)htmlOrUrl);
 
             IEnumerable<HtmlNode> episodes = htmldoc.DocumentNode.Descendants("div").Where(d => d.Attributes.Contains("id") && d.Attributes["id"].Value.Equals("episodes")).SingleOrDefault().Descendants("div").Where(d => d.Attributes.Contains("class") && d.Attributes["class"].Value.Equals("episode"));
-            List<SubtitulamosScraper> scraper = new List<SubtitulamosScraper>();
+            List<SubtitulamosScraperData> scraper = new List<SubtitulamosScraperData>();
 
             foreach (var episode in episodes)
             {
-                SubtitulamosScraper scraperItem = new SubtitulamosScraper();
+                SubtitulamosScraperData scraperItem = new SubtitulamosScraperData();
                 scraperItem.EpisodeName = System.Web.HttpUtility.HtmlDecode(episode.Descendants("div").Where(e => e.Attributes.Contains("class") && e.Attributes["class"].Value.Equals("episode-name")).SingleOrDefault().InnerText);
 
                 foreach (var language in episode.Descendants("div").Where(e => e.Attributes.Contains("class") && e.Attributes["class"].Value.Equals("subtitle-language")))
@@ -124,7 +124,7 @@ namespace SubtitleFinderApp
             int gridViewOffsetY = 51;
             int selectedTabIndex = tabCtrlResults.SelectedIndex;
 
-            foreach (SubtitulamosScraper item in scraper)
+            foreach (SubtitulamosScraperData item in scraper)
             {
                 lblTitle = new Label()
                 {

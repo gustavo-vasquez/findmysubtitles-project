@@ -28,12 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SubtitleFinderForm));
             this.txtSearch = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.dialogSaveSubtitle = new System.Windows.Forms.SaveFileDialog();
-            this.statusDetails = new System.Windows.Forms.StatusStrip();
-            this.statusbarLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.btnSearch = new System.Windows.Forms.Button();
             this.btnProductInfo = new System.Windows.Forms.Button();
             this.rdoBtnSubDivX = new System.Windows.Forms.RadioButton();
@@ -43,7 +42,8 @@
             this.picBoxTuSubtitulo = new System.Windows.Forms.PictureBox();
             this.picBoxSubDivX = new System.Windows.Forms.PictureBox();
             this.picBoxAppImage = new System.Windows.Forms.PictureBox();
-            this.statusDetails.SuspendLayout();
+            this.lblExample = new System.Windows.Forms.Label();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.picBoxSubtitulamos)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBoxTuSubtitulo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBoxSubDivX)).BeginInit();
@@ -54,20 +54,20 @@
             // 
             this.txtSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSearch.Location = new System.Drawing.Point(12, 78);
+            this.txtSearch.Location = new System.Drawing.Point(12, 74);
             this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(632, 20);
+            this.txtSearch.Size = new System.Drawing.Size(704, 20);
             this.txtSearch.TabIndex = 0;
-            this.txtSearch.Text = "jigsaw 2017";
+            this.txtSearch.Text = "the walking dead";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(9, 62);
+            this.label2.Location = new System.Drawing.Point(9, 58);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(188, 13);
+            this.label2.Size = new System.Drawing.Size(277, 13);
             this.label2.TabIndex = 8;
-            this.label2.Text = "Escriba el nombre de la serie/película:";
+            this.label2.Text = "Escriba el nombre de la serie/película (+palabras claves):";
             // 
             // dialogSaveSubtitle
             // 
@@ -77,30 +77,16 @@
             this.dialogSaveSubtitle.RestoreDirectory = true;
             this.dialogSaveSubtitle.Title = "Guardar subtítulo como...";
             // 
-            // statusDetails
-            // 
-            this.statusDetails.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.statusbarLabel});
-            this.statusDetails.Location = new System.Drawing.Point(0, 540);
-            this.statusDetails.Name = "statusDetails";
-            this.statusDetails.Size = new System.Drawing.Size(884, 22);
-            this.statusDetails.TabIndex = 14;
-            // 
-            // statusbarLabel
-            // 
-            this.statusbarLabel.Name = "statusbarLabel";
-            this.statusbarLabel.Size = new System.Drawing.Size(32, 17);
-            this.statusbarLabel.Text = "Listo";
-            // 
             // btnSearch
             // 
             this.btnSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSearch.Image = ((System.Drawing.Image)(resources.GetObject("btnSearch.Image")));
-            this.btnSearch.Location = new System.Drawing.Point(650, 76);
+            this.btnSearch.Location = new System.Drawing.Point(722, 72);
             this.btnSearch.Name = "btnSearch";
-            this.btnSearch.Size = new System.Drawing.Size(75, 23);
+            this.btnSearch.Size = new System.Drawing.Size(150, 23);
             this.btnSearch.TabIndex = 1;
-            this.btnSearch.Text = "Buscar";
+            this.btnSearch.Text = "Buscar subtítulo";
+            this.btnSearch.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnSearch.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnSearch.UseVisualStyleBackColor = true;
             this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
@@ -108,11 +94,13 @@
             // btnProductInfo
             // 
             this.btnProductInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnProductInfo.FlatAppearance.BorderSize = 0;
+            this.btnProductInfo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnProductInfo.Image = global::SubtitleFinderApp.Properties.Resources.info;
-            this.btnProductInfo.Location = new System.Drawing.Point(822, 76);
+            this.btnProductInfo.Location = new System.Drawing.Point(845, 12);
             this.btnProductInfo.Name = "btnProductInfo";
             this.btnProductInfo.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.btnProductInfo.Size = new System.Drawing.Size(50, 23);
+            this.btnProductInfo.Size = new System.Drawing.Size(27, 23);
             this.btnProductInfo.TabIndex = 5;
             this.btnProductInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnProductInfo.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -202,12 +190,23 @@
             this.picBoxAppImage.TabIndex = 22;
             this.picBoxAppImage.TabStop = false;
             // 
+            // lblExample
+            // 
+            this.lblExample.AutoSize = true;
+            this.lblExample.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblExample.Location = new System.Drawing.Point(12, 96);
+            this.lblExample.Name = "lblExample";
+            this.lblExample.Size = new System.Drawing.Size(243, 12);
+            this.lblExample.TabIndex = 23;
+            this.lblExample.Text = "Ejemplo: \"the walking dead s09e01\", \"batman begins 2005\"";
+            // 
             // SubtitleFinderForm
             // 
             this.AcceptButton = this.btnSearch;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(884, 562);
+            this.Controls.Add(this.lblExample);
             this.Controls.Add(this.picBoxAppImage);
             this.Controls.Add(this.picBoxSubDivX);
             this.Controls.Add(this.picBoxTuSubtitulo);
@@ -216,7 +215,6 @@
             this.Controls.Add(this.rdoBtnTuSubtitulo);
             this.Controls.Add(this.rdoBtnSubDivX);
             this.Controls.Add(this.btnProductInfo);
-            this.Controls.Add(this.statusDetails);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.btnSearch);
             this.Controls.Add(this.txtSearch);
@@ -227,8 +225,6 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Buscador de subtítulos";
             this.Load += new System.EventHandler(this.SubtitleFinderForm_Load);
-            this.statusDetails.ResumeLayout(false);
-            this.statusDetails.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picBoxSubtitulamos)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBoxTuSubtitulo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBoxSubDivX)).EndInit();
@@ -243,9 +239,7 @@
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.SaveFileDialog dialogSaveSubtitle;
-        private System.Windows.Forms.StatusStrip statusDetails;
         private System.Windows.Forms.Button btnProductInfo;
-        private System.Windows.Forms.ToolStripStatusLabel statusbarLabel;
         private System.Windows.Forms.RadioButton rdoBtnSubDivX;
         private System.Windows.Forms.RadioButton rdoBtnTuSubtitulo;
         private System.Windows.Forms.RadioButton rdoBtnSubtitulamos;
@@ -253,6 +247,8 @@
         private System.Windows.Forms.PictureBox picBoxTuSubtitulo;
         private System.Windows.Forms.PictureBox picBoxSubDivX;
         private System.Windows.Forms.PictureBox picBoxAppImage;
+        private System.Windows.Forms.Label lblExample;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }
 

@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Windows.Forms;
 
 namespace SubtitleFinderApp.Scrapers
@@ -32,14 +33,14 @@ namespace SubtitleFinderApp.Scrapers
             gridResults.BorderStyle = BorderStyle.None;
             gridResults.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
             gridResults.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            gridResults.Location = new Point(12, 110);
+            gridResults.Location = new Point(12, 114);
             gridResults.MultiSelect = false;
             gridResults.Name = "gridResults";
             gridResults.ReadOnly = true;
             gridResults.RowHeadersVisible = false;
             gridResults.RowsDefaultCellStyle = new DataGridViewCellStyle() { WrapMode = DataGridViewTriState.True };
             gridResults.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            gridResults.Size = new Size(860, 420);
+            gridResults.Size = new Size(860, 442);
 
             DataGridViewTextBoxColumn Title = new DataGridViewTextBoxColumn();
             //Title.FillWeight = 194.9239F;
@@ -124,7 +125,7 @@ namespace SubtitleFinderApp.Scrapers
                         result.EpisodeName,
                         result.Description,
                         result.UploadBy,
-                        result.Comments,                        
+                        result.Comments,
                         result.DownloadUrl,
                         result.CommentsUrl
                     );
