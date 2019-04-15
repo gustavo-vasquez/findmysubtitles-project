@@ -11,14 +11,14 @@ namespace SubtitleFinderApp.Scrapers
 {
     public class SubtitulamosScraper : SourceScraper, ISourceScraper
     {
-        public static IEnumerable<HtmlNode> TvShows { get; set; }
-        protected override string ShowsCatalogUrl { get { return "https://www.subtitulamos.tv/shows"; } }
-        protected override string UrlPrefix { get { return "https://www.subtitulamos.tv/"; } }
+        public static IEnumerable<HtmlNode> TvShows { get; private set; }
+        protected override string _ShowsCatalogUrl { get { return "https://www.subtitulamos.tv/shows"; } }
+        protected override string _UrlPrefix { get { return "https://www.subtitulamos.tv/"; } }
 
         public SubtitulamosScraper()
         {
-            tabCtrlResults = base.NewTabControl();
-            tabCtrlResults.Click += tabCtrlResults_Click;
+            _TabCtrlResults = base.NewTabControl();
+            _TabCtrlResults.Click += _TabCtrlResults_Click;
 
             if (TvShows == null)
                 this.SetTvShows();
@@ -26,7 +26,7 @@ namespace SubtitleFinderApp.Scrapers
 
         protected override void SetTvShows()
         {
-            HtmlAgilityPack.HtmlDocument htmldoc = new HtmlWeb().Load(ShowsCatalogUrl);
+            HtmlAgilityPack.HtmlDocument htmldoc = new HtmlWeb().Load(_ShowsCatalogUrl);
             HtmlNode showsListDiv = htmldoc.DocumentNode.Descendants("div").Where(d => d.Attributes.Contains("class") && d.Attributes["class"].Value.Equals("container")).SingleOrDefault();
             TvShows = showsListDiv.Descendants("div").Where(d => d.Attributes.Contains("class") && d.Attributes["class"].Value.Equals("row"));
         }
@@ -39,7 +39,7 @@ namespace SubtitleFinderApp.Scrapers
             {
                 if (text.ToLower() == tvShow.Descendants("a").SingleOrDefault().InnerText.ToLower())
                 {
-                    tvShowUrl = UrlPrefix + tvShow.Descendants("a").SingleOrDefault().Attributes["href"].Value;
+                    tvShowUrl = _UrlPrefix + tvShow.Descendants("a").SingleOrDefault().Attributes["href"].Value;
                     break;
                 }
             }
@@ -52,28 +52,28 @@ namespace SubtitleFinderApp.Scrapers
             HtmlAgilityPack.HtmlDocument tvShowHtml = new HtmlWeb().Load(tvShowUrl);
             HtmlNode tabs = tvShowHtml.DocumentNode.Descendants("div").Where(d => d.Attributes.Contains("class") && d.Attributes["class"].Value.Equals("tabs")).SingleOrDefault();
             IEnumerable<HtmlNode> seasonsList = tabs.Descendants("ul").SingleOrDefault().Descendants("li");
-            SeasonURL = new Dictionary<string, string>();
+            _SeasonUrl = new Dictionary<string, string>();
 
             foreach (var season in seasonsList)
             {
                 string seasonTitle = season.Descendants("a").SingleOrDefault().InnerText;
 
                 TabPage tab = base.NewTabPage(seasonTitle);
-                tabCtrlResults.Controls.Add(tab);
+                _TabCtrlResults.Controls.Add(tab);
 
-                SeasonURL.Add(seasonTitle, UrlPrefix + season.Descendants("a").SingleOrDefault().Attributes["href"].Value.Substring(1));
+                _SeasonUrl.Add(seasonTitle, _UrlPrefix + season.Descendants("a").SingleOrDefault().Attributes["href"].Value.Substring(1));
 
                 if (season.Attributes["class"].Value.Equals("is-active"))
-                    tabCtrlResults.SelectTab(tab);
+                    _TabCtrlResults.SelectTab(tab);
             }
 
-            return base.RenderizeSeasonTab(SeasonURL.Last().Value, SearchSources.Subtitulamos);
+            return base.RenderizeSeasonTab(_SeasonUrl.Last().Value, SearchSources.Subtitulamos);
         }
 
-        protected override void tabCtrlResults_Click(object sender, EventArgs e)
+        protected override void _TabCtrlResults_Click(object sender, EventArgs e)
         {
-            if (tabCtrlResults.SelectedTab.Controls.Count <= 0)
-                Application.OpenForms["SubtitleFinderForm"].Controls.Add(base.RenderizeSeasonTab(SeasonURL[tabCtrlResults.SelectedTab.Text], SearchSources.Subtitulamos));
+            if (_TabCtrlResults.SelectedTab.Controls.Count <= 0)
+                Application.OpenForms["SubtitleFinderForm"].Controls.Add(base.RenderizeSeasonTab(_SeasonUrl[_TabCtrlResults.SelectedTab.Text], SearchSources.Subtitulamos));
         }
     }
 }

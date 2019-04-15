@@ -28,11 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SubtitleFinderForm));
             this.txtSearch = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.dialogSaveSubtitle = new System.Windows.Forms.SaveFileDialog();
+            this.lblSearch = new System.Windows.Forms.Label();
             this.btnSearch = new System.Windows.Forms.Button();
             this.btnProductInfo = new System.Windows.Forms.Button();
             this.rdoBtnSubDivX = new System.Windows.Forms.RadioButton();
@@ -42,8 +40,7 @@
             this.picBoxTuSubtitulo = new System.Windows.Forms.PictureBox();
             this.picBoxSubDivX = new System.Windows.Forms.PictureBox();
             this.picBoxAppImage = new System.Windows.Forms.PictureBox();
-            this.lblExample = new System.Windows.Forms.Label();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.lblSearchExample = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.picBoxSubtitulamos)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBoxTuSubtitulo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBoxSubDivX)).BeginInit();
@@ -58,24 +55,15 @@
             this.txtSearch.Name = "txtSearch";
             this.txtSearch.Size = new System.Drawing.Size(704, 20);
             this.txtSearch.TabIndex = 0;
-            this.txtSearch.Text = "the walking dead";
             // 
-            // label2
+            // lblSearch
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(9, 58);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(277, 13);
-            this.label2.TabIndex = 8;
-            this.label2.Text = "Escriba el nombre de la serie/película (+palabras claves):";
-            // 
-            // dialogSaveSubtitle
-            // 
-            this.dialogSaveSubtitle.DefaultExt = "rar";
-            this.dialogSaveSubtitle.Filter = "Archivos RAR (*.rar)|*.rar|Todos los archivos (*.*)|*.*";
-            this.dialogSaveSubtitle.InitialDirectory = "%USERPROFILE%\\Downloads";
-            this.dialogSaveSubtitle.RestoreDirectory = true;
-            this.dialogSaveSubtitle.Title = "Guardar subtítulo como...";
+            this.lblSearch.AutoSize = true;
+            this.lblSearch.Location = new System.Drawing.Point(9, 58);
+            this.lblSearch.Name = "lblSearch";
+            this.lblSearch.Size = new System.Drawing.Size(277, 13);
+            this.lblSearch.TabIndex = 8;
+            this.lblSearch.Text = "Escriba el nombre de la serie/película (+palabras claves):";
             // 
             // btnSearch
             // 
@@ -111,13 +99,14 @@
             // 
             this.rdoBtnSubDivX.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.rdoBtnSubDivX.AutoSize = true;
+            this.rdoBtnSubDivX.Checked = true;
             this.rdoBtnSubDivX.Location = new System.Drawing.Point(303, 40);
             this.rdoBtnSubDivX.Name = "rdoBtnSubDivX";
             this.rdoBtnSubDivX.Size = new System.Drawing.Size(90, 17);
             this.rdoBtnSubDivX.TabIndex = 2;
+            this.rdoBtnSubDivX.TabStop = true;
             this.rdoBtnSubDivX.Text = "SubDivX.com";
             this.rdoBtnSubDivX.UseVisualStyleBackColor = true;
-            this.rdoBtnSubDivX.CheckedChanged += new System.EventHandler(this.radioBtnSources_CheckedChanged);
             // 
             // rdoBtnTuSubtitulo
             // 
@@ -129,7 +118,6 @@
             this.rdoBtnTuSubtitulo.TabIndex = 3;
             this.rdoBtnTuSubtitulo.Text = "TuSubtitulo.com";
             this.rdoBtnTuSubtitulo.UseVisualStyleBackColor = true;
-            this.rdoBtnTuSubtitulo.CheckedChanged += new System.EventHandler(this.radioBtnSources_CheckedChanged);
             // 
             // rdoBtnSubtitulamos
             // 
@@ -141,7 +129,6 @@
             this.rdoBtnSubtitulamos.TabIndex = 4;
             this.rdoBtnSubtitulamos.Text = "Subtitulamos.tv";
             this.rdoBtnSubtitulamos.UseVisualStyleBackColor = true;
-            this.rdoBtnSubtitulamos.CheckedChanged += new System.EventHandler(this.radioBtnSources_CheckedChanged);
             // 
             // picBoxSubtitulamos
             // 
@@ -153,7 +140,6 @@
             this.picBoxSubtitulamos.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.picBoxSubtitulamos.TabIndex = 19;
             this.picBoxSubtitulamos.TabStop = false;
-            this.picBoxSubtitulamos.Click += new System.EventHandler(this.picBoxSubtitulamos_Click);
             // 
             // picBoxTuSubtitulo
             // 
@@ -165,7 +151,6 @@
             this.picBoxTuSubtitulo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.picBoxTuSubtitulo.TabIndex = 20;
             this.picBoxTuSubtitulo.TabStop = false;
-            this.picBoxTuSubtitulo.Click += new System.EventHandler(this.picBoxTuSubtitulo_Click);
             // 
             // picBoxSubDivX
             // 
@@ -177,7 +162,6 @@
             this.picBoxSubDivX.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.picBoxSubDivX.TabIndex = 21;
             this.picBoxSubDivX.TabStop = false;
-            this.picBoxSubDivX.Click += new System.EventHandler(this.picBoxSubDivX_Click);
             // 
             // picBoxAppImage
             // 
@@ -190,15 +174,15 @@
             this.picBoxAppImage.TabIndex = 22;
             this.picBoxAppImage.TabStop = false;
             // 
-            // lblExample
+            // lblSearchExample
             // 
-            this.lblExample.AutoSize = true;
-            this.lblExample.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblExample.Location = new System.Drawing.Point(12, 96);
-            this.lblExample.Name = "lblExample";
-            this.lblExample.Size = new System.Drawing.Size(243, 12);
-            this.lblExample.TabIndex = 23;
-            this.lblExample.Text = "Ejemplo: \"the walking dead s09e01\", \"batman begins 2005\"";
+            this.lblSearchExample.AutoSize = true;
+            this.lblSearchExample.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSearchExample.Location = new System.Drawing.Point(12, 96);
+            this.lblSearchExample.Name = "lblSearchExample";
+            this.lblSearchExample.Size = new System.Drawing.Size(248, 12);
+            this.lblSearchExample.TabIndex = 23;
+            this.lblSearchExample.Text = "Ejemplos: \"the walking dead s09e01\", \"batman begins 2005\"";
             // 
             // SubtitleFinderForm
             // 
@@ -206,7 +190,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(884, 562);
-            this.Controls.Add(this.lblExample);
+            this.Controls.Add(this.lblSearchExample);
             this.Controls.Add(this.picBoxAppImage);
             this.Controls.Add(this.picBoxSubDivX);
             this.Controls.Add(this.picBoxTuSubtitulo);
@@ -215,7 +199,7 @@
             this.Controls.Add(this.rdoBtnTuSubtitulo);
             this.Controls.Add(this.rdoBtnSubDivX);
             this.Controls.Add(this.btnProductInfo);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.lblSearch);
             this.Controls.Add(this.btnSearch);
             this.Controls.Add(this.txtSearch);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -237,8 +221,7 @@
         #endregion
         private System.Windows.Forms.TextBox txtSearch;
         private System.Windows.Forms.Button btnSearch;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.SaveFileDialog dialogSaveSubtitle;
+        private System.Windows.Forms.Label lblSearch;
         private System.Windows.Forms.Button btnProductInfo;
         private System.Windows.Forms.RadioButton rdoBtnSubDivX;
         private System.Windows.Forms.RadioButton rdoBtnTuSubtitulo;
@@ -247,8 +230,7 @@
         private System.Windows.Forms.PictureBox picBoxTuSubtitulo;
         private System.Windows.Forms.PictureBox picBoxSubDivX;
         private System.Windows.Forms.PictureBox picBoxAppImage;
-        private System.Windows.Forms.Label lblExample;
-        private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.Label lblSearchExample;
     }
 }
 

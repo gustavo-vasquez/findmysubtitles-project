@@ -12,11 +12,11 @@ namespace SubtitleFinderApp.Scrapers
 {
     public abstract class SourceScraper
     {
-        protected TabControl tabCtrlResults { get; set; }
-        protected Dictionary<string, string> SeasonURL { get; set; }
+        protected TabControl _TabCtrlResults { get; set; }
+        protected Dictionary<string, string> _SeasonUrl { get; set; }
 
-        protected abstract string ShowsCatalogUrl { get; }
-        protected abstract string UrlPrefix { get; }
+        protected abstract string _ShowsCatalogUrl { get; }
+        protected abstract string _UrlPrefix { get; }
 
         protected abstract void SetTvShows();
 
@@ -57,19 +57,19 @@ namespace SubtitleFinderApp.Scrapers
                     break;
             }
 
-            tabCtrlResults = SetControls(scraperData, tabCtrlResults);
+            _TabCtrlResults = SetControls(scraperData, _TabCtrlResults);
 
-            return tabCtrlResults;
+            return _TabCtrlResults;
         }
 
-        protected TabControl SetControls(List<ISourceScraperData> scraperData, TabControl tabCtrlResults)
+        protected TabControl SetControls(List<ISourceScraperData> scraperData, TabControl _TabCtrlResults)
         {
             Label _lblTitle;
             DataGridView _gridDetails;
             int _labelOffsetY = 19;
             int _gridViewOffsetY = 51;
 
-            int selectedTabIndex = tabCtrlResults.SelectedIndex;
+            int selectedTabIndex = _TabCtrlResults.SelectedIndex;
 
             foreach (var item in scraperData)
             {
@@ -140,15 +140,15 @@ namespace SubtitleFinderApp.Scrapers
                     _gridDetails.Rows.Add(detail.SubtitleLanguage, detail.VersionName, detail.ProgressPercentage, detail.DownloadUrl);
                 }
 
-                tabCtrlResults.TabPages[selectedTabIndex].Controls.Add(_lblTitle);
+                _TabCtrlResults.TabPages[selectedTabIndex].Controls.Add(_lblTitle);
                 _gridDetails.Height = _gridDetails.Rows.Count * _gridDetails.RowTemplate.Height + 30;
-                tabCtrlResults.TabPages[selectedTabIndex].Controls.Add(_gridDetails);
+                _TabCtrlResults.TabPages[selectedTabIndex].Controls.Add(_gridDetails);
                 _labelOffsetY = _gridDetails.Location.Y + _gridDetails.Height + 14;
                 _gridViewOffsetY = _labelOffsetY + _lblTitle.Height + 16;
                 _gridDetails.CellContentClick += gridDetails_CellContentClick;
             }
 
-            return tabCtrlResults;
+            return _TabCtrlResults;
         }
 
         protected TabControl NewTabControl()
@@ -159,7 +159,8 @@ namespace SubtitleFinderApp.Scrapers
                 Appearance = TabAppearance.Normal,
                 Location = new Point(12, 114),
                 Name = "tabCtrlResults",
-                Size = new Size(860, 442)
+                Size = new Size(860, 442),
+                TabIndex = 6
             };
         }
 
@@ -181,7 +182,7 @@ namespace SubtitleFinderApp.Scrapers
             {
                 DataGridView currentGridView = (DataGridView)sender;
                 //TabControl tab = Application.OpenForms["SubtitleFinderForm"].Controls["tabCtrResults"] as TabControl;
-                Label previousTitle = (Label)tabCtrlResults.GetNextControl(currentGridView, false);
+                Label previousTitle = (Label)_TabCtrlResults.GetNextControl(currentGridView, false);
 
                 SaveFileDialog dialogSaveSubtitle = new SaveFileDialog();
                 dialogSaveSubtitle.FileName = string.Join("_", previousTitle.Text, currentGridView.CurrentRow.Cells[1].Value.ToString().Replace('/', '_'), currentGridView.CurrentRow.Cells[0].Value.ToString());
@@ -200,6 +201,6 @@ namespace SubtitleFinderApp.Scrapers
             }
         }
 
-        protected abstract void tabCtrlResults_Click(object sender, EventArgs e);
+        protected abstract void _TabCtrlResults_Click(object sender, EventArgs e);
     }
 }
