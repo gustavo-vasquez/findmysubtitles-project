@@ -17,6 +17,8 @@ namespace SubtitleFinderApp.Scrapers
 
         protected abstract string _ShowsCatalogUrl { get; }
         protected abstract string _UrlPrefix { get; }
+        private SearchSources _sourceName { get; set; }
+        private bool _isBusy { get; set; }
 
         protected abstract void SetTvShows();
 
@@ -57,6 +59,7 @@ namespace SubtitleFinderApp.Scrapers
                     break;
             }
 
+            _sourceName = sourceName;
             _TabCtrlResults = SetControls(scraperData, _TabCtrlResults);
 
             return _TabCtrlResults;
@@ -64,24 +67,24 @@ namespace SubtitleFinderApp.Scrapers
 
         protected TabControl SetControls(List<ISourceScraperData> scraperData, TabControl _TabCtrlResults)
         {
-            Label _lblTitle;
-            DataGridView _gridDetails;
-            int _labelOffsetY = 19;
-            int _gridViewOffsetY = 51;
+            Label lblTitle;
+            DataGridView gridDetails;
+            int labelOffsetY = 19;
+            int gridViewOffsetY = 51;
 
             int selectedTabIndex = _TabCtrlResults.SelectedIndex;
 
             foreach (var item in scraperData)
             {
-                _lblTitle = new Label()
+                lblTitle = new Label()
                 {
                     AutoSize = true,
                     Font = new Font("Microsoft Sans Serif", 9.75F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(0))),
-                    Location = new Point(6, _labelOffsetY),
+                    Location = new Point(6, labelOffsetY),
                     Text = item.EpisodeName
                 };
 
-                _gridDetails = new DataGridView()
+                gridDetails = new DataGridView()
                 {
                     AllowUserToAddRows = false,
                     AllowUserToDeleteRows = false,
@@ -90,15 +93,15 @@ namespace SubtitleFinderApp.Scrapers
                     BackgroundColor = SystemColors.ControlLightLight,
                     BorderStyle = BorderStyle.None,
                     ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize,
-                    Location = new Point(6, _gridViewOffsetY),
+                    Location = new Point(6, gridViewOffsetY),
                     ReadOnly = true,
                     RowHeadersVisible = false,
                     Size = new Size(800, 120),
                     StandardTab = true
                 };
 
-                _gridDetails.DefaultCellStyle.SelectionBackColor = _gridDetails.DefaultCellStyle.BackColor;
-                _gridDetails.DefaultCellStyle.SelectionForeColor = _gridDetails.DefaultCellStyle.ForeColor;
+                gridDetails.DefaultCellStyle.SelectionBackColor = gridDetails.DefaultCellStyle.BackColor;
+                gridDetails.DefaultCellStyle.SelectionForeColor = gridDetails.DefaultCellStyle.ForeColor;
 
                 DataGridViewTextBoxColumn Language = new DataGridViewTextBoxColumn()
                 {
@@ -133,19 +136,19 @@ namespace SubtitleFinderApp.Scrapers
                     SortMode = DataGridViewColumnSortMode.NotSortable
                 };
 
-                _gridDetails.Columns.AddRange(new DataGridViewColumn[] { Language, Version, Progress, DownloadLink });
+                gridDetails.Columns.AddRange(new DataGridViewColumn[] { Language, Version, Progress, DownloadLink });
 
                 foreach (SubtitleDetails detail in item.SubtitleDetails)
                 {
-                    _gridDetails.Rows.Add(detail.SubtitleLanguage, detail.VersionName, detail.ProgressPercentage, detail.DownloadUrl);
+                    gridDetails.Rows.Add(detail.SubtitleLanguage, detail.VersionName, detail.ProgressPercentage, detail.DownloadUrl);
                 }
 
-                _TabCtrlResults.TabPages[selectedTabIndex].Controls.Add(_lblTitle);
-                _gridDetails.Height = _gridDetails.Rows.Count * _gridDetails.RowTemplate.Height + 30;
-                _TabCtrlResults.TabPages[selectedTabIndex].Controls.Add(_gridDetails);
-                _labelOffsetY = _gridDetails.Location.Y + _gridDetails.Height + 14;
-                _gridViewOffsetY = _labelOffsetY + _lblTitle.Height + 16;
-                _gridDetails.CellContentClick += gridDetails_CellContentClick;
+                _TabCtrlResults.TabPages[selectedTabIndex].Controls.Add(lblTitle);
+                gridDetails.Height = gridDetails.Rows.Count * gridDetails.RowTemplate.Height + 30;
+                _TabCtrlResults.TabPages[selectedTabIndex].Controls.Add(gridDetails);
+                labelOffsetY = gridDetails.Location.Y + gridDetails.Height + 14;
+                gridViewOffsetY = labelOffsetY + lblTitle.Height + 16;
+                gridDetails.CellContentClick += gridDetails_CellContentClick;
             }
 
             return _TabCtrlResults;
@@ -192,11 +195,24 @@ namespace SubtitleFinderApp.Scrapers
                 dialogSaveSubtitle.RestoreDirectory = true;
                 dialogSaveSubtitle.Title = "Guardar subtítulo como...";
 
-                var result = dialogSaveSubtitle.ShowDialog();
-                if (result == DialogResult.OK)
+                if (_isBusy) return;
+
+                if (dialogSaveSubtitle.ShowDialog() == DialogResult.OK)
                 {
+                    _isBusy = true;
                     var wClient = new System.Net.WebClient();
-                    wClient.DownloadFile(currentGridView.CurrentRow.Cells[3].Value.ToString(), dialogSaveSubtitle.FileName);
+
+                    if(_sourceName == SearchSources.TuSubtitulo)
+                        wClient.Headers.Add("referer", "https://www.tusubtitulo.com/show/2199");
+
+                    wClient.DownloadFileCompleted += (webClientSender, args) =>
+                    {
+                        MessageBox.Show($"\"{dialogSaveSubtitle.FileName}\" se ha descargado correctamente.");
+                        //System.Diagnostics.Process.Start(dialogSaveSubtitle.FileName); Abre automáticamente el archivo descargado
+                        _isBusy = false;
+                    };
+
+                    wClient.DownloadFileAsync(new Uri(currentGridView.CurrentRow.Cells[3].Value.ToString()), dialogSaveSubtitle.FileName);
                 }
             }
         }

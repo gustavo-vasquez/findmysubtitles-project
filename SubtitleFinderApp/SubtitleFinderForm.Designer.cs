@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SubtitleFinderForm));
             this.txtSearch = new System.Windows.Forms.TextBox();
             this.lblSearch = new System.Windows.Forms.Label();
@@ -41,6 +42,9 @@
             this.picBoxSubDivX = new System.Windows.Forms.PictureBox();
             this.picBoxAppImage = new System.Windows.Forms.PictureBox();
             this.lblSearchExample = new System.Windows.Forms.Label();
+            this.btnDownloadFolder = new System.Windows.Forms.Button();
+            this.tltDownloadFolder = new System.Windows.Forms.ToolTip(this.components);
+            this.tltProductInfo = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.picBoxSubtitulamos)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBoxTuSubtitulo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBoxSubDivX)).BeginInit();
@@ -89,7 +93,7 @@
             this.btnProductInfo.Name = "btnProductInfo";
             this.btnProductInfo.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.btnProductInfo.Size = new System.Drawing.Size(27, 23);
-            this.btnProductInfo.TabIndex = 5;
+            this.btnProductInfo.TabIndex = 6;
             this.btnProductInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnProductInfo.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnProductInfo.UseVisualStyleBackColor = true;
@@ -103,7 +107,7 @@
             this.rdoBtnSubDivX.Location = new System.Drawing.Point(303, 40);
             this.rdoBtnSubDivX.Name = "rdoBtnSubDivX";
             this.rdoBtnSubDivX.Size = new System.Drawing.Size(90, 17);
-            this.rdoBtnSubDivX.TabIndex = 2;
+            this.rdoBtnSubDivX.TabIndex = 3;
             this.rdoBtnSubDivX.TabStop = true;
             this.rdoBtnSubDivX.Text = "SubDivX.com";
             this.rdoBtnSubDivX.UseVisualStyleBackColor = true;
@@ -115,7 +119,8 @@
             this.rdoBtnTuSubtitulo.Location = new System.Drawing.Point(399, 40);
             this.rdoBtnTuSubtitulo.Name = "rdoBtnTuSubtitulo";
             this.rdoBtnTuSubtitulo.Size = new System.Drawing.Size(102, 17);
-            this.rdoBtnTuSubtitulo.TabIndex = 3;
+            this.rdoBtnTuSubtitulo.TabIndex = 4;
+            this.rdoBtnTuSubtitulo.TabStop = true;
             this.rdoBtnTuSubtitulo.Text = "TuSubtitulo.com";
             this.rdoBtnTuSubtitulo.UseVisualStyleBackColor = true;
             // 
@@ -126,7 +131,8 @@
             this.rdoBtnSubtitulamos.Location = new System.Drawing.Point(507, 40);
             this.rdoBtnSubtitulamos.Name = "rdoBtnSubtitulamos";
             this.rdoBtnSubtitulamos.Size = new System.Drawing.Size(97, 17);
-            this.rdoBtnSubtitulamos.TabIndex = 4;
+            this.rdoBtnSubtitulamos.TabIndex = 5;
+            this.rdoBtnSubtitulamos.TabStop = true;
             this.rdoBtnSubtitulamos.Text = "Subtitulamos.tv";
             this.rdoBtnSubtitulamos.UseVisualStyleBackColor = true;
             // 
@@ -184,12 +190,27 @@
             this.lblSearchExample.TabIndex = 23;
             this.lblSearchExample.Text = "Ejemplos: \"the walking dead s09e01\", \"batman begins 2005\"";
             // 
+            // btnDownloadFolder
+            // 
+            this.btnDownloadFolder.FlatAppearance.BorderSize = 0;
+            this.btnDownloadFolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnDownloadFolder.Image = global::SubtitleFinderApp.Properties.Resources.open_download_folder;
+            this.btnDownloadFolder.Location = new System.Drawing.Point(12, 12);
+            this.btnDownloadFolder.Name = "btnDownloadFolder";
+            this.btnDownloadFolder.Size = new System.Drawing.Size(27, 23);
+            this.btnDownloadFolder.TabIndex = 2;
+            this.btnDownloadFolder.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnDownloadFolder.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnDownloadFolder.UseVisualStyleBackColor = true;
+            this.btnDownloadFolder.Click += new System.EventHandler(this.btnDownloadFolder_Click);
+            // 
             // SubtitleFinderForm
             // 
             this.AcceptButton = this.btnSearch;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(884, 562);
+            this.Controls.Add(this.btnDownloadFolder);
             this.Controls.Add(this.lblSearchExample);
             this.Controls.Add(this.picBoxAppImage);
             this.Controls.Add(this.picBoxSubDivX);
@@ -231,6 +252,9 @@
         private System.Windows.Forms.PictureBox picBoxSubDivX;
         private System.Windows.Forms.PictureBox picBoxAppImage;
         private System.Windows.Forms.Label lblSearchExample;
+        private System.Windows.Forms.Button btnDownloadFolder;
+        private System.Windows.Forms.ToolTip tltDownloadFolder;
+        private System.Windows.Forms.ToolTip tltProductInfo;
     }
 }
 

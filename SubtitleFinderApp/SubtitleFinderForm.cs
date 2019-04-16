@@ -23,6 +23,9 @@ namespace SubtitleFinderApp
             rdoBtnSubDivX.Click += sourceRadioBtns_Click;
             rdoBtnTuSubtitulo.Click += sourceRadioBtns_Click;
             rdoBtnSubtitulamos.Click += sourceRadioBtns_Click;
+
+            tltDownloadFolder.SetToolTip(this.btnDownloadFolder, "Abrir carpeta de descargas");
+            tltProductInfo.SetToolTip(this.btnProductInfo, "Información del producto");
         }
 
         private void SubtitleFinderForm_Load(object sender, EventArgs e)
@@ -146,6 +149,11 @@ namespace SubtitleFinderApp
                     System.Reflection.Assembly.GetEntryAssembly().GetName().Version.ToString()
                 );
             DialogResult AppInfoWindow = MessageBox.Show(appInfoText, "Acerca de", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void btnDownloadFolder_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Downloads");
         }
     }
 }

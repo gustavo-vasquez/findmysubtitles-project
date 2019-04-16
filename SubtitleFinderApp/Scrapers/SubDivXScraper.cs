@@ -14,6 +14,7 @@ namespace SubtitleFinderApp.Scrapers
     {
         private List<SubDivXResult> _SubDivXResults { get; set; }
         private DataGridView _GridResults { get; set; }
+        private bool _isBusy { get; set; }
 
         private const string _SearchUrlStartPart = "https://www.subdivx.com/index.php?buscar=";
         private const string _SearchUrlEndPart = "&accion=5&masdesc=&subtitulos=1&realiza_b=1";
@@ -179,11 +180,21 @@ namespace SubtitleFinderApp.Scrapers
                 dialogSaveSubtitle.RestoreDirectory = true;
                 dialogSaveSubtitle.Title = "Guardar subtítulo como...";
 
-                var result = dialogSaveSubtitle.ShowDialog();
-                if (result == DialogResult.OK)
+                if (_isBusy) return;
+                
+                if (dialogSaveSubtitle.ShowDialog() == DialogResult.OK)
                 {
+                    _isBusy = true;
                     var wClient = new System.Net.WebClient();
-                    wClient.DownloadFile(downloadUrl, dialogSaveSubtitle.FileName);
+
+                    wClient.DownloadFileCompleted += (webClientSender, args) =>
+                    {
+                        MessageBox.Show($"\"{dialogSaveSubtitle.FileName}\" se ha descargado correctamente.");
+                        //System.Diagnostics.Process.Start(dialogSaveSubtitle.FileName); Abre automáticamente el archivo descargado
+                        _isBusy = false;
+                    };
+
+                    wClient.DownloadFileAsync(new Uri(downloadUrl), dialogSaveSubtitle.FileName);
                 }
             }
         }
