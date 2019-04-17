@@ -184,11 +184,11 @@ namespace SubtitleFinderApp.Scrapers
             if (e.ColumnIndex == 3)
             {
                 DataGridView currentGridView = (DataGridView)sender;
-                //TabControl tab = Application.OpenForms["SubtitleFinderForm"].Controls["tabCtrResults"] as TabControl;
                 Label previousTitle = (Label)_TabCtrlResults.GetNextControl(currentGridView, false);
+                var pattern = new System.Text.RegularExpressions.Regex("[\\/:*?\"<>|]");
 
                 SaveFileDialog dialogSaveSubtitle = new SaveFileDialog();
-                dialogSaveSubtitle.FileName = string.Join("_", previousTitle.Text, currentGridView.CurrentRow.Cells[1].Value.ToString().Replace('/', '_'), currentGridView.CurrentRow.Cells[0].Value.ToString());
+                dialogSaveSubtitle.FileName = string.Join("_", pattern.Replace(previousTitle.Text, "_"), currentGridView.CurrentRow.Cells[1].Value.ToString().Replace('/', '_'), currentGridView.CurrentRow.Cells[0].Value.ToString());
                 dialogSaveSubtitle.DefaultExt = "srt";
                 dialogSaveSubtitle.Filter = "Archivos SRT (*.srt)|*.srt|Todos los archivos (*.*)|*.*";
                 dialogSaveSubtitle.InitialDirectory = "%USERPROFILE%\\Downloads";

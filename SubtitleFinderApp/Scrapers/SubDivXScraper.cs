@@ -171,9 +171,10 @@ namespace SubtitleFinderApp.Scrapers
                 string downloadUrl = currentRow.Cells["DownloadLink"].Value.ToString();
                 string queryString = downloadUrl.Substring(downloadUrl.IndexOf('?'));
                 string subtitleId = HttpUtility.ParseQueryString(queryString).Get("id");
+                var pattern = new System.Text.RegularExpressions.Regex("[\\/:*?\"<>|]");
 
                 SaveFileDialog dialogSaveSubtitle = new SaveFileDialog();
-                dialogSaveSubtitle.FileName = string.Join(" ", currentRow.Cells["Title"].Value.ToString(), "-", subtitleId);
+                dialogSaveSubtitle.FileName = string.Join(" ", pattern.Replace(currentRow.Cells["Title"].Value.ToString(), "_"), "-", subtitleId);
                 dialogSaveSubtitle.DefaultExt = "rar";
                 dialogSaveSubtitle.Filter = "Archivos RAR (*.rar)|*.rar|Todos los archivos (*.*)|*.*";
                 dialogSaveSubtitle.InitialDirectory = "%USERPROFILE%\\Downloads";
