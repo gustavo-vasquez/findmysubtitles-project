@@ -32,24 +32,26 @@ namespace SubtitleFinderApp.Scrapers
             _GridResults.AllowUserToDeleteRows = false;
             _GridResults.AllowUserToResizeRows = false;
             _GridResults.AllowUserToOrderColumns = false;
-            _GridResults.Anchor = ((System.Windows.Forms.AnchorStyles)((((AnchorStyles.Top | AnchorStyles.Bottom)
-            | AnchorStyles.Left)
-            | AnchorStyles.Right)));
+            _GridResults.Anchor = ((System.Windows.Forms.AnchorStyles)((((AnchorStyles.Top | AnchorStyles.Bottom) | AnchorStyles.Left) | AnchorStyles.Right)));
             _GridResults.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            _GridResults.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             _GridResults.BackgroundColor = SystemColors.Control;
             _GridResults.BorderStyle = BorderStyle.None;
             _GridResults.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
             _GridResults.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            _GridResults.AllowUserToResizeColumns = true;
             _GridResults.Location = new Point(12, 114);
             _GridResults.MultiSelect = false;
             _GridResults.Name = "gridResults";
             _GridResults.ReadOnly = true;
             _GridResults.RowHeadersVisible = false;
             _GridResults.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            _GridResults.Size = new Size(860, 442);
+            _GridResults.Size = new Size(Application.OpenForms["SubtitleFinderForm"].ClientRectangle.Width - 24, 442);
+            _GridResults.MinimumSize = new Size(860, 442);
             _GridResults.TabIndex = 7;
 
             DataGridViewTextBoxColumn Title = new DataGridViewTextBoxColumn();
+            Title.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
             Title.HeaderText = "Título";
             Title.Name = "Title";
             Title.ReadOnly = true;
@@ -58,15 +60,16 @@ namespace SubtitleFinderApp.Scrapers
             _GridResults.Columns.Add(Title);
 
             DataGridViewTextBoxColumn Description = new DataGridViewTextBoxColumn();
-            Description.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            Description.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             Description.HeaderText = "Descripción";
             Description.Name = "Description";
             Description.ReadOnly = true;
             Description.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            Description.Width = 400;
+            Description.Width = 422;
             _GridResults.Columns.Add(Description);
 
             DataGridViewTextBoxColumn UploadBy = new DataGridViewTextBoxColumn();
+            UploadBy.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
             UploadBy.HeaderText = "Subido por";
             UploadBy.Name = "UploadBy";
             UploadBy.ReadOnly = true;
@@ -75,6 +78,7 @@ namespace SubtitleFinderApp.Scrapers
             _GridResults.Columns.Add(UploadBy);
 
             DataGridViewLinkColumn commentsColumn = new DataGridViewLinkColumn();
+            commentsColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
             commentsColumn.HeaderText = "Comentarios";
             commentsColumn.LinkBehavior = LinkBehavior.HoverUnderline;
             commentsColumn.Name = "Comments";
@@ -84,6 +88,7 @@ namespace SubtitleFinderApp.Scrapers
             _GridResults.Columns.Add(commentsColumn);
 
             DataGridViewLinkColumn downloadsColumn = new DataGridViewLinkColumn();
+            downloadsColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
             downloadsColumn.HeaderText = "Descargar";
             downloadsColumn.LinkBehavior = LinkBehavior.HoverUnderline;
             downloadsColumn.Name = "DownloadLink";

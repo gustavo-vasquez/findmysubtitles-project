@@ -1,6 +1,7 @@
 ﻿using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,15 +25,16 @@ namespace SubtitleFinderApp
                 Text = "Ver comentarios",
                 StartPosition = FormStartPosition.CenterParent,
                 Icon = Properties.Resources.comments_form,
-                MinimumSize = new System.Drawing.Size(500, 500)
+                MinimumSize = new Size(500, 500)
             };
 
             _tablePanel = new TableLayoutPanel()
             {
-                Location = new System.Drawing.Point(32, 20),
+                Location = new Point(32, 20),
                 ColumnCount = 1,
                 AutoScroll = true,
-                Size = new System.Drawing.Size(420, 390),
+                Size = new Size(420, 380),
+                MinimumSize = new Size(410, 380),
                 TabIndex = 1,
                 Anchor = ((System.Windows.Forms.AnchorStyles)((((AnchorStyles.Top | AnchorStyles.Bottom) | AnchorStyles.Left) | AnchorStyles.Right)))
             };
@@ -44,7 +46,7 @@ namespace SubtitleFinderApp
             {
                 Text = "Cerrar",
                 Width = 100,
-                Location = new System.Drawing.Point(190, 420),
+                Location = new Point(190, 420),
                 TabIndex = 0,
                 Anchor = ((System.Windows.Forms.AnchorStyles)(((AnchorStyles.Bottom | AnchorStyles.Left) | AnchorStyles.Right)))
             };
@@ -63,13 +65,13 @@ namespace SubtitleFinderApp
                 _lblUser = new Label()
                 {
                     Text = div.Descendants("div").SingleOrDefault().Descendants("a").SingleOrDefault().InnerText,
-                    Margin = new Padding(3, 0, 3, 0),                    
+                    Margin = new Padding(3, 0, 3, 0),
                     AutoSize = true,
-                    Font = new System.Drawing.Font(Label.DefaultFont, System.Drawing.FontStyle.Bold)
+                    Font = new Font(Label.DefaultFont, FontStyle.Bold)
                 };
 
                 _tablePanel.Controls.Add(_lblUser, 0, rowIndex);
-                _tablePanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));                
+                _tablePanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
 
                 _lblComment = new Label()
                 {                    

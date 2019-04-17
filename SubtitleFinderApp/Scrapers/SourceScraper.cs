@@ -157,13 +157,16 @@ namespace SubtitleFinderApp.Scrapers
 
         protected TabControl NewTabControl()
         {
+            Rectangle mainFormCR = Application.OpenForms["SubtitleFinderForm"].ClientRectangle;
+
             return new TabControl()
             {
                 Anchor = ((System.Windows.Forms.AnchorStyles)((((AnchorStyles.Top | AnchorStyles.Bottom) | AnchorStyles.Left) | AnchorStyles.Right))),
                 Appearance = TabAppearance.Normal,
                 Location = new Point(12, 114),
                 Name = "tabCtrlResults",
-                Size = new Size(860, 442),
+                Size = new Size(mainFormCR.Width - 24, mainFormCR.Height - 120),
+                MinimumSize = new Size(860, 442),
                 TabIndex = 7
             };
         }
