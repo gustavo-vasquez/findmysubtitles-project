@@ -220,6 +220,6 @@ namespace SubtitleFinderApp.Scrapers
             }
         }
 
-        protected abstract void _TabCtrlResults_Click(object sender, EventArgs e);
+        protected abstract void _TabCtrlResults_SelectedIndexChanged(object sender, EventArgs e);
     }
 }

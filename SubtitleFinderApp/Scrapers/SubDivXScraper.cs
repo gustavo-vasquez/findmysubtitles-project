@@ -27,6 +27,8 @@ namespace SubtitleFinderApp.Scrapers
 
         private void InitGridViewControl()
         {
+            Rectangle mainFormCR = Application.OpenForms["SubtitleFinderForm"].ClientRectangle;
+
             _GridResults = new DataGridView();
             _GridResults.AllowUserToAddRows = false;
             _GridResults.AllowUserToDeleteRows = false;
@@ -46,7 +48,7 @@ namespace SubtitleFinderApp.Scrapers
             _GridResults.ReadOnly = true;
             _GridResults.RowHeadersVisible = false;
             _GridResults.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            _GridResults.Size = new Size(Application.OpenForms["SubtitleFinderForm"].ClientRectangle.Width - 24, 442);
+            _GridResults.Size = new Size(mainFormCR.Width - 24, mainFormCR.Height - 120);
             _GridResults.MinimumSize = new Size(860, 442);
             _GridResults.TabIndex = 7;
 

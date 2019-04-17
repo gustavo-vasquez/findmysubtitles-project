@@ -54,16 +54,23 @@ namespace SubtitleFinderApp
 
         private void SearchWithSubDivX(string text)
         {
-            SubDivXScraper scraper = new SubDivXScraper();
-            IEnumerable<HtmlNode> episodes = scraper.GetEpisodeNodes(text);
-
-            if (episodes.Any())
+            if(text.Count() > 3)
             {
-                ClearResultsArea();
-                this.Controls.Add(scraper.GenerateResults(episodes));
+                SubDivXScraper scraper = new SubDivXScraper();
+                IEnumerable<HtmlNode> episodes = scraper.GetEpisodeNodes(text);
+
+                if (episodes.Any())
+                {
+                    ClearResultsArea();
+                    this.Controls.Add(scraper.GenerateResults(episodes));
+                }
+                else
+                    NoResultsMessageBox();
             }
             else
-                NoResultsMessageBox();
+            {
+                MessageBox.Show("Debe ingresar más de 3 letras. Puedes agregar palabras claves (" + lblSearchExample.Text + ")");
+            }
         }
 
         private void SearchWithTuSubtitulo(string text)

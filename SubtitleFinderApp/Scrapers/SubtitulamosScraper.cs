@@ -18,7 +18,7 @@ namespace SubtitleFinderApp.Scrapers
         public SubtitulamosScraper()
         {
             _TabCtrlResults = base.NewTabControl();
-            _TabCtrlResults.Click += _TabCtrlResults_Click;
+            _TabCtrlResults.SelectedIndexChanged += _TabCtrlResults_SelectedIndexChanged;
 
             if (TvShows == null)
                 this.SetTvShows();
@@ -70,7 +70,7 @@ namespace SubtitleFinderApp.Scrapers
             return base.RenderizeSeasonTab(_SeasonUrl.Last().Value, SearchSources.Subtitulamos);
         }
 
-        protected override void _TabCtrlResults_Click(object sender, EventArgs e)
+        protected override void _TabCtrlResults_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (_TabCtrlResults.SelectedTab.Controls.Count <= 0)
                 Application.OpenForms["SubtitleFinderForm"].Controls.Add(base.RenderizeSeasonTab(_SeasonUrl[_TabCtrlResults.SelectedTab.Text], SearchSources.Subtitulamos));
