@@ -124,14 +124,15 @@ namespace SubtitleFinderApp.Scrapers
                     HeaderText = "Progreso",
                     Name = "Progress",
                     ReadOnly = true,
-                    Width = 60,
+                    Width = 80,
                     SortMode = DataGridViewColumnSortMode.NotSortable
                 };
                 DataGridViewLinkColumn DownloadLink = new DataGridViewLinkColumn()
                 {
-                    HeaderText = "Descarga",
+                    HeaderText = "Descargar",
                     Name = "DownloadLink",
                     ReadOnly = true,
+                    LinkBehavior = LinkBehavior.HoverUnderline,
                     Width = 110,
                     SortMode = DataGridViewColumnSortMode.NotSortable
                 };
@@ -163,7 +164,7 @@ namespace SubtitleFinderApp.Scrapers
                 Location = new Point(12, 114),
                 Name = "tabCtrlResults",
                 Size = new Size(860, 442),
-                TabIndex = 6
+                TabIndex = 7
             };
         }
 
@@ -208,7 +209,6 @@ namespace SubtitleFinderApp.Scrapers
                     wClient.DownloadFileCompleted += (webClientSender, args) =>
                     {
                         MessageBox.Show($"\"{dialogSaveSubtitle.FileName}\" se ha descargado correctamente.");
-                        //System.Diagnostics.Process.Start(dialogSaveSubtitle.FileName); Abre automáticamente el archivo descargado
                         _isBusy = false;
                     };
 

@@ -31,6 +31,7 @@ namespace SubtitleFinderApp.Scrapers
             _GridResults.AllowUserToAddRows = false;
             _GridResults.AllowUserToDeleteRows = false;
             _GridResults.AllowUserToResizeRows = false;
+            _GridResults.AllowUserToOrderColumns = false;
             _GridResults.Anchor = ((System.Windows.Forms.AnchorStyles)((((AnchorStyles.Top | AnchorStyles.Bottom)
             | AnchorStyles.Left)
             | AnchorStyles.Right)));
@@ -44,10 +45,9 @@ namespace SubtitleFinderApp.Scrapers
             _GridResults.Name = "gridResults";
             _GridResults.ReadOnly = true;
             _GridResults.RowHeadersVisible = false;
-            _GridResults.RowsDefaultCellStyle = new DataGridViewCellStyle() { WrapMode = DataGridViewTriState.True };
             _GridResults.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             _GridResults.Size = new Size(860, 442);
-            _GridResults.TabIndex = 6;
+            _GridResults.TabIndex = 7;
 
             DataGridViewTextBoxColumn Title = new DataGridViewTextBoxColumn();
             Title.HeaderText = "Título";
@@ -76,19 +76,20 @@ namespace SubtitleFinderApp.Scrapers
 
             DataGridViewLinkColumn commentsColumn = new DataGridViewLinkColumn();
             commentsColumn.HeaderText = "Comentarios";
-            commentsColumn.LinkBehavior = LinkBehavior.SystemDefault;
+            commentsColumn.LinkBehavior = LinkBehavior.HoverUnderline;
             commentsColumn.Name = "Comments";
-            commentsColumn.Text = "Comentarios";
-            commentsColumn.Width = 80;
+            commentsColumn.ReadOnly = true;
+            commentsColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            commentsColumn.Width = 70;
             _GridResults.Columns.Add(commentsColumn);
 
             DataGridViewLinkColumn downloadsColumn = new DataGridViewLinkColumn();
             downloadsColumn.HeaderText = "Descargar";
-            downloadsColumn.LinkBehavior = LinkBehavior.SystemDefault;
+            downloadsColumn.LinkBehavior = LinkBehavior.HoverUnderline;
             downloadsColumn.Name = "DownloadLink";
-            downloadsColumn.Text = "Descargar";
-            //downloadsColumn.UseColumnTextForLinkValue = true;
-            downloadsColumn.Width = 80;
+            downloadsColumn.ReadOnly = true;
+            downloadsColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            downloadsColumn.Width = 90;
             _GridResults.Columns.Add(downloadsColumn);
 
             DataGridViewLinkColumn commentsUrlColumn = new DataGridViewLinkColumn();
@@ -191,7 +192,6 @@ namespace SubtitleFinderApp.Scrapers
                     wClient.DownloadFileCompleted += (webClientSender, args) =>
                     {
                         MessageBox.Show($"\"{dialogSaveSubtitle.FileName}\" se ha descargado correctamente.");
-                        //System.Diagnostics.Process.Start(dialogSaveSubtitle.FileName); Abre automáticamente el archivo descargado
                         _isBusy = false;
                     };
 
