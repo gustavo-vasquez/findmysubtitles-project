@@ -22,7 +22,7 @@ namespace SubtitleFinderApp.Scrapers
 
         public SubDivXScraper()
         {
-            this._SubDivXResults = new List<SubDivXResult>();
+            
         }
 
         private void InitGridViewControl()
@@ -48,8 +48,8 @@ namespace SubtitleFinderApp.Scrapers
             _GridResults.ReadOnly = true;
             _GridResults.RowHeadersVisible = false;
             _GridResults.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            _GridResults.Size = new Size(mainFormCR.Width - 24, mainFormCR.Height - 120);
-            _GridResults.MinimumSize = new Size(860, 442);
+            _GridResults.Size = new Size(mainFormCR.Width - 24, mainFormCR.Height - 150);
+            _GridResults.MinimumSize = new Size(860, 412);
             _GridResults.TabIndex = 7;
 
             DataGridViewTextBoxColumn Title = new DataGridViewTextBoxColumn();
@@ -112,16 +112,179 @@ namespace SubtitleFinderApp.Scrapers
         public IEnumerable<HtmlNode> GetEpisodeNodes(string text)
         {
             HtmlAgilityPack.HtmlDocument htmldoc = _web.Load(_SearchUrlStartPart + HttpUtility.UrlEncode(text) + _SearchUrlEndPart);
-            HtmlNode wrapper = htmldoc.DocumentNode.Descendants("div").Where(d => d.Attributes.Contains("id") && d.Attributes["id"].Value.Equals("contenedor_izq")).SingleOrDefault();
+            HtmlNode wrapper = htmldoc.DocumentNode.Descendants("div").Where(d => d.Attributes.Contains("id") && d.Attributes["id"].Value.Equals("contenedor_izq")).SingleOrDefault();            
             IEnumerable<HtmlNode> episodes = wrapper.Descendants("div").Where(d => d.Attributes.Contains("id") && d.Attributes["id"].Value.Equals("menu_detalle_buscador"));
 
+            if (episodes != null)
+                GenerateFooter(wrapper);
+
             return episodes;
+        }
+
+        private void ChangePage(string url)
+        {
+            HtmlAgilityPack.HtmlDocument htmldoc = _web.Load("https://www.subdivx.com/" + url);
+            HtmlNode wrapper = htmldoc.DocumentNode.Descendants("div").Where(d => d.Attributes.Contains("id") && d.Attributes["id"].Value.Equals("contenedor_izq")).SingleOrDefault();
+            IEnumerable<HtmlNode> episodes = wrapper.Descendants("div").Where(d => d.Attributes.Contains("id") && d.Attributes["id"].Value.Equals("menu_detalle_buscador"));
+            _SubDivXResults.Clear();
+            _GridResults.Rows.Clear();
+            Application.OpenForms["SubtitleFinderForm"].Controls.Add(FillRowsGridResults(episodes));
+            GenerateFooter(wrapper);
+        }
+
+        private void GenerateFooter(HtmlNode wrapper)
+        {
+            Label lblSortMode = new Label()
+            {
+                Anchor = ((System.Windows.Forms.AnchorStyles)((AnchorStyles.Bottom | AnchorStyles.Left))),
+                AutoSize = true,
+                Location = new Point(9, 4),
+                Name = "lblSortMode",
+                Size = new Size(66, 13),
+                Text = "Ordenar por:"
+            };
+
+            ComboBox cboxSortMode = new ComboBox()
+            {
+                Anchor = ((System.Windows.Forms.AnchorStyles)((AnchorStyles.Bottom | AnchorStyles.Left))),
+                DropDownStyle = ComboBoxStyle.DropDownList,
+                FlatStyle = FlatStyle.Popup,
+                ForeColor = SystemColors.WindowText,
+                FormattingEnabled = true,
+                Location = new Point(81, 0),
+                Name = "cboxSortMode",
+                Size = new Size(121, 21)
+            };
+
+            cboxSortMode.Items.AddRange(new object[] { "Título", "Fecha", "Descargas" });
+            cboxSortMode.SelectedItem = cboxSortMode.Items[0];
+
+            Panel panel = new Panel()
+            {
+                Anchor = ((System.Windows.Forms.AnchorStyles)(((AnchorStyles.Bottom | AnchorStyles.Left) | AnchorStyles.Right))),
+                Location = new Point(0, 529),
+                Name = "paginationContainer",
+                Size = new Size(884, 23)
+            };
+
+            panel.Controls.Add(lblSortMode);
+            panel.Controls.Add(cboxSortMode);
+            
+            IEnumerable<HtmlNode> pagElements = wrapper.Descendants("div").Where(d => d.Attributes.Contains("class") && d.Attributes["class"].Value.Equals("pagination")).FirstOrDefault().Descendants().Reverse();
+            int coordX = 840;
+
+            if (pagElements.Any())
+            {
+                foreach (var p in pagElements)
+                {
+                    switch (p.Name)
+                    {
+                        case "span":
+                            if (p.Attributes["class"].Value == "current")
+                            {
+                                Button btnActive = new Button()
+                                {
+                                    Anchor = ((System.Windows.Forms.AnchorStyles)((AnchorStyles.Top | AnchorStyles.Right))),
+                                    Enabled = false,
+                                    FlatStyle = FlatStyle.Flat,
+                                    Location = new Point(coordX, 0),
+                                    Name = "btnPagActive",
+                                    AutoSize = true,
+                                    Size = new Size(32, 23),
+                                    MaximumSize = new Size(75, 23),
+                                    Text = p.InnerText,
+                                    UseVisualStyleBackColor = true
+                                };
+
+                                btnActive.FlatAppearance.BorderColor = SystemColors.ControlDark;
+                                panel.Controls.Add(btnActive);
+                                coordX -= 38;
+                            }
+                            break;
+                        case "a":
+                            switch (p.InnerText)
+                            {
+                                case "Siguiente &#187;":
+                                    coordX = 797;
+
+                                    Button btnNextPag = new Button()
+                                    {
+                                        Anchor = ((System.Windows.Forms.AnchorStyles)((AnchorStyles.Top | AnchorStyles.Right))),
+                                        FlatStyle = FlatStyle.Flat,
+                                        Location = new Point(coordX, 0),
+                                        Name = "btnPag" + p.InnerText,
+                                        Size = new Size(75, 23),
+                                        Text = "Siguiente",
+                                        UseVisualStyleBackColor = true
+                                    };
+                                    btnNextPag.FlatAppearance.BorderColor = SystemColors.ControlDark;
+                                    btnNextPag.Click += (sender, args) =>
+                                    {
+                                        ChangePage(p.Attributes["href"].Value);
+                                    };
+                                    panel.Controls.Add(btnNextPag);
+                                    coordX -= 38;
+                                    break;
+                                case "&#171; Anterior":
+                                    Button btnPrevPag = new Button()
+                                    {
+                                        Anchor = ((System.Windows.Forms.AnchorStyles)((AnchorStyles.Top | AnchorStyles.Right))),
+                                        FlatStyle = FlatStyle.Flat,
+                                        Location = new Point(coordX - 43, 0),
+                                        Name = "btnPag" + p.InnerText,
+                                        Size = new Size(75, 23),
+                                        Text = "Anterior",
+                                        UseVisualStyleBackColor = true
+                                    };
+                                    btnPrevPag.FlatAppearance.BorderColor = SystemColors.ControlDark;
+                                    btnPrevPag.Click += (sender, args) =>
+                                    {
+                                        ChangePage(p.Attributes["href"].Value);
+                                    };
+                                    panel.Controls.Add(btnPrevPag);
+                                    break;
+                                default:
+                                    Button btnPag = new Button()
+                                    {
+                                        Anchor = ((System.Windows.Forms.AnchorStyles)((AnchorStyles.Top | AnchorStyles.Right))),
+                                        FlatStyle = FlatStyle.Flat,
+                                        Location = new Point(coordX, 0),
+                                        Name = "btnPag" + p.InnerText,
+                                        AutoSize = true,
+                                        Size = new Size(32, 23),
+                                        MaximumSize = new Size(75, 23),
+                                        Text = p.InnerText,
+                                        UseVisualStyleBackColor = true
+                                    };
+
+                                    btnPag.FlatAppearance.BorderColor = SystemColors.ControlDark;
+                                    btnPag.Click += (sender, args) =>
+                                    {
+                                        ChangePage(p.Attributes["href"].Value);
+                                    };
+                                    panel.Controls.Add(btnPag);
+                                    coordX -= 38;
+                                    break;
+                            }
+                            break;
+                    }
+                }
+            }
+
+            Application.OpenForms["SubtitleFinderForm"].Controls.RemoveByKey("paginationContainer");
+            Application.OpenForms["SubtitleFinderForm"].Controls.Add(panel);
         }
 
         public DataGridView GenerateResults(IEnumerable<HtmlNode> episodes)
         {
             InitGridViewControl();
+            this._SubDivXResults = new List<SubDivXResult>();
 
+            return FillRowsGridResults(episodes);
+        }
+
+        private DataGridView FillRowsGridResults(IEnumerable<HtmlNode> episodes)
+        {
             foreach (var episode in episodes)
             {
                 HtmlNode detailsWrapper = episode.NextSibling;

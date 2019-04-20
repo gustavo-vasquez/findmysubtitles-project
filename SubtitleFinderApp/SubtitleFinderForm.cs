@@ -69,7 +69,7 @@ namespace SubtitleFinderApp
             }
             else
             {
-                MessageBox.Show("Debe ingresar más de 3 letras. Puedes agregar palabras claves (" + lblSearchExample.Text + ")");
+                MessageBox.Show("Debes ingresar más de 3 letras: puedes agregar palabras claves (" + lblSearchExample.Text + ")");
             }
         }
 
