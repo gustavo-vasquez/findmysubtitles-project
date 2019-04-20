@@ -15,10 +15,11 @@ namespace SubtitleFinderApp.Scrapers
         private List<SubDivXResult> _SubDivXResults { get; set; }
         private DataGridView _GridResults { get; set; }
         private bool _isBusy { get; set; }
+        private HtmlNode _wrapper { get; set; }
 
         private const string _SearchUrlStartPart = "https://www.subdivx.com/index.php?buscar=";
         private const string _SearchUrlEndPart = "&accion=5&masdesc=&subtitulos=1&realiza_b=1";
-        private HtmlWeb _web = new HtmlWeb() { OverrideEncoding = Encoding.GetEncoding("ISO-8859-1") };
+        private HtmlWeb _web = new HtmlWeb() { OverrideEncoding = Encoding.GetEncoding("ISO-8859-1") };        
 
         public SubDivXScraper()
         {
@@ -112,11 +113,8 @@ namespace SubtitleFinderApp.Scrapers
         public IEnumerable<HtmlNode> GetEpisodeNodes(string text)
         {
             HtmlAgilityPack.HtmlDocument htmldoc = _web.Load(_SearchUrlStartPart + HttpUtility.UrlEncode(text) + _SearchUrlEndPart);
-            HtmlNode wrapper = htmldoc.DocumentNode.Descendants("div").Where(d => d.Attributes.Contains("id") && d.Attributes["id"].Value.Equals("contenedor_izq")).SingleOrDefault();            
-            IEnumerable<HtmlNode> episodes = wrapper.Descendants("div").Where(d => d.Attributes.Contains("id") && d.Attributes["id"].Value.Equals("menu_detalle_buscador"));
-
-            if (episodes != null)
-                GenerateFooter(wrapper);
+            _wrapper = htmldoc.DocumentNode.Descendants("div").Where(d => d.Attributes.Contains("id") && d.Attributes["id"].Value.Equals("contenedor_izq")).SingleOrDefault();            
+            IEnumerable<HtmlNode> episodes = _wrapper.Descendants("div").Where(d => d.Attributes.Contains("id") && d.Attributes["id"].Value.Equals("menu_detalle_buscador"));
 
             return episodes;
         }
@@ -124,41 +122,16 @@ namespace SubtitleFinderApp.Scrapers
         private void ChangePage(string url)
         {
             HtmlAgilityPack.HtmlDocument htmldoc = _web.Load("https://www.subdivx.com/" + url);
-            HtmlNode wrapper = htmldoc.DocumentNode.Descendants("div").Where(d => d.Attributes.Contains("id") && d.Attributes["id"].Value.Equals("contenedor_izq")).SingleOrDefault();
-            IEnumerable<HtmlNode> episodes = wrapper.Descendants("div").Where(d => d.Attributes.Contains("id") && d.Attributes["id"].Value.Equals("menu_detalle_buscador"));
+            _wrapper = htmldoc.DocumentNode.Descendants("div").Where(d => d.Attributes.Contains("id") && d.Attributes["id"].Value.Equals("contenedor_izq")).SingleOrDefault();
+            IEnumerable<HtmlNode> episodes = _wrapper.Descendants("div").Where(d => d.Attributes.Contains("id") && d.Attributes["id"].Value.Equals("menu_detalle_buscador"));
             _SubDivXResults.Clear();
             _GridResults.Rows.Clear();
             Application.OpenForms["SubtitleFinderForm"].Controls.Add(FillRowsGridResults(episodes));
-            GenerateFooter(wrapper);
+            GenerateFooter(_wrapper);
         }
 
         private void GenerateFooter(HtmlNode wrapper)
         {
-            Label lblSortMode = new Label()
-            {
-                Anchor = ((System.Windows.Forms.AnchorStyles)((AnchorStyles.Bottom | AnchorStyles.Left))),
-                AutoSize = true,
-                Location = new Point(9, 4),
-                Name = "lblSortMode",
-                Size = new Size(66, 13),
-                Text = "Ordenar por:"
-            };
-
-            ComboBox cboxSortMode = new ComboBox()
-            {
-                Anchor = ((System.Windows.Forms.AnchorStyles)((AnchorStyles.Bottom | AnchorStyles.Left))),
-                DropDownStyle = ComboBoxStyle.DropDownList,
-                FlatStyle = FlatStyle.Popup,
-                ForeColor = SystemColors.WindowText,
-                FormattingEnabled = true,
-                Location = new Point(81, 0),
-                Name = "cboxSortMode",
-                Size = new Size(121, 21)
-            };
-
-            cboxSortMode.Items.AddRange(new object[] { "Título", "Fecha", "Descargas" });
-            cboxSortMode.SelectedItem = cboxSortMode.Items[0];
-
             Panel panel = new Panel()
             {
                 Anchor = ((System.Windows.Forms.AnchorStyles)(((AnchorStyles.Bottom | AnchorStyles.Left) | AnchorStyles.Right))),
@@ -166,9 +139,6 @@ namespace SubtitleFinderApp.Scrapers
                 Name = "paginationContainer",
                 Size = new Size(884, 23)
             };
-
-            panel.Controls.Add(lblSortMode);
-            panel.Controls.Add(cboxSortMode);
             
             IEnumerable<HtmlNode> pagElements = wrapper.Descendants("div").Where(d => d.Attributes.Contains("class") && d.Attributes["class"].Value.Equals("pagination")).FirstOrDefault().Descendants().Reverse();
             int coordX = 840;
@@ -278,6 +248,7 @@ namespace SubtitleFinderApp.Scrapers
         public DataGridView GenerateResults(IEnumerable<HtmlNode> episodes)
         {
             InitGridViewControl();
+            GenerateFooter(_wrapper);
             this._SubDivXResults = new List<SubDivXResult>();
 
             return FillRowsGridResults(episodes);

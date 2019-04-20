@@ -109,7 +109,10 @@ namespace SubtitleFinderApp
         private void ClearResultsArea()
         {
             if (this.Controls.ContainsKey("gridResults"))
+            {
                 this.Controls.RemoveByKey("gridResults");
+                this.Controls.RemoveByKey("paginationContainer");
+            }   
 
             if (this.Controls.ContainsKey("tabCtrlResults"))
                 this.Controls.RemoveByKey("tabCtrlResults");
