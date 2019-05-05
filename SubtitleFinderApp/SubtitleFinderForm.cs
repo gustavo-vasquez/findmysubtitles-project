@@ -145,7 +145,7 @@ namespace SubtitleFinderApp
 
         private void btnProductInfo_Click(object sender, EventArgs e)
         {
-            string appInfoText = String.Join(
+            string appInfoText = string.Join(
                     null,
                     ProductInfo.Product,
                     Environment.NewLine,
