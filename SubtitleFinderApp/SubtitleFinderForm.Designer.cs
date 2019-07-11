@@ -228,7 +228,7 @@
             this.Name = "SubtitleFinderForm";
             this.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Buscador de subtítulos";
+            this.Text = "Find my subtitles";
             this.Load += new System.EventHandler(this.SubtitleFinderForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.picBoxSubtitulamos)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBoxTuSubtitulo)).EndInit();
