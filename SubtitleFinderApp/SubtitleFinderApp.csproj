@@ -117,6 +117,11 @@
     <Content Include="Resources\images\open_download_folder.png" />
     <Content Include="Resources\images\search.png" />
     <Content Include="Resources\images\info.png" />
+    <Content Include="Resources\previews\find_my_subtitles_1.png" />
+    <Content Include="Resources\previews\find_my_subtitles_2.png" />
+    <Content Include="Resources\previews\find_my_subtitles_3.png" />
+    <Content Include="Resources\previews\find_my_subtitles_4.png" />
+    <Content Include="Resources\previews\find_my_subtitles_5.png" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
