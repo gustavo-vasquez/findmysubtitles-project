@@ -273,7 +273,7 @@ namespace SubtitleFinderApp.Scrapers
                 }
 
                 result.UploadBy = anchors.Where(u => u.Attributes.Contains("class") && u.Attributes["class"].Value.Equals("link1")).SingleOrDefault().InnerText;
-                result.DownloadUrl = anchors.Where(a => a.Attributes.Contains("rel") && a.Attributes["rel"].Value.Equals("nofollow") && a.Attributes.Contains("target")).SingleOrDefault().Attributes["href"].Value;
+                result.DownloadUrl = episode.FirstChild.FirstChild.Attributes["href"].Value;
                 _SubDivXResults.Add(result);
             }
 
@@ -310,34 +310,7 @@ namespace SubtitleFinderApp.Scrapers
 
             if (e.ColumnIndex == 4)
             {
-                string downloadUrl = currentRow.Cells["DownloadLink"].Value.ToString();
-                string queryString = downloadUrl.Substring(downloadUrl.IndexOf('?'));
-                string subtitleId = HttpUtility.ParseQueryString(queryString).Get("id");
-                var pattern = new System.Text.RegularExpressions.Regex("[\\/:*?\"<>|]");
-
-                SaveFileDialog dialogSaveSubtitle = new SaveFileDialog();
-                dialogSaveSubtitle.FileName = string.Join(" ", pattern.Replace(currentRow.Cells["Title"].Value.ToString(), "_"), "-", subtitleId);
-                dialogSaveSubtitle.DefaultExt = "rar";
-                dialogSaveSubtitle.Filter = "Archivos RAR (*.rar)|*.rar|Todos los archivos (*.*)|*.*";
-                dialogSaveSubtitle.InitialDirectory = "%USERPROFILE%\\Downloads";
-                dialogSaveSubtitle.RestoreDirectory = true;
-                dialogSaveSubtitle.Title = "Guardar subtítulo como...";
-
-                if (_isBusy) return;
-                
-                if (dialogSaveSubtitle.ShowDialog() == DialogResult.OK)
-                {
-                    _isBusy = true;
-                    var wClient = new System.Net.WebClient();
-
-                    wClient.DownloadFileCompleted += (webClientSender, args) =>
-                    {
-                        MessageBox.Show($"\"{dialogSaveSubtitle.FileName}\" se ha descargado correctamente.");
-                        _isBusy = false;
-                    };
-
-                    wClient.DownloadFileAsync(new Uri(downloadUrl), dialogSaveSubtitle.FileName);
-                }
+                System.Diagnostics.Process.Start(currentRow.Cells["DownloadLink"].Value.ToString());
             }
         }
     }
