@@ -21,15 +21,15 @@ namespace SubtitleFinderApp.Scrapers
         public void SetEpisodeData(HtmlNode episode, string prefix)
         {
             IEnumerable<HtmlNode> allRows = episode.Descendants("tr");
-            EpisodeName = allRows.FirstOrDefault().Descendants("td").Where(c => c.Attributes.Contains("class") && c.Attributes["class"].Value.Equals("NewsTitle")).LastOrDefault().Descendants("a").FirstOrDefault().InnerText;
-            string versionName = "", subtitleLanguage = "", progressPercentage = "", downloadUrl = "";
+            HtmlNode episodeHeader = allRows.First().Descendants("td").Where(c => c.Attributes.Contains("class") && c.Attributes["class"].Value.Equals("NewsTitle")).Last().Descendants("a").First();
+            EpisodeName = episodeHeader.InnerText;
+            string downloadUrl = episodeHeader.Attributes["href"].Value;
+            string versionName = "", subtitleLanguage = "", progressPercentage = "";
 
-            foreach(HtmlNode row in allRows)
+            foreach(HtmlNode row in allRows.Skip(1))
             {
                 IEnumerable<HtmlNode> currentColumns = row.Descendants("td");
-                bool isTitleRow = currentColumns.Any(c => c.Attributes.Contains("class") && c.Attributes["class"].Value.Equals("NewsTitle"));
-
-                if(!isTitleRow && (currentColumns.Count() > 1))
+                if (currentColumns.Count() > 1)
                 {
                     HtmlNode versionNameColumn = currentColumns.Where(c => c.Attributes.Contains("colspan") && c.Attributes["class"].Value.Equals("newsClaro")).SingleOrDefault();
 
@@ -46,9 +46,6 @@ namespace SubtitleFinderApp.Scrapers
                         subtitleLanguage = languageColumn.InnerText;
                         progressPercentage = languageColumn.NextSibling.NextSibling.InnerText;
 
-                        HtmlNode downloadUrlNode = languageColumn.NextSibling.NextSibling.NextSibling.NextSibling.Descendants("a").SingleOrDefault();
-                        downloadUrl = (downloadUrlNode != null) ? prefix + downloadUrlNode.Attributes["href"].Value : "";
-
                         SubtitleDetails.Add(new SubtitleDetails()
                         {
                             VersionName = System.Web.HttpUtility.HtmlDecode(versionName.Trim()),
@@ -59,8 +56,6 @@ namespace SubtitleFinderApp.Scrapers
                     }
                 }
             }
-
-            //return this;
         }
     }
 }

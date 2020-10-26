@@ -19,7 +19,7 @@ namespace SubtitleFinderApp.Scrapers
 
         private const string _SearchUrlStartPart = "https://www.subdivx.com/index.php?buscar=";
         private const string _SearchUrlEndPart = "&accion=5&masdesc=&subtitulos=1&realiza_b=1";
-        private HtmlWeb _web = new HtmlWeb() { OverrideEncoding = Encoding.GetEncoding("ISO-8859-1") };        
+        private HtmlWeb _web = new HtmlWeb() { OverrideEncoding = Encoding.GetEncoding("utf-8") };
 
         public SubDivXScraper()
         {
@@ -113,10 +113,17 @@ namespace SubtitleFinderApp.Scrapers
         public IEnumerable<HtmlNode> GetEpisodeNodes(string text)
         {
             HtmlAgilityPack.HtmlDocument htmldoc = _web.Load(_SearchUrlStartPart + HttpUtility.UrlEncode(text) + _SearchUrlEndPart);
-            _wrapper = htmldoc.DocumentNode.Descendants("div").Where(d => d.Attributes.Contains("id") && d.Attributes["id"].Value.Equals("contenedor_izq")).SingleOrDefault();            
-            IEnumerable<HtmlNode> episodes = _wrapper.Descendants("div").Where(d => d.Attributes.Contains("id") && d.Attributes["id"].Value.Equals("menu_detalle_buscador"));
+            _wrapper = htmldoc.DocumentNode.Descendants("div").Where(d => d.Attributes.Contains("id") && d.Attributes["id"].Value.Equals("contenedor_izq")).SingleOrDefault();
 
-            return episodes;
+            try
+            {
+                IEnumerable<HtmlNode> episodes = _wrapper.Descendants("div").Where(d => d.Attributes.Contains("id") && d.Attributes["id"].Value.Equals("menu_detalle_buscador"));
+                return episodes;
+            }
+            catch
+            {
+                return null;
+            }           
         }
 
         private void ChangePage(string url)
@@ -262,14 +269,14 @@ namespace SubtitleFinderApp.Scrapers
                 IEnumerable<HtmlNode> anchors = detailsWrapper.LastChild.Descendants("a");
                 SubDivXResult result = new SubDivXResult();
 
-                result.EpisodeName = episode.FirstChild.FirstChild.InnerText.Substring(13);
+                result.EpisodeName = episode.FirstChild.FirstChild.InnerText.Substring(14);
                 result.Description = detailsWrapper.FirstChild.NextSibling.InnerText;
 
                 var commentsNode = anchors.Where(a => a.Attributes.Contains("rel") && a.Attributes["rel"].Value.Equals("nofollow") && a.Attributes.Contains("onclick")).SingleOrDefault();
                 if (commentsNode != null)
                 {
                     result.Comments = commentsNode.InnerText;
-                    result.CommentsUrl = commentsNode.Attributes["href"].Value;
+                    result.CommentsUrl = episode.FirstChild.FirstChild.Attributes["href"].Value;
                 }
 
                 result.UploadBy = anchors.Where(u => u.Attributes.Contains("class") && u.Attributes["class"].Value.Equals("link1")).SingleOrDefault().InnerText;
@@ -300,11 +307,8 @@ namespace SubtitleFinderApp.Scrapers
             if (e.ColumnIndex == 3)
             {
                 string commentUrl = currentRow.Cells["CommentsUrl"].Value.ToString();
-                string queryString = commentUrl.Substring(commentUrl.IndexOf('?'));
-                string subtitleId = HttpUtility.ParseQueryString(queryString).Get("idsub");
-
-                var htmlComments = new HtmlWeb() { OverrideEncoding = Encoding.Default }.Load("https://www.subdivx.com/popcoment.php?idsub=" + HttpUtility.UrlEncode(subtitleId));
-                var userComments = htmlComments.DocumentNode.Descendants("div").Where(d => d.Attributes.Contains("id") && d.Attributes["id"].Value.Equals("pop_upcoment"));
+                var htmlComments = _web.Load(commentUrl);
+                var userComments = htmlComments.DocumentNode.Descendants("div").Where(d => d.Attributes.Contains("id") && d.Attributes["id"].Value.Equals("detalle_comentarios"));
                 new SubDivXCommentsDialog().ShowDialog(userComments);
             }
 

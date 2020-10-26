@@ -64,7 +64,7 @@ namespace SubtitleFinderApp
             {
                 _lblUser = new Label()
                 {
-                    Text = div.Descendants("div").SingleOrDefault().Descendants("a").SingleOrDefault().InnerText,
+                    Text = div.Descendants("div").LastOrDefault().InnerText,
                     Margin = new Padding(3, 0, 3, 0),
                     AutoSize = true,
                     Font = new Font(Label.DefaultFont, FontStyle.Bold)
@@ -74,9 +74,9 @@ namespace SubtitleFinderApp
                 _tablePanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
 
                 _lblComment = new Label()
-                {                    
-                    Text = div.FirstChild.InnerText.Trim(),                                     
-                    Margin = new Padding(3, 0, 3, 0),                    
+                {
+                    Text = div.Descendants("div").FirstOrDefault().InnerText,
+                    Margin = new Padding(3, 0, 3, 14),
                     AutoSize = true
                 };
                 

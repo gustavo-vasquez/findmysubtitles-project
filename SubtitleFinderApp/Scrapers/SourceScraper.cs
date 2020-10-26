@@ -35,7 +35,7 @@ namespace SubtitleFinderApp.Scrapers
             switch (sourceName)
             {
                 case SearchSources.TuSubtitulo:
-                    episodes = htmldoc.DocumentNode.Descendants("table");
+                    episodes = htmldoc.DocumentNode.Descendants("table").Skip(1);
 
                     foreach (HtmlNode episode in episodes)
                     {
@@ -55,7 +55,7 @@ namespace SubtitleFinderApp.Scrapers
                     }
                     break;
                 default:
-                    MessageBox.Show("No se pudo generar los resultados. Pruebe de nuevo.");
+                    MessageBox.Show("No se pudo generar los resultados. Inténtelo de nuevo.");
                     break;
             }
 
@@ -188,34 +188,40 @@ namespace SubtitleFinderApp.Scrapers
             if (e.ColumnIndex == 3)
             {
                 DataGridView currentGridView = (DataGridView)sender;
-                Label previousTitle = (Label)_TabCtrlResults.GetNextControl(currentGridView, false);
-                var pattern = new System.Text.RegularExpressions.Regex("[\\/:*?\"<>|]");
 
-                SaveFileDialog dialogSaveSubtitle = new SaveFileDialog();
-                dialogSaveSubtitle.FileName = string.Join("_", pattern.Replace(previousTitle.Text, "_"), currentGridView.CurrentRow.Cells[1].Value.ToString().Replace('/', '_'), currentGridView.CurrentRow.Cells[0].Value.ToString());
-                dialogSaveSubtitle.DefaultExt = "srt";
-                dialogSaveSubtitle.Filter = "Archivos SRT (*.srt)|*.srt|Todos los archivos (*.*)|*.*";
-                dialogSaveSubtitle.InitialDirectory = "%USERPROFILE%\\Downloads";
-                dialogSaveSubtitle.RestoreDirectory = true;
-                dialogSaveSubtitle.Title = "Guardar subtítulo como...";
-
-                if (_isBusy) return;
-
-                if (dialogSaveSubtitle.ShowDialog() == DialogResult.OK)
+                if (_sourceName == SearchSources.TuSubtitulo)
                 {
-                    _isBusy = true;
-                    var wClient = new System.Net.WebClient();
+                    DataGridViewRow currentRow = currentGridView.Rows[e.RowIndex];
+                    System.Diagnostics.Process.Start(currentRow.Cells["DownloadLink"].Value.ToString());
+                }
+                else
+                {
+                    Label previousTitle = (Label)_TabCtrlResults.GetNextControl(currentGridView, false);
+                    var pattern = new System.Text.RegularExpressions.Regex("[\\/:*?\"<>|]");
 
-                    if(_sourceName == SearchSources.TuSubtitulo)
-                        wClient.Headers.Add("referer", "https://www.tusubtitulo.com/show/2199");
+                    SaveFileDialog dialogSaveSubtitle = new SaveFileDialog();
+                    dialogSaveSubtitle.FileName = string.Join("_", pattern.Replace(previousTitle.Text, "_"), currentGridView.CurrentRow.Cells[1].Value.ToString().Replace('/', '_'), currentGridView.CurrentRow.Cells[0].Value.ToString());
+                    dialogSaveSubtitle.DefaultExt = "srt";
+                    dialogSaveSubtitle.Filter = "Archivos SRT (*.srt)|*.srt|Todos los archivos (*.*)|*.*";
+                    dialogSaveSubtitle.InitialDirectory = "%USERPROFILE%\\Downloads";
+                    dialogSaveSubtitle.RestoreDirectory = true;
+                    dialogSaveSubtitle.Title = "Guardar subtítulo como...";
 
-                    wClient.DownloadFileCompleted += (webClientSender, args) =>
+                    if (_isBusy) return;
+
+                    if (dialogSaveSubtitle.ShowDialog() == DialogResult.OK)
                     {
-                        MessageBox.Show($"\"{dialogSaveSubtitle.FileName}\" se ha descargado correctamente.");
-                        _isBusy = false;
-                    };
+                        _isBusy = true;
+                        var wClient = new System.Net.WebClient();
 
-                    wClient.DownloadFileAsync(new Uri(currentGridView.CurrentRow.Cells[3].Value.ToString()), dialogSaveSubtitle.FileName);
+                        wClient.DownloadFileCompleted += (webClientSender, args) =>
+                        {
+                            MessageBox.Show($"Descarga completada.\r\n\r\n\"{dialogSaveSubtitle.FileName}\"");
+                            _isBusy = false;
+                        };
+
+                        wClient.DownloadFileAsync(new Uri(currentGridView.CurrentRow.Cells[3].Value.ToString()), dialogSaveSubtitle.FileName);
+                    }
                 }
             }
         }

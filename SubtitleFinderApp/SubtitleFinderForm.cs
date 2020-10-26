@@ -42,12 +42,12 @@ namespace SubtitleFinderApp
                 if(currentRadioButton.Name == "rdoBtnSubDivX")
                 {
                     lblSearch.Text = "Escriba el nombre de la serie/película (+palabras claves):";
-                    lblSearchExample.Text = "Ejemplos: \"the walking dead s09e01\", \"batman begins 2005\"";
+                    lblSearchExample.Text = "Ejemplos: \"The Godfather 1972\", \"The Walking Dead s01e01\"";
                 }
                 else
                 {
                     lblSearch.Text = "Escriba el nombre de la serie:";
-                    lblSearchExample.Text = "Ejemplos: \"the walking dead\", \"gotham\"";
+                    lblSearchExample.Text = "Ejemplos: \"The Walking Dead\", \"Cobra Kai\"";
                 }
             }
         }
@@ -59,18 +59,19 @@ namespace SubtitleFinderApp
                 SubDivXScraper scraper = new SubDivXScraper();
                 IEnumerable<HtmlNode> episodes = scraper.GetEpisodeNodes(text);
 
-                if (episodes.Any())
-                {
-                    ClearResultsArea();
-                    this.Controls.Add(scraper.GenerateResults(episodes));
-                }
+                if(episodes != null)
+                    if (episodes.Any())
+                    {
+                        ClearResultsArea();
+                        this.Controls.Add(scraper.GenerateResults(episodes));
+                    }
+                    else
+                        NoResultsMessageBox();
                 else
-                    NoResultsMessageBox();
+                    MessageBox.Show("Ocurrió un error. Vuelva a intentarlo.");
             }
             else
-            {
-                MessageBox.Show("Debes ingresar más de 3 letras: puedes agregar palabras claves (" + lblSearchExample.Text + ")");
-            }
+                MessageBox.Show("Escribe como mínimo 4 letras para buscar. \r\n\r\n" + lblSearchExample.Text);
         }
 
         private void SearchWithTuSubtitulo(string text)

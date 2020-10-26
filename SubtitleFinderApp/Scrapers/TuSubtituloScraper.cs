@@ -65,7 +65,7 @@ namespace SubtitleFinderApp.Scrapers
                 TabPage tab = base.NewTabPage(seasonTitle);
                 _TabCtrlResults.Controls.Add(tab);
 
-                _SeasonUrl.Add(seasonTitle, _UrlPrefix + "/ajax_loadShow.php?show=" + _TvShowId + "&season=" + seasonsList[i].InnerText);
+                _SeasonUrl.Add(seasonTitle, string.Concat(_UrlPrefix, "/show/", _TvShowId, "/", seasonsList[i].InnerText));
 
                 if (i == totalIndexSeasons)
                     _TabCtrlResults.SelectTab(tab);

@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Find my subtitles")]
-[assembly: AssemblyDescription("Un programa para buscar subtítulos de series y películas desde SubDivX, TuSubtitulo y Subtitulamos.")]
+[assembly: AssemblyDescription("Buscar subtítulos de series (SubDivX, TuSubtitulo y Subtitulamos) o películas (SubDivX).")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Find my subtitles")]
-[assembly: AssemblyCopyright("Copyright © 2019 por Gustavo Vasquez")]
+[assembly: AssemblyCopyright("Copyright © 2020 por Gustavo Vasquez")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.1.1911.1")]
-[assembly: AssemblyFileVersion("1.1.1911.1")]
+[assembly: AssemblyVersion("1.2.2010.1")]
+[assembly: AssemblyFileVersion("1.2.2010.1")]

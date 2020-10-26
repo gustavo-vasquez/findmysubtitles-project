@@ -186,9 +186,9 @@
             this.lblSearchExample.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSearchExample.Location = new System.Drawing.Point(12, 96);
             this.lblSearchExample.Name = "lblSearchExample";
-            this.lblSearchExample.Size = new System.Drawing.Size(248, 12);
+            this.lblSearchExample.Size = new System.Drawing.Size(251, 12);
             this.lblSearchExample.TabIndex = 23;
-            this.lblSearchExample.Text = "Ejemplos: \"the walking dead s09e01\", \"batman begins 2005\"";
+            this.lblSearchExample.Text = "Ejemplos: \"The Godfather 1972\", \"The Walking Dead s01e01\"";
             // 
             // btnDownloadFolder
             // 
