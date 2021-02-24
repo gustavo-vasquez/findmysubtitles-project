@@ -1,4 +1,4 @@
-# Proyecto_SubtitleFinder
+# Find my subtitles
 Aplicación winforms para buscar subtítulos de series y películas usando como fuente sitios web utilizando web scraping.
 
 Ventana principal
