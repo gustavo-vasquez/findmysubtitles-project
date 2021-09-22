@@ -27,7 +27,7 @@ namespace SubtitleFinderApp.Scrapers
 
         protected override void SetTvShows()
         {
-            HtmlAgilityPack.HtmlDocument htmldoc = new HtmlWeb().Load(_ShowsCatalogUrl);
+            HtmlAgilityPack.HtmlDocument htmldoc = new HtmlWeb().LoadFromBrowser(_ShowsCatalogUrl);
             TvShows = htmldoc.DocumentNode.Descendants("td").Where(t => t.Attributes.Contains("class") && t.Attributes["class"].Value == "line0").ToList();
         }
 
@@ -52,7 +52,7 @@ namespace SubtitleFinderApp.Scrapers
 
         public override TabControl GenerateResults(string tvShowUrl)
         {
-            HtmlAgilityPack.HtmlDocument tvShowHtml = new HtmlWeb().Load(tvShowUrl);
+            HtmlAgilityPack.HtmlDocument tvShowHtml = new HtmlWeb().LoadFromBrowser(tvShowUrl);
             HtmlNode tabs = tvShowHtml.DocumentNode.Descendants("span").Where(t => t.Attributes.Contains("class") && t.Attributes["class"].Value == "titulo").FirstOrDefault();
             List<HtmlNode> seasonsList = tabs.Descendants("a").ToList();
             int totalIndexSeasons = seasonsList.Count() - 1;

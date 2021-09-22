@@ -28,7 +28,7 @@ namespace SubtitleFinderApp.Scrapers
 
         public TabControl RenderizeSeasonTab(string lastSeasonUrl, SearchSources sourceName)
         {
-            HtmlAgilityPack.HtmlDocument htmldoc = new HtmlWeb().Load(lastSeasonUrl);
+            HtmlAgilityPack.HtmlDocument htmldoc = new HtmlWeb().LoadFromBrowser(lastSeasonUrl);
             List<ISourceScraperData> scraperData = new List<ISourceScraperData>();
             IEnumerable<HtmlNode> episodes;
 
