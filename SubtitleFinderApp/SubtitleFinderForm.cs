@@ -104,7 +104,7 @@ namespace SubtitleFinderApp
 
         private void NoResultsMessageBox()
         {
-            MessageBox.Show("No hay resultados que mostrar.");
+            MessageBox.Show("No hay resultados que mostrar. Compruebe que el nombre esté escrito correctamente e inténtelo de nuevo.");
         }
 
         private void ClearResultsArea()

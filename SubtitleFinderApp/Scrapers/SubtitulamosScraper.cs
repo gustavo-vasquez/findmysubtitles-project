@@ -27,19 +27,22 @@ namespace SubtitleFinderApp.Scrapers
         protected override void SetTvShows()
         {
             HtmlAgilityPack.HtmlDocument htmldoc = new HtmlWeb().Load(_ShowsCatalogUrl);
-            HtmlNode showsListDiv = htmldoc.DocumentNode.Descendants("div").Where(d => d.Attributes.Contains("class") && d.Attributes["class"].Value.Equals("container")).SingleOrDefault();
-            TvShows = showsListDiv.Descendants("div").Where(d => d.Attributes.Contains("class") && d.Attributes["class"].Value.Equals("row"));
+            IEnumerable<HtmlNode> showsWrapper = htmldoc.DocumentNode.Descendants("div").Where(d => d.Attributes.Contains("class") && d.Attributes["class"].Value.Equals("shows-in-letter"));
+            TvShows = showsWrapper;
         }
 
         public override string GetTvShowUrl(string text)
         {
-            string tvShowUrl = "";
+            string tvShowUrl = string.Empty;
+            text = text.ToLower();
 
             foreach (var tvShow in TvShows)
             {
-                if (text.ToLower() == tvShow.Descendants("a").SingleOrDefault().InnerText.ToLower())
+                var show = tvShow.Descendants("a").FirstOrDefault(x => x.Element("span").InnerText.ToLower() == text);
+
+                if (show != null)
                 {
-                    tvShowUrl = _UrlPrefix + tvShow.Descendants("a").SingleOrDefault().Attributes["href"].Value;
+                    tvShowUrl = _UrlPrefix + show.Attributes["href"].Value;
                     break;
                 }
             }
@@ -50,20 +53,20 @@ namespace SubtitleFinderApp.Scrapers
         public override TabControl GenerateResults(string tvShowUrl)
         {
             HtmlAgilityPack.HtmlDocument tvShowHtml = new HtmlWeb().Load(tvShowUrl);
-            HtmlNode tabs = tvShowHtml.DocumentNode.Descendants("div").Where(d => d.Attributes.Contains("class") && d.Attributes["class"].Value.Equals("tabs")).SingleOrDefault();
-            IEnumerable<HtmlNode> seasonsList = tabs.Descendants("ul").SingleOrDefault().Descendants("li");
+            HtmlNode tabs = tvShowHtml.DocumentNode.Descendants("div").Where(d => d.Id == "season-choices").SingleOrDefault();
+            IEnumerable<HtmlNode> seasonsList = tabs.Descendants("a");
             _SeasonUrl = new Dictionary<string, string>();
 
             foreach (var season in seasonsList)
             {
-                string seasonTitle = season.Descendants("a").SingleOrDefault().InnerText;
+                string seasonTitle = "Temporada " + season.InnerText;
 
                 TabPage tab = base.NewTabPage(seasonTitle);
                 _TabCtrlResults.Controls.Add(tab);
 
-                _SeasonUrl.Add(seasonTitle, _UrlPrefix + season.Descendants("a").SingleOrDefault().Attributes["href"].Value.Substring(1));
+                _SeasonUrl.Add(seasonTitle, _UrlPrefix + season.Attributes["href"].Value.Substring(1));
 
-                if (season.Attributes["class"].Value.Equals("is-active"))
+                if (season.Attributes["class"].Value.Equals("choice selected"))
                     _TabCtrlResults.SelectTab(tab);
             }
 

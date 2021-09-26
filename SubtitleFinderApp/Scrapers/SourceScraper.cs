@@ -45,17 +45,19 @@ namespace SubtitleFinderApp.Scrapers
                     }
                     break;
                 case SearchSources.Subtitulamos:
-                    episodes = htmldoc.DocumentNode.Descendants("div").Where(d => d.Attributes.Contains("id") && d.Attributes["id"].Value.Equals("episodes")).SingleOrDefault().Descendants("div").Where(d => d.Attributes.Contains("class") && d.Attributes["class"].Value.Equals("episode"));
+                    HtmlNode episodesWrapper = htmldoc.DocumentNode.Descendants("div").SingleOrDefault(x => x.Id == "episode-choices");
+                    episodes = episodesWrapper.Descendants("a");
 
                     foreach (HtmlNode episode in episodes)
                     {
+                        HtmlAgilityPack.HtmlDocument episodeHtml = new HtmlWeb().Load("https://www.subtitulamos.tv" + episode.Attributes["href"].Value);
                         SubtitulamosScraperData scraperItem = new SubtitulamosScraperData();
-                        scraperItem.SetEpisodeData(episode, "https://www.subtitulamos.tv/");
+                        scraperItem.SetEpisodeData(episodeHtml.DocumentNode.Descendants("div").SingleOrDefault(e => e.Attributes.Contains("class") && e.Attributes["class"].Value.Equals("content limited-width")), "https://www.subtitulamos.tv");
                         scraperData.Add(scraperItem);
                     }
                     break;
                 default:
-                    MessageBox.Show("No se pudo generar los resultados. Inténtelo de nuevo.");
+                    MessageBox.Show("No se pudo generar los resultados. El servidor de datos para la búsqueda es incorrecta.");
                     break;
             }
 
