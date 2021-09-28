@@ -210,7 +210,7 @@
             // pbSearchingSubs
             // 
             this.pbSearchingSubs.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.pbSearchingSubs.Location = new System.Drawing.Point(401, 421);
+            this.pbSearchingSubs.Location = new System.Drawing.Point(400, 420);
             this.pbSearchingSubs.MarqueeAnimationSpeed = 40;
             this.pbSearchingSubs.Name = "pbSearchingSubs";
             this.pbSearchingSubs.Size = new System.Drawing.Size(100, 23);
@@ -221,7 +221,7 @@
             // txtSearchingSubs
             // 
             this.txtSearchingSubs.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.txtSearchingSubs.Location = new System.Drawing.Point(340, 393);
+            this.txtSearchingSubs.Location = new System.Drawing.Point(340, 392);
             this.txtSearchingSubs.Name = "txtSearchingSubs";
             this.txtSearchingSubs.Size = new System.Drawing.Size(224, 14);
             this.txtSearchingSubs.TabIndex = 25;
@@ -231,12 +231,12 @@
             // 
             // lblResults
             // 
-            this.lblResults.AutoSize = true;
+            this.lblResults.AutoEllipsis = true;
             this.lblResults.Font = new System.Drawing.Font("Tahoma", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblResults.Location = new System.Drawing.Point(672, 98);
+            this.lblResults.Location = new System.Drawing.Point(452, 98);
             this.lblResults.MinimumSize = new System.Drawing.Size(200, 11);
             this.lblResults.Name = "lblResults";
-            this.lblResults.Size = new System.Drawing.Size(200, 11);
+            this.lblResults.Size = new System.Drawing.Size(420, 11);
             this.lblResults.TabIndex = 26;
             this.lblResults.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 

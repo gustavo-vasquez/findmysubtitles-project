@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Find my subtitles")]
-[assembly: AssemblyCopyright("Copyright © 2020 por Gustavo Vasquez")]
+[assembly: AssemblyCopyright("Copyright © 2021 por Gustavo Vasquez")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

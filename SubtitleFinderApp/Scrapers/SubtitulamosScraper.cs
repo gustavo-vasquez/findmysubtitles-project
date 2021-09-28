@@ -75,8 +75,13 @@ namespace SubtitleFinderApp.Scrapers
 
         protected override void _TabCtrlResults_SelectedIndexChanged(object sender, EventArgs e)
         {
+            Control.ControlCollection controls = Application.OpenForms["SubtitleFinderForm"].Controls;
+            controls["pbSearchingSubs"].Visible = true;
+
             if (_TabCtrlResults.SelectedTab.Controls.Count <= 0)
-                Application.OpenForms["SubtitleFinderForm"].Controls.Add(base.RenderizeSeasonTab(_SeasonUrl[_TabCtrlResults.SelectedTab.Text], SearchSources.Subtitulamos));
+                controls.Add(base.RenderizeSeasonTab(_SeasonUrl[_TabCtrlResults.SelectedTab.Text], SearchSources.Subtitulamos));
+
+            controls["pbSearchingSubs"].Visible = false;
         }
     }
 }
