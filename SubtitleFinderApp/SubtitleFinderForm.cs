@@ -17,6 +17,8 @@ namespace SubtitleFinderApp
 {
     public partial class SubtitleFinderForm : Form
     {
+        private const string RESULTS_MESSAGE_PREFIX = "Mostrando resultados para: '";
+
         public SubtitleFinderForm()
         {
             InitializeComponent();
@@ -52,26 +54,28 @@ namespace SubtitleFinderApp
             }
         }
 
-        private void SearchWithSubDivX(string text)
+        private async void SearchWithSubDivX(string text)
         {
-            if(text.Count() > 3)
+            if (text.Count() > 3)
             {
                 SubDivXScraper scraper = new SubDivXScraper();
-                IEnumerable<HtmlNode> episodes = scraper.GetEpisodeNodes(text);
+                IEnumerable<HtmlNode> episodes = await scraper.GetEpisodeNodes(text);
 
-                if(episodes != null)
+                if (episodes != null)
                     if (episodes.Any())
                     {
-                        ClearResultsArea();
                         this.Controls.Add(scraper.GenerateResults(episodes));
+                        lblResults.Text = string.Concat(RESULTS_MESSAGE_PREFIX, text, "'");
                     }
                     else
-                        NoResultsMessageBox();
+                        SearchErrorMessageBox(SearchErrors.NoResults);
                 else
-                    MessageBox.Show("Ocurrió un error. Vuelva a intentarlo.");
+                    SearchErrorMessageBox(SearchErrors.UnexpectedError);
             }
             else
-                MessageBox.Show("Escribe como mínimo 4 letras para buscar. \r\n\r\n" + lblSearchExample.Text);
+                SearchErrorMessageBox(SearchErrors.InsufficentCharacters);
+
+            picBoxAppImage.Visible = txtSearchingSubs.Visible = pbSearchingSubs.Visible = false;
         }
 
         private void SearchWithTuSubtitulo(string text)
@@ -81,11 +85,13 @@ namespace SubtitleFinderApp
 
             if (!string.IsNullOrEmpty(tvShowURL))
             {
-                ClearResultsArea();
                 this.Controls.Add(scraper.GenerateResults(tvShowURL));
+                lblResults.Text = string.Concat(RESULTS_MESSAGE_PREFIX, text, "'");
             }
             else
-                NoResultsMessageBox();
+                SearchErrorMessageBox(SearchErrors.NoResults);
+
+            picBoxAppImage.Visible = txtSearchingSubs.Visible = pbSearchingSubs.Visible = false;
         }
 
         private void SearchWithSubtitulamos(string text)
@@ -95,16 +101,31 @@ namespace SubtitleFinderApp
 
             if (!string.IsNullOrEmpty(tvShowURL))
             {
-                ClearResultsArea();
                 this.Controls.Add(scraper.GenerateResults(tvShowURL));
+                lblResults.Text = string.Concat(RESULTS_MESSAGE_PREFIX, text, "'");
             }
             else
-                NoResultsMessageBox();
+                SearchErrorMessageBox(SearchErrors.NoResults);
+
+            picBoxAppImage.Visible = txtSearchingSubs.Visible = pbSearchingSubs.Visible = false;
         }
 
-        private void NoResultsMessageBox()
+        private void SearchErrorMessageBox(SearchErrors errorType)
         {
-            MessageBox.Show("No hay resultados que mostrar. Compruebe que el nombre esté escrito correctamente e inténtelo de nuevo.");
+            switch(errorType)
+            {
+                case SearchErrors.NoResults:
+                    MessageBox.Show("No hay resultados que mostrar. Compruebe que el nombre esté escrito correctamente e inténtelo de nuevo.");
+                    break;
+                case SearchErrors.InsufficentCharacters:
+                    MessageBox.Show("Escribe como mínimo 4 letras para buscar. \r\n\r\n" + lblSearchExample.Text);
+                    break;
+                case SearchErrors.UnexpectedError:
+                    MessageBox.Show("Ocurrió un error. Vuelva a intentarlo.");
+                    break;
+            }
+
+            lblResults.Text = string.Empty;
         }
 
         private void ClearResultsArea()
@@ -122,9 +143,11 @@ namespace SubtitleFinderApp
         private void btnSearch_Click(object sender, EventArgs e)
         {
             RadioButton checkedButton = this.Controls.OfType<RadioButton>().FirstOrDefault(r => r.Checked);
+            ClearResultsArea();
 
             if (checkedButton != null)
             {
+                picBoxAppImage.Visible = txtSearchingSubs.Visible = pbSearchingSubs.Visible = true;
                 switch (checkedButton.Name)
                 {
                     case "rdoBtnSubDivX":
@@ -137,8 +160,6 @@ namespace SubtitleFinderApp
                         SearchWithSubtitulamos(txtSearch.Text);
                         break;
                 }
-
-                this.Controls.Remove(picBoxAppImage);
             }
             else
                 MessageBox.Show("No seleccionó ninguna fuente de subtítulos.");

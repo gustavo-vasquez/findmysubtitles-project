@@ -45,6 +45,9 @@
             this.btnDownloadFolder = new System.Windows.Forms.Button();
             this.tltDownloadFolder = new System.Windows.Forms.ToolTip(this.components);
             this.tltProductInfo = new System.Windows.Forms.ToolTip(this.components);
+            this.pbSearchingSubs = new System.Windows.Forms.ProgressBar();
+            this.txtSearchingSubs = new System.Windows.Forms.Label();
+            this.lblResults = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.picBoxSubtitulamos)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBoxTuSubtitulo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBoxSubDivX)).BeginInit();
@@ -183,10 +186,10 @@
             // lblSearchExample
             // 
             this.lblSearchExample.AutoSize = true;
-            this.lblSearchExample.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSearchExample.Location = new System.Drawing.Point(12, 96);
+            this.lblSearchExample.Font = new System.Drawing.Font("Tahoma", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSearchExample.Location = new System.Drawing.Point(10, 97);
             this.lblSearchExample.Name = "lblSearchExample";
-            this.lblSearchExample.Size = new System.Drawing.Size(251, 12);
+            this.lblSearchExample.Size = new System.Drawing.Size(262, 11);
             this.lblSearchExample.TabIndex = 23;
             this.lblSearchExample.Text = "Ejemplos: \"The Godfather 1972\", \"The Walking Dead s01e01\"";
             // 
@@ -204,12 +207,48 @@
             this.btnDownloadFolder.UseVisualStyleBackColor = true;
             this.btnDownloadFolder.Click += new System.EventHandler(this.btnDownloadFolder_Click);
             // 
+            // pbSearchingSubs
+            // 
+            this.pbSearchingSubs.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pbSearchingSubs.Location = new System.Drawing.Point(401, 421);
+            this.pbSearchingSubs.MarqueeAnimationSpeed = 40;
+            this.pbSearchingSubs.Name = "pbSearchingSubs";
+            this.pbSearchingSubs.Size = new System.Drawing.Size(100, 23);
+            this.pbSearchingSubs.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
+            this.pbSearchingSubs.TabIndex = 24;
+            this.pbSearchingSubs.Visible = false;
+            // 
+            // txtSearchingSubs
+            // 
+            this.txtSearchingSubs.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.txtSearchingSubs.Location = new System.Drawing.Point(340, 393);
+            this.txtSearchingSubs.Name = "txtSearchingSubs";
+            this.txtSearchingSubs.Size = new System.Drawing.Size(224, 14);
+            this.txtSearchingSubs.TabIndex = 25;
+            this.txtSearchingSubs.Text = "Buscando subtitulos disponibles...";
+            this.txtSearchingSubs.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.txtSearchingSubs.Visible = false;
+            // 
+            // lblResults
+            // 
+            this.lblResults.AutoSize = true;
+            this.lblResults.Font = new System.Drawing.Font("Tahoma", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblResults.Location = new System.Drawing.Point(672, 98);
+            this.lblResults.MinimumSize = new System.Drawing.Size(200, 11);
+            this.lblResults.Name = "lblResults";
+            this.lblResults.Size = new System.Drawing.Size(200, 11);
+            this.lblResults.TabIndex = 26;
+            this.lblResults.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // SubtitleFinderForm
             // 
             this.AcceptButton = this.btnSearch;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(884, 562);
+            this.Controls.Add(this.lblResults);
+            this.Controls.Add(this.txtSearchingSubs);
+            this.Controls.Add(this.pbSearchingSubs);
             this.Controls.Add(this.btnDownloadFolder);
             this.Controls.Add(this.lblSearchExample);
             this.Controls.Add(this.picBoxAppImage);
@@ -223,7 +262,9 @@
             this.Controls.Add(this.lblSearch);
             this.Controls.Add(this.btnSearch);
             this.Controls.Add(this.txtSearch);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.MinimumSize = new System.Drawing.Size(900, 600);
             this.Name = "SubtitleFinderForm";
             this.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -255,6 +296,9 @@
         private System.Windows.Forms.Button btnDownloadFolder;
         private System.Windows.Forms.ToolTip tltDownloadFolder;
         private System.Windows.Forms.ToolTip tltProductInfo;
+        private System.Windows.Forms.ProgressBar pbSearchingSubs;
+        private System.Windows.Forms.Label txtSearchingSubs;
+        private System.Windows.Forms.Label lblResults;
     }
 }
 

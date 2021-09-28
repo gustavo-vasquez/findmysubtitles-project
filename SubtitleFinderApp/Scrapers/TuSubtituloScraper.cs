@@ -35,15 +35,18 @@ namespace SubtitleFinderApp.Scrapers
         {
             string tvShowUrl = "";
 
-            foreach (var tvShow in TvShows)
+            if (TvShows != null)
             {
-                HtmlNode anchorTag = tvShow.Descendants("a").SingleOrDefault();
-
-                if (text.ToLower() == anchorTag.InnerText.ToLower())
+                foreach (var tvShow in TvShows)
                 {
-                    tvShowUrl = _UrlPrefix + anchorTag.Attributes["href"].Value;
-                    _TvShowId = anchorTag.Attributes["href"].Value.Substring(anchorTag.Attributes["href"].Value.LastIndexOf('/') + 1);
-                    break;
+                    HtmlNode anchorTag = tvShow.Descendants("a").SingleOrDefault();
+
+                    if (text.ToLower() == anchorTag.InnerText.ToLower())
+                    {
+                        tvShowUrl = _UrlPrefix + anchorTag.Attributes["href"].Value;
+                        _TvShowId = anchorTag.Attributes["href"].Value.Substring(anchorTag.Attributes["href"].Value.LastIndexOf('/') + 1);
+                        break;
+                    }
                 }
             }
 

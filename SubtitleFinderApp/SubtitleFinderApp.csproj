@@ -58,6 +58,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums\SearchErrors.cs" />
     <Compile Include="Enums\SearchSources.cs" />
     <Compile Include="ProductInfo.cs" />
     <Compile Include="Scrapers\ISourceScraperData.cs" />

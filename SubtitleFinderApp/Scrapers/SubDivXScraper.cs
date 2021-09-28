@@ -36,7 +36,7 @@ namespace SubtitleFinderApp.Scrapers
             _GridResults.AllowUserToResizeRows = false;
             _GridResults.AllowUserToOrderColumns = false;
             _GridResults.Anchor = ((System.Windows.Forms.AnchorStyles)((((AnchorStyles.Top | AnchorStyles.Bottom) | AnchorStyles.Left) | AnchorStyles.Right)));
-            _GridResults.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            _GridResults.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
             _GridResults.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             _GridResults.BackgroundColor = SystemColors.Control;
             _GridResults.BorderStyle = BorderStyle.None;
@@ -63,6 +63,7 @@ namespace SubtitleFinderApp.Scrapers
             _GridResults.Columns.Add(Title);
 
             DataGridViewTextBoxColumn Description = new DataGridViewTextBoxColumn();
+            Description.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
             Description.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             Description.HeaderText = "Descripción";
             Description.Name = "Description";
@@ -110,9 +111,9 @@ namespace SubtitleFinderApp.Scrapers
             _GridResults.CellContentClick += this._GridResults_CellContentClick;
         }
 
-        public IEnumerable<HtmlNode> GetEpisodeNodes(string text)
+        public async Task<IEnumerable<HtmlNode>> GetEpisodeNodes(string text)
         {
-            HtmlAgilityPack.HtmlDocument htmldoc = _web.Load(_SearchUrlStartPart + HttpUtility.UrlEncode(text) + _SearchUrlEndPart);
+            HtmlAgilityPack.HtmlDocument htmldoc = await _web.LoadFromWebAsync(_SearchUrlStartPart + HttpUtility.UrlEncode(text) + _SearchUrlEndPart);
             _wrapper = htmldoc.DocumentNode.Descendants("div").Where(d => d.Attributes.Contains("id") && d.Attributes["id"].Value.Equals("contenedor_izq")).SingleOrDefault();
 
             try
@@ -126,9 +127,9 @@ namespace SubtitleFinderApp.Scrapers
             }           
         }
 
-        private void ChangePage(string url)
+        private async void ChangePage(string url)
         {
-            HtmlAgilityPack.HtmlDocument htmldoc = _web.Load("https://www.subdivx.com/" + url);
+            HtmlAgilityPack.HtmlDocument htmldoc = await _web.LoadFromWebAsync("https://www.subdivx.com/" + url);
             _wrapper = htmldoc.DocumentNode.Descendants("div").Where(d => d.Attributes.Contains("id") && d.Attributes["id"].Value.Equals("contenedor_izq")).SingleOrDefault();
             IEnumerable<HtmlNode> episodes = _wrapper.Descendants("div").Where(d => d.Attributes.Contains("id") && d.Attributes["id"].Value.Equals("menu_detalle_buscador"));
             _SubDivXResults.Clear();
@@ -142,9 +143,9 @@ namespace SubtitleFinderApp.Scrapers
             Panel panel = new Panel()
             {
                 Anchor = ((System.Windows.Forms.AnchorStyles)(((AnchorStyles.Bottom | AnchorStyles.Left) | AnchorStyles.Right))),
-                Location = new Point(0, 529),
+                Location = new Point(0, _GridResults.Location.Y + _GridResults.Size.Height),
                 Name = "paginationContainer",
-                Size = new Size(884, 23)
+                MinimumSize = new Size(884, 23),
             };
             
             IEnumerable<HtmlNode> pagElements = wrapper.Descendants("div").Where(d => d.Attributes.Contains("class") && d.Attributes["class"].Value.Equals("pagination")).FirstOrDefault().Descendants().Reverse();
@@ -163,7 +164,7 @@ namespace SubtitleFinderApp.Scrapers
                                 {
                                     Anchor = ((System.Windows.Forms.AnchorStyles)((AnchorStyles.Top | AnchorStyles.Right))),
                                     Enabled = false,
-                                    FlatStyle = FlatStyle.Flat,
+                                    FlatStyle = FlatStyle.Standard,
                                     Location = new Point(coordX, 0),
                                     Name = "btnPagActive",
                                     AutoSize = true,
@@ -187,7 +188,7 @@ namespace SubtitleFinderApp.Scrapers
                                     Button btnNextPag = new Button()
                                     {
                                         Anchor = ((System.Windows.Forms.AnchorStyles)((AnchorStyles.Top | AnchorStyles.Right))),
-                                        FlatStyle = FlatStyle.Flat,
+                                        FlatStyle = FlatStyle.Standard,
                                         Location = new Point(coordX, 0),
                                         Name = "btnPag" + p.InnerText,
                                         Size = new Size(75, 23),
@@ -206,7 +207,7 @@ namespace SubtitleFinderApp.Scrapers
                                     Button btnPrevPag = new Button()
                                     {
                                         Anchor = ((System.Windows.Forms.AnchorStyles)((AnchorStyles.Top | AnchorStyles.Right))),
-                                        FlatStyle = FlatStyle.Flat,
+                                        FlatStyle = FlatStyle.Standard,
                                         Location = new Point(coordX - 43, 0),
                                         Name = "btnPag" + p.InnerText,
                                         Size = new Size(75, 23),
@@ -224,7 +225,7 @@ namespace SubtitleFinderApp.Scrapers
                                     Button btnPag = new Button()
                                     {
                                         Anchor = ((System.Windows.Forms.AnchorStyles)((AnchorStyles.Top | AnchorStyles.Right))),
-                                        FlatStyle = FlatStyle.Flat,
+                                        FlatStyle = FlatStyle.Standard,
                                         Location = new Point(coordX, 0),
                                         Name = "btnPag" + p.InnerText,
                                         AutoSize = true,
@@ -299,7 +300,7 @@ namespace SubtitleFinderApp.Scrapers
             return _GridResults;
         }
 
-        private void _GridResults_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private async void _GridResults_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             DataGridView currentGridView = (DataGridView)sender;
             DataGridViewRow currentRow = currentGridView.Rows[e.RowIndex];
@@ -307,7 +308,7 @@ namespace SubtitleFinderApp.Scrapers
             if (e.ColumnIndex == 3)
             {
                 string commentUrl = currentRow.Cells["CommentsUrl"].Value.ToString();
-                var htmlComments = _web.Load(commentUrl);
+                var htmlComments = await _web.LoadFromWebAsync(commentUrl);
                 var userComments = htmlComments.DocumentNode.Descendants("div").Where(d => d.Attributes.Contains("id") && d.Attributes["id"].Value.Equals("detalle_comentarios"));
                 new SubDivXCommentsDialog().ShowDialog(userComments);
             }
