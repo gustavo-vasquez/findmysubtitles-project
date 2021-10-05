@@ -19,6 +19,7 @@ namespace SubtitleFinderApp.Scrapers
         protected abstract string _UrlPrefix { get; }
         private SearchSources _sourceName { get; set; }
         private bool _isBusy { get; set; }
+        protected HtmlWeb _web = new HtmlWeb() { BrowserTimeout = TimeSpan.Zero };
 
         protected abstract void SetTvShows();
 
@@ -28,7 +29,7 @@ namespace SubtitleFinderApp.Scrapers
 
         public TabControl RenderizeSeasonTab(string lastSeasonUrl, SearchSources sourceName)
         {
-            HtmlAgilityPack.HtmlDocument htmldoc = new HtmlWeb().LoadFromBrowser(lastSeasonUrl);
+            HtmlAgilityPack.HtmlDocument htmldoc = _web.LoadFromBrowser(lastSeasonUrl);
             List<ISourceScraperData> scraperData = new List<ISourceScraperData>();
             IEnumerable<HtmlNode> episodes;
 
@@ -50,7 +51,7 @@ namespace SubtitleFinderApp.Scrapers
 
                     foreach (HtmlNode episode in episodes)
                     {
-                        HtmlAgilityPack.HtmlDocument episodeHtml = new HtmlWeb().Load("https://www.subtitulamos.tv" + episode.Attributes["href"].Value);
+                        HtmlAgilityPack.HtmlDocument episodeHtml = _web.Load("https://www.subtitulamos.tv" + episode.Attributes["href"].Value);
                         SubtitulamosScraperData scraperItem = new SubtitulamosScraperData();
                         scraperItem.SetEpisodeData(episodeHtml.DocumentNode.Descendants("div").SingleOrDefault(e => e.Attributes.Contains("class") && e.Attributes["class"].Value.Equals("content limited-width")), "https://www.subtitulamos.tv");
                         scraperData.Add(scraperItem);
@@ -190,39 +191,44 @@ namespace SubtitleFinderApp.Scrapers
             if (e.ColumnIndex == 3)
             {
                 DataGridView currentGridView = (DataGridView)sender;
+                DataGridViewRow currentRow = currentGridView.Rows[e.RowIndex];
 
                 if (_sourceName == SearchSources.TuSubtitulo)
-                {
-                    DataGridViewRow currentRow = currentGridView.Rows[e.RowIndex];
                     System.Diagnostics.Process.Start(currentRow.Cells["DownloadLink"].Value.ToString());
-                }
                 else
                 {
-                    Label previousTitle = (Label)_TabCtrlResults.GetNextControl(currentGridView, false);
-                    var pattern = new System.Text.RegularExpressions.Regex("[\\/:*?\"<>|]");
+                    string downloadLink = currentRow.Cells["DownloadLink"].Value.ToString();
 
-                    SaveFileDialog dialogSaveSubtitle = new SaveFileDialog();
-                    dialogSaveSubtitle.FileName = string.Join("_", pattern.Replace(previousTitle.Text, "_"), currentGridView.CurrentRow.Cells[1].Value.ToString().Replace('/', '_'), currentGridView.CurrentRow.Cells[0].Value.ToString());
-                    dialogSaveSubtitle.DefaultExt = "srt";
-                    dialogSaveSubtitle.Filter = "Archivos SRT (*.srt)|*.srt|Todos los archivos (*.*)|*.*";
-                    dialogSaveSubtitle.InitialDirectory = "%USERPROFILE%\\Downloads";
-                    dialogSaveSubtitle.RestoreDirectory = true;
-                    dialogSaveSubtitle.Title = "Guardar subtítulo como...";
-
-                    if (_isBusy) return;
-
-                    if (dialogSaveSubtitle.ShowDialog() == DialogResult.OK)
+                    if (downloadLink.EndsWith("translate"))
+                        System.Diagnostics.Process.Start(currentRow.Cells["DownloadLink"].Value.ToString());
+                    else
                     {
-                        _isBusy = true;
-                        var wClient = new System.Net.WebClient();
+                        Label previousTitle = (Label)_TabCtrlResults.GetNextControl(currentGridView, false);
+                        var pattern = new System.Text.RegularExpressions.Regex("[\\/:*?\"<>|]");
 
-                        wClient.DownloadFileCompleted += (webClientSender, args) =>
+                        SaveFileDialog dialogSaveSubtitle = new SaveFileDialog();
+                        dialogSaveSubtitle.FileName = string.Join("_", pattern.Replace(previousTitle.Text, "_"), currentGridView.CurrentRow.Cells["Version"].Value.ToString().Replace('/', '_'), currentGridView.CurrentRow.Cells["Language"].Value.ToString());
+                        dialogSaveSubtitle.DefaultExt = "srt";
+                        dialogSaveSubtitle.Filter = "Archivos SRT (*.srt)|*.srt|Todos los archivos (*.*)|*.*";
+                        dialogSaveSubtitle.InitialDirectory = "%USERPROFILE%\\Downloads";
+                        dialogSaveSubtitle.RestoreDirectory = true;
+                        dialogSaveSubtitle.Title = "Guardar subtítulo como...";
+
+                        if (_isBusy) return;
+
+                        if (dialogSaveSubtitle.ShowDialog() == DialogResult.OK)
                         {
-                            MessageBox.Show($"Descarga completada.\r\n\r\n\"{dialogSaveSubtitle.FileName}\"");
-                            _isBusy = false;
-                        };
+                            _isBusy = true;
+                            var wClient = new System.Net.WebClient();
 
-                        wClient.DownloadFileAsync(new Uri(currentGridView.CurrentRow.Cells[3].Value.ToString()), dialogSaveSubtitle.FileName);
+                            wClient.DownloadFileCompleted += (webClientSender, args) =>
+                            {
+                                MessageBox.Show($"Descarga completada.\r\n\r\n\"{dialogSaveSubtitle.FileName}\"");
+                                _isBusy = false;
+                            };
+
+                            wClient.DownloadFileAsync(new Uri(downloadLink), dialogSaveSubtitle.FileName);
+                        }
                     }
                 }
             }
